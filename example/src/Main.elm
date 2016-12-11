@@ -2,6 +2,7 @@ module Main exposing (..)
 
 import Example1
 import Html exposing (Html, text, div, program)
+import Html.Attributes exposing (class)
 
 
 type alias Model =
@@ -41,7 +42,7 @@ update msg model =
 
 view : Model -> Html Msg
 view model =
-    div [] [ Html.map Example1Msg (Example1.view model.example1) ]
+    div [ class "p3" ] [ Html.map Example1Msg (Example1.view model.example1) ]
 
 
 subscriptions : Model -> Sub Msg

@@ -1,4 +1,4 @@
-module Select.Select.Option exposing (..)
+module Select.Select.Item exposing (..)
 
 import Html exposing (..)
 import Html.Events exposing (onClick)

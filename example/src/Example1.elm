@@ -1,6 +1,7 @@
 module Example1 exposing (..)
 
 import Html exposing (Html, text, div)
+import Html.Attributes exposing (class)
 import Movies
 import Select
 
@@ -86,7 +87,7 @@ view model =
                     List.filter (\movie -> movie.id == id) movies
                         |> List.head
     in
-        div []
+        div [ class "bg-silver p1" ]
             [ text (toString model.selectedMovieId)
             , Html.map SelectMsg (select.view model.selectState model.movies selectedMovie)
             ]
