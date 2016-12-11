@@ -1,6 +1,6 @@
 'use strict';
 
-// require('./main.css');
+require('ace-css/css/ace.css');
 
 var Elm = require('./Main.elm');
 var app = Elm.Main.fullscreen();
