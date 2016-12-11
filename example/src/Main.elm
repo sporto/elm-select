@@ -1,59 +1,46 @@
 module Main exposing (..)
 
+import Example1
 import Html exposing (Html, text, div, program)
-import Select
 
 
 type alias Model =
-    { message : String
+    { example1 : Example1.Model
     }
 
 
-type alias Movie =
-    { id : String
-    , label : String
+initialModel =
+    { example1 = Example1.initialModel
     }
 
 
 init : ( Model, Cmd Msg )
 init =
-    ( { message = "Your Elm App is working!" }, Cmd.none )
+    ( initialModel, Cmd.none )
 
 
 type Msg
     = NoOp
-    | OnQuery String
-    | OnSelect Movie
+    | Example1Msg Example1.Msg
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        OnQuery str ->
-            ( model, Cmd.none )
-
-        OnSelect movie ->
-            ( model, Cmd.none )
+        Example1Msg sub ->
+            let
+                ( subModel, subCmd ) =
+                    Example1.update sub model.example1
+            in
+                ( { model | example1 = subModel }, Cmd.map Example1Msg subCmd )
 
         NoOp ->
             ( model, Cmd.none )
 
 
-autoCompleteConfig : Select.Config Msg Movie
-autoCompleteConfig =
-    { onQueryChange = OnQuery
-    , onSelect = OnSelect
-    , toLabel = .label
-    }
-
-
-autoCompleteOptions =
-    [ Movie "1" "Harry Potter" ]
-
-
 view : Model -> Html Msg
 view model =
-    div [] [ Select.view autoCompleteConfig autoCompleteOptions ]
+    div [] [ Html.map Example1Msg (Example1.view model.example1) ]
 
 
 subscriptions : Model -> Sub Msg
