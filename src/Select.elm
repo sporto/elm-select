@@ -48,10 +48,14 @@ view config model items selected =
         Html.map PrivateMsg (Select.Select.view config privateModel items)
 
 
-update : Models.Config msg item -> Msg item -> Model -> Model
+update : Models.Config msg item -> Msg item -> Model -> ( Model, Cmd msg )
 update config msg model =
     case msg of
         PrivateMsg privMsg ->
             case model of
                 PrivateModel privModel ->
-                    PrivateModel (Select.Update.update config privMsg privModel)
+                    let
+                        ( mdl, cmd ) =
+                            Select.Update.update config privMsg privModel
+                    in
+                        ( PrivateModel mdl, cmd )

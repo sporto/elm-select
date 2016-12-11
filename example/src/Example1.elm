@@ -65,10 +65,10 @@ update msg model =
 
         SelectMsg subMsg ->
             let
-                updated =
+                ( updated, cmd ) =
                     select.update subMsg model.selectState
             in
-                ( { model | selectState = updated }, Cmd.none )
+                ( { model | selectState = updated }, cmd )
 
         NoOp ->
             ( model, Cmd.none )
