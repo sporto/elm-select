@@ -14,7 +14,7 @@ type alias Movie =
 type alias Model =
     { movies : List Movie
     , selectedMovieId : Maybe String
-    , select : Select.Model
+    , selectState : Select.Model Movie
     }
 
 
@@ -27,7 +27,7 @@ initialModel : Model
 initialModel =
     { movies = movies
     , selectedMovieId = Nothing
-    , select = Select.model
+    , selectState = Select.model []
     }
 
 
@@ -35,7 +35,7 @@ type Msg
     = NoOp
     | OnQuery String
     | OnSelect Movie
-    | SelectMsg Select.Msg
+    | SelectMsg (Select.Msg Movie)
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -50,9 +50,9 @@ update msg model =
         SelectMsg subMsg ->
             let
                 updated =
-                    Select.update subMsg model.select
+                    Select.update subMsg model.selectState
             in
-                ( { model | select = updated }, Cmd.none )
+                ( { model | selectState = updated }, Cmd.none )
 
         NoOp ->
             ( model, Cmd.none )
@@ -77,4 +77,4 @@ view model =
                 Just id ->
                     List.filter (\movie -> movie.id == id) movies |> List.head
     in
-        div [] [ Select.view autoCompleteConfig model.movies selectedMovie ]
+        div [] [ Html.map SelectMsg (Select.view autoCompleteConfig model.selectState model.movies) ]

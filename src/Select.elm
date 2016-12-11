@@ -1,48 +1,44 @@
 module Select exposing (..)
 
 import Html exposing (..)
-import Html.Attributes exposing (value)
-import Html.Events exposing (onInput)
+import Select.Select
 import Select.Models as Models
-import Select.Option
+import Select.Messages as Messages
+import Select.Update
 
 
 type alias Config msg item =
     Models.Config msg item
 
 
-type Model
-    = Model Models.Model
+type Model item
+    = PrivateModel (Models.Model item)
 
 
-type Msg
-    = NoOp
+type Msg item
+    = PrivateMsg (Messages.Msg item)
 
 
-model : Model
-model =
-    Model
-        { value = ""
-        }
+model : List item -> Model item
+model items =
+    PrivateModel (Models.makeModel items)
 
 
-view : Models.Config msg item -> List item -> Maybe item -> Html msg
-view config options selectedItem =
+view : Models.Config msg item -> Model item -> List item -> Html (Msg item)
+view config model items =
     let
-        val =
-            case selectedItem of
-                Nothing ->
-                    ""
-
-                Just item ->
-                    config.toLabel item
+        privateModel =
+            case model of
+                PrivateModel m ->
+                    m
     in
-        div []
-            [ div [ onInput config.onQueryChange ] [ input [ value val ] [] ]
-            , div [] (List.map (Select.Option.view config) options)
-            ]
+        Html.map PrivateMsg (Select.Select.view config privateModel items)
 
 
-update : Msg -> Model -> Model
+update : Msg item -> Model item -> Model item
 update msg model =
-    model
+    case msg of
+        PrivateMsg privMsg ->
+            case model of
+                PrivateModel privModel ->
+                    PrivateModel (Select.Update.update privMsg privModel)

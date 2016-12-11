@@ -8,6 +8,12 @@ type alias Config msg item =
     }
 
 
-type alias Model =
-    { value : String
+type alias Model item =
+    { selected : List item
+    }
+
+
+makeModel : List item -> Model item
+makeModel items =
+    { selected = items
     }
