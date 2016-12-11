@@ -27,7 +27,7 @@ initialModel : Model
 initialModel =
     { movies = movies
     , selectedMovieId = Nothing
-    , selectState = Select.model []
+    , selectState = Select.model Nothing
     }
 
 
@@ -36,6 +36,19 @@ type Msg
     | OnQuery String
     | OnSelect Movie
     | SelectMsg (Select.Msg Movie)
+
+
+selectConfig : Select.Config Msg Movie
+selectConfig =
+    { onQueryChange = OnQuery
+    , onSelect = OnSelect
+    , toLabel = .label
+    }
+
+
+select : Select.Select Movie
+select =
+    Select.new selectConfig
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -50,20 +63,12 @@ update msg model =
         SelectMsg subMsg ->
             let
                 updated =
-                    Select.update subMsg model.selectState
+                    select.update subMsg model.selectState
             in
                 ( { model | selectState = updated }, Cmd.none )
 
         NoOp ->
             ( model, Cmd.none )
-
-
-autoCompleteConfig : Select.Config Msg Movie
-autoCompleteConfig =
-    { onQueryChange = OnQuery
-    , onSelect = OnSelect
-    , toLabel = .label
-    }
 
 
 view : Model -> Html Msg
@@ -77,4 +82,4 @@ view model =
                 Just id ->
                     List.filter (\movie -> movie.id == id) movies |> List.head
     in
-        div [] [ Html.map SelectMsg (Select.view autoCompleteConfig model.selectState model.movies) ]
+        div [] [ Html.map SelectMsg (select.view model.selectState model.movies) ]

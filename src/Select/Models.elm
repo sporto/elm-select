@@ -9,11 +9,13 @@ type alias Config msg item =
 
 
 type alias Model item =
-    { selected : List item
+    { selected : Maybe item
+    , query : String
     }
 
 
-makeModel : List item -> Model item
-makeModel items =
-    { selected = items
+new : Maybe item -> Model item
+new maybeItem =
+    { selected = maybeItem
+    , query = ""
     }

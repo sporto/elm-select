@@ -4,14 +4,18 @@ import Select.Models as Models
 import Select.Messages as Messages
 
 
-update : Messages.Msg item -> Models.Model item -> Models.Model item
-update msg model =
+update : Models.Config msg item -> Messages.Msg item -> Models.Model item -> Models.Model item
+update config msg model =
     case msg of
         Messages.OnQueryChange value ->
-            model
+            { model | query = value }
 
         Messages.OnSelect item ->
-            { model | selected = [ item ] }
+            let
+                query =
+                    config.toLabel item
+            in
+                { model | query = query, selected = Just item }
 
         Messages.NoOp ->
             model
