@@ -11,7 +11,7 @@ import String
 import Tuple
 
 
-view : Models.Config msg item -> Models.Model item -> List item -> Html (Messages.Msg item)
+view : Models.Config msg item -> Models.Model -> List item -> Html (Messages.Msg item)
 view config model items =
     let
         relevantItems =
@@ -27,7 +27,7 @@ view config model items =
             ]
 
 
-matchedItems : Models.Config msg item -> Models.Model item -> List item -> List item
+matchedItems : Models.Config msg item -> Models.Model -> List item -> List item
 matchedItems config model items =
     if model.query == "" then
         []

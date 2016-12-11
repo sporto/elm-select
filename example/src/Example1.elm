@@ -14,21 +14,13 @@ type alias Movie =
 type alias Model =
     { movies : List Movie
     , selectedMovieId : Maybe String
-    , selectState : Select.Model Movie
+    , selectState : Select.Model
     }
 
 
 movies : List Movie
 movies =
     List.map (\( id, name ) -> Movie id name) Movies.movies
-
-
-initialModel : Model
-initialModel =
-    { movies = movies
-    , selectedMovieId = Nothing
-    , selectState = Select.model Nothing
-    }
 
 
 type Msg
@@ -46,9 +38,20 @@ selectConfig =
     }
 
 
-select : Select.Select Movie
+
+-- select : Select.Select Movie
+
+
 select =
-    Select.new selectConfig
+    Select.new selectConfig Nothing
+
+
+initialModel : Model
+initialModel =
+    { movies = movies
+    , selectedMovieId = Nothing
+    , selectState = select.model
+    }
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -80,6 +83,10 @@ view model =
                     Nothing
 
                 Just id ->
-                    List.filter (\movie -> movie.id == id) movies |> List.head
+                    List.filter (\movie -> movie.id == id) movies
+                        |> List.head
     in
-        div [] [ Html.map SelectMsg (select.view model.selectState model.movies) ]
+        div []
+            [ text (toString model.selectedMovieId)
+            , Html.map SelectMsg (select.view model.selectState model.movies selectedMovie)
+            ]

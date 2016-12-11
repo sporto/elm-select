@@ -4,7 +4,7 @@ import Select.Models as Models
 import Select.Messages as Messages
 
 
-update : Models.Config msg item -> Messages.Msg item -> Models.Model item -> Models.Model item
+update : Models.Config msg item -> Messages.Msg item -> Models.Model -> Models.Model
 update config msg model =
     case msg of
         Messages.OnQueryChange value ->
@@ -15,7 +15,7 @@ update config msg model =
                 query =
                     config.toLabel item
             in
-                { model | query = query, selected = Just item }
+                { model | query = query }
 
         Messages.NoOp ->
             model

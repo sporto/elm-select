@@ -8,14 +8,12 @@ type alias Config msg item =
     }
 
 
-type alias Model item =
-    { selected : Maybe item
-    , query : String
+type alias Model =
+    { query : String
     }
 
 
-new : Maybe item -> Model item
+new : Maybe item -> Model
 new maybeItem =
-    { selected = maybeItem
-    , query = ""
+    { query = ""
     }

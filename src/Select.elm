@@ -11,8 +11,8 @@ type alias Config msg item =
     Models.Config msg item
 
 
-type Model item
-    = PrivateModel (Models.Model item)
+type Model
+    = PrivateModel (Models.Model)
 
 
 type Msg item
@@ -20,25 +20,25 @@ type Msg item
 
 
 type alias Select item =
-    { view : Model item -> List item -> Html (Msg item)
-    , update : Msg item -> Model item -> Model item
+    { model : Model
+    , view : Model -> List item -> Html (Msg item)
+    , update : Msg item -> Model item -> Model
     }
 
 
-new : Config msg item -> Select item
-new config =
-    { view = view config
+
+-- new : Config msg item -> Maybe item -> Select item
+
+
+new config maybeItem =
+    { model = PrivateModel (Models.new maybeItem)
+    , view = view config
     , update = update config
     }
 
 
-model : Maybe item -> Model item
-model maybeItem =
-    PrivateModel (Models.new maybeItem)
-
-
-view : Models.Config msg item -> Model item -> List item -> Html (Msg item)
-view config model items =
+view : Models.Config msg item -> Model -> List item -> Maybe item -> Html (Msg item)
+view config model items selected =
     let
         privateModel =
             case model of
@@ -48,7 +48,7 @@ view config model items =
         Html.map PrivateMsg (Select.Select.view config privateModel items)
 
 
-update : Models.Config msg item -> Msg item -> Model item -> Model item
+update : Models.Config msg item -> Msg item -> Model -> Model
 update config msg model =
     case msg of
         PrivateMsg privMsg ->
