@@ -1,6 +1,7 @@
 module Example1 exposing (..)
 
 import Html exposing (Html, text, div)
+import Movies
 import Select
 
 
@@ -12,12 +13,19 @@ type alias Movie =
 
 type alias Model =
     { movies : List Movie
+    , selectedMovieId : Maybe String
     }
+
+
+movies : List Movie
+movies =
+    List.map (\( id, name ) -> Movie id name) Movies.movies
 
 
 initialModel : Model
 initialModel =
-    { movies = [ Movie "1" "Harry Potter" ]
+    { movies = movies
+    , selectedMovieId = Nothing
     }
 
 
@@ -34,7 +42,7 @@ update msg model =
             ( model, Cmd.none )
 
         OnSelect movie ->
-            ( model, Cmd.none )
+            ( { model | selectedMovieId = Just movie.id }, Cmd.none )
 
         NoOp ->
             ( model, Cmd.none )

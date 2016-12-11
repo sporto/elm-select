@@ -9,6 +9,7 @@ type alias Model =
     }
 
 
+initialModel : Model
 initialModel =
     { example1 = Example1.initialModel
     }
