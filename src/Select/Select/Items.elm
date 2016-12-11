@@ -16,7 +16,12 @@ view config model items selected =
         relevantItems =
             matchedItems config model items
     in
-        div [ style viewStyles ] (List.map (Select.Select.Item.view config) relevantItems)
+        case model.query of
+            Nothing ->
+                span [] []
+
+            Just query ->
+                div [ style viewStyles ] (List.map (Select.Select.Item.view config) relevantItems)
 
 
 viewStyles : List ( String, String )
