@@ -6,3 +6,8 @@ type alias Config msg item =
     , onSelect : item -> msg
     , toLabel : item -> String
     }
+
+
+type alias Model =
+    { value : String
+    }
