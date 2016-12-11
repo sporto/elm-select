@@ -45,7 +45,7 @@ view config model items selected =
                 PrivateModel m ->
                     m
     in
-        Html.map PrivateMsg (Select.Select.view config privateModel items)
+        Html.map PrivateMsg (Select.Select.view config privateModel items selected)
 
 
 update : Models.Config msg item -> Msg item -> Model -> ( Model, Cmd msg )

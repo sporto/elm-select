@@ -9,7 +9,7 @@ update : Models.Config msg item -> Messages.Msg item -> Models.Model -> ( Models
 update config msg model =
     case msg of
         Messages.OnQueryChange value ->
-            ( { model | query = value }, Cmd.none )
+            ( { model | query = Just value }, Cmd.none )
 
         Messages.OnSelect item ->
             let
@@ -17,7 +17,7 @@ update config msg model =
                     Task.succeed item
                         |> Task.perform config.onSelect
             in
-                ( model, cmd )
+                ( { model | query = Nothing }, cmd )
 
         Messages.NoOp ->
             ( model, Cmd.none )

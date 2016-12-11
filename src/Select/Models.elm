@@ -9,11 +9,11 @@ type alias Config msg item =
 
 
 type alias Model =
-    { query : String
+    { query : Maybe String
     }
 
 
 new : Maybe item -> Model
 new maybeItem =
-    { query = ""
+    { query = Nothing
     }
