@@ -1,7 +1,7 @@
 module Main exposing (..)
 
 import Example1
-import Html exposing (Html, text, div, program)
+import Html exposing (..)
 import Html.Attributes exposing (class)
 
 
@@ -42,7 +42,14 @@ update msg model =
 
 view : Model -> Html Msg
 view model =
-    div [ class "p3" ] [ Html.map Example1Msg (Example1.view model.example1) ]
+    div [ class "p3" ]
+        [ h1 [] [ text "Elm Select" ]
+        , div [ class "clearfix" ]
+            [ div [ class "col col-6" ]
+                [ Html.map Example1Msg (Example1.view model.example1)
+                ]
+            ]
+        ]
 
 
 subscriptions : Model -> Sub Msg

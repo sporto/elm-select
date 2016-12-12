@@ -18,6 +18,7 @@ See `example/src/Example1.elm`
   - ✔ Items
   - First item
   - Last item
+  - Item hover
 - Allow passing styles
   - Input
   - Menu
@@ -35,6 +36,8 @@ See `example/src/Example1.elm`
   - ✔ Hit space to select
   - Add arrows navigation
 - Hide the items when navigating away
+  - Esc
+  - on blur
 - Documentation
   - ✔ API
   - Example
