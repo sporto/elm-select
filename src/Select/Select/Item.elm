@@ -8,23 +8,31 @@ import Select.Messages as Messages
 import Select.Models as Models
 
 
-onEnter : msg -> Attribute msg
-onEnter msg =
+onKeyUpAttribute : item -> Attribute (Messages.Msg item)
+onKeyUpAttribute item =
     let
-        isEnterOrSpace code =
-            if code == 13 || code == 32 then
-                Json.succeed msg
-            else
-                Json.fail "not ENTER"
+        fn code =
+            case code of
+                13 ->
+                    Json.succeed (Messages.OnSelect item)
+
+                32 ->
+                    Json.succeed (Messages.OnSelect item)
+
+                27 ->
+                    Json.succeed Messages.OnEsc
+
+                _ ->
+                    Json.fail "not ENTER"
     in
-        on "keyup" (Json.andThen isEnterOrSpace keyCode)
+        on "keyup" (Json.andThen fn keyCode)
 
 
 view : Models.Config msg item -> item -> Html (Messages.Msg item)
 view config item =
     div
         [ class config.itemClass
-        , onEnter (Messages.OnSelect item)
+        , onKeyUpAttribute item
         , onClick (Messages.OnSelect item)
         , tabindex 0
         ]

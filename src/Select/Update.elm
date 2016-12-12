@@ -19,5 +19,8 @@ update config msg model =
             in
                 ( { model | query = Nothing }, cmd )
 
+        OnEsc ->
+            ( { model | query = Nothing }, Cmd.none )
+
         NoOp ->
             ( model, Cmd.none )
