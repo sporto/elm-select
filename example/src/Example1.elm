@@ -35,8 +35,8 @@ selectConfig : Select.Config Msg Movie
 selectConfig =
     Select.newConfig OnSelect .label
         |> Select.withInputClass "col-12"
-        |> Select.withMenuClass "bg-white"
-        |> Select.withItemClass "border-bottom p1"
+        |> Select.withMenuClass "bg-white border border-gray"
+        |> Select.withItemClass "border-bottom border-silver p1"
         |> Select.withCutoff 6
 
 
