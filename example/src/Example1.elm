@@ -39,12 +39,9 @@ selectConfig =
     }
 
 
-
--- select : Select.Select Movie
-
-
+select : Select.Select Msg Movie
 select =
-    Select.new selectConfig Nothing
+    Select.new selectConfig
 
 
 initialModel : Model

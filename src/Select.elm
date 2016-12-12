@@ -19,19 +19,16 @@ type Msg item
     = PrivateMsg (Messages.Msg item)
 
 
-type alias Select item =
+type alias Select msg item =
     { model : Model
-    , view : Model -> List item -> Html (Msg item)
-    , update : Msg item -> Model item -> Model
+    , view : Model -> List item -> Maybe item -> Html (Msg item)
+    , update : Msg item -> Model -> ( Model, Cmd msg )
     }
 
 
-
--- new : Config msg item -> Maybe item -> Select item
-
-
-new config maybeItem =
-    { model = PrivateModel (Models.new maybeItem)
+new : Config msg item -> Select msg item
+new config =
+    { model = PrivateModel Models.new
     , view = view config
     , update = update config
     }

@@ -13,7 +13,7 @@ type alias Model =
     }
 
 
-new : Maybe item -> Model
-new maybeItem =
+new : Model
+new =
     { query = Nothing
     }
