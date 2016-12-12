@@ -8,6 +8,15 @@ import Task
 update : Models.Config msg item -> Msg item -> Models.State -> ( Models.State, Cmd msg )
 update config msg model =
     case msg of
+        NoOp ->
+            ( model, Cmd.none )
+
+        OnEsc ->
+            ( { model | query = Nothing }, Cmd.none )
+
+        OnInputBlur ->
+            ( { model | query = Nothing }, Cmd.none )
+
         OnQueryChange value ->
             ( { model | query = Just value }, Cmd.none )
 
@@ -18,9 +27,3 @@ update config msg model =
                         |> Task.perform config.onSelect
             in
                 ( { model | query = Nothing }, cmd )
-
-        OnEsc ->
-            ( { model | query = Nothing }, Cmd.none )
-
-        NoOp ->
-            ( model, Cmd.none )

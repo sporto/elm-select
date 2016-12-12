@@ -2,13 +2,13 @@ module Select.Select.Input exposing (..)
 
 import Html exposing (..)
 import Html.Attributes exposing (class, value)
-import Html.Events exposing (onInput)
+import Html.Events exposing (onInput, onBlur)
 import Select.Events exposing (onEsc)
-import Select.Messages as Messages
-import Select.Models as Models
+import Select.Messages exposing (..)
+import Select.Models exposing (..)
 
 
-view : Models.Config msg item -> Models.State -> Maybe item -> Html (Messages.Msg item)
+view : Config msg item -> State -> Maybe item -> Html (Msg item)
 view config model selected =
     let
         val =
@@ -26,8 +26,8 @@ view config model selected =
     in
         input
             [ class config.inputClass
-            , onInput Messages.OnQueryChange
-            , onEsc Messages.OnEsc
+            , onInput OnQueryChange
+            , onEsc OnEsc
             , value val
             ]
             []
