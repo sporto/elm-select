@@ -2,9 +2,13 @@
 
 An input component with autocompletion.
 
+## Demo
+
+See https://sporto.github.io/elm-select/
+
 ## Example
 
-See 
+See `example/src/Example1.elm`
 
 ## To do
 
