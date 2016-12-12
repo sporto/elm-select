@@ -42,19 +42,46 @@ newConfig onSelectMessage toLabel =
 withInputClass : String -> Config msg item -> Config msg item
 withInputClass classes config =
     let
-        config_ =
-            unwrapConfig config
+        fn c =
+            { c | inputClass = classes }
     in
-        PrivateConfig { config_ | inputClass = classes }
+        fmapConfig fn config
 
 
+{-|
+@public
+-}
+withMenuClass : String -> Config msg item -> Config msg item
+withMenuClass classes config =
+    let
+        fn c =
+            { c | menuClass = classes }
+    in
+        fmapConfig fn config
+
+
+{-|
+@public
+-}
 withItemClass : String -> Config msg item -> Config msg item
 withItemClass classes config =
+    let
+        fn c =
+            { c | itemClass = classes }
+    in
+        fmapConfig fn config
+
+
+{-|
+@priv
+-}
+fmapConfig : (Models.Config msg item -> Models.Config msg item) -> Config msg item -> Config msg item
+fmapConfig fn config =
     let
         config_ =
             unwrapConfig config
     in
-        PrivateConfig { config_ | itemClass = classes }
+        PrivateConfig (fn config_)
 
 
 {-|
