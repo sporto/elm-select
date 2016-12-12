@@ -48,6 +48,15 @@ withInputClass classes config =
         PrivateConfig { config_ | inputClass = classes }
 
 
+withItemClass : String -> Config msg item -> Config msg item
+withItemClass classes config =
+    let
+        config_ =
+            unwrapConfig config
+    in
+        PrivateConfig { config_ | itemClass = classes }
+
+
 {-|
 @public
 -}
