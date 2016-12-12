@@ -2,18 +2,28 @@ module Select.Models exposing (..)
 
 
 type alias Config msg item =
-    { onQueryChange : String -> msg
+    { inputClass : String
+    , onQueryChange : Maybe (String -> msg)
     , onSelect : item -> msg
     , toLabel : item -> String
     }
 
 
-type alias Model =
+newConfig : (item -> msg) -> (item -> String) -> Config msg item
+newConfig onSelect toLabel =
+    { inputClass = ""
+    , onQueryChange = Nothing
+    , onSelect = onSelect
+    , toLabel = toLabel
+    }
+
+
+type alias State =
     { query : Maybe String
     }
 
 
-new : Model
-new =
+newState : State
+newState =
     { query = Nothing
     }

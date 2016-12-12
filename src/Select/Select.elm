@@ -7,7 +7,7 @@ import Select.Select.Items
 import Select.Select.Input
 
 
-view : Models.Config msg item -> Models.Model -> List item -> Maybe item -> Html (Messages.Msg item)
+view : Models.Config msg item -> Models.State -> List item -> Maybe item -> Html (Messages.Msg item)
 view config model items selected =
     div []
         [ div [] [ Select.Select.Input.view config model selected ]

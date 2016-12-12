@@ -5,7 +5,7 @@ import Select.Messages as Messages
 import Task
 
 
-update : Models.Config msg item -> Messages.Msg item -> Models.Model -> ( Models.Model, Cmd msg )
+update : Models.Config msg item -> Messages.Msg item -> Models.State -> ( Models.State, Cmd msg )
 update config msg model =
     case msg of
         Messages.OnQueryChange value ->

@@ -33,22 +33,15 @@ type Msg
 
 selectConfig : Select.Config Msg Movie
 selectConfig =
-    { onQueryChange = OnQuery
-    , onSelect = OnSelect
-    , toLabel = .label
-    }
-
-
-select : Select.Select Msg Movie
-select =
-    Select.new selectConfig
+    Select.newConfig OnSelect .label
+        |> Select.withInputClass "col-12"
 
 
 initialModel : Model
 initialModel =
     { movies = movies
     , selectedMovieId = Nothing
-    , selectState = select.model
+    , selectState = Select.newState
     }
 
 
@@ -64,7 +57,7 @@ update msg model =
         SelectMsg subMsg ->
             let
                 ( updated, cmd ) =
-                    select.update subMsg model.selectState
+                    Select.update selectConfig subMsg model.selectState
             in
                 ( { model | selectState = updated }, cmd )
 
@@ -86,5 +79,5 @@ view model =
     in
         div [ class "bg-silver p1" ]
             [ text (toString model.selectedMovieId)
-            , Html.map SelectMsg (select.view model.selectState model.movies selectedMovie)
+            , Html.map SelectMsg (Select.view selectConfig model.selectState model.movies selectedMovie)
             ]

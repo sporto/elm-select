@@ -10,7 +10,7 @@ import String
 import Tuple
 
 
-view : Models.Config msg item -> Models.Model -> List item -> Maybe item -> Html (Messages.Msg item)
+view : Models.Config msg item -> Models.State -> List item -> Maybe item -> Html (Messages.Msg item)
 view config model items selected =
     let
         relevantItems =
@@ -30,7 +30,7 @@ viewStyles =
     ]
 
 
-matchedItems : Models.Config msg item -> Models.Model -> List item -> List item
+matchedItems : Models.Config msg item -> Models.State -> List item -> List item
 matchedItems config model items =
     case model.query of
         Nothing ->
