@@ -3,6 +3,7 @@ module Select.Select.Input exposing (..)
 import Html exposing (..)
 import Html.Attributes exposing (class, value)
 import Html.Events exposing (onInput)
+import Select.Events exposing (onEsc)
 import Select.Messages as Messages
 import Select.Models as Models
 
@@ -23,4 +24,10 @@ view config model selected =
                 Just str ->
                     str
     in
-        input [ class config.inputClass, onInput Messages.OnQueryChange, value val ] []
+        input
+            [ class config.inputClass
+            , onInput Messages.OnQueryChange
+            , onEsc Messages.OnEsc
+            , value val
+            ]
+            []
