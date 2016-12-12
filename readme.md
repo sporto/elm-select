@@ -6,7 +6,7 @@ An input component with autocompletion.
 
 See 
 
-## TODO
+## To do
 
 - Allow passing classes to
   - ✔ Input
