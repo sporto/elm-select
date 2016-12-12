@@ -1,4 +1,35 @@
-module Select exposing (..)
+module Select
+    exposing
+        ( Config
+        , Model
+        , Msg
+        , newConfig
+        , withInputClass
+        , withMenuClass
+        , withItemClass
+        , withCutoff
+        , newState
+        , view
+        , update
+        )
+
+{-| Select input with auto-complete
+
+# Types
+@docs Config, Model, Msg
+
+# Configuration
+@docs newConfig, withInputClass, withMenuClass, withItemClass, withCutoff
+
+# State
+@docs newState
+
+# view
+@docs view
+
+# Update
+@docs update
+-}
 
 import Html exposing (..)
 import Select.Select
@@ -8,28 +39,34 @@ import Select.Update
 
 
 {-|
-@public
+Opaque type that holds the configuration
 -}
 type Config msg item
     = PrivateConfig (Models.Config msg item)
 
 
 {-|
-@public
+Opaque type that holds the current state
 -}
 type Model
     = PrivateModel (Models.State)
 
 
 {-|
-@public
+Opaque type for internal library messages
 -}
 type Msg item
     = PrivateMsg (Messages.Msg item)
 
 
 {-|
-@public
+Create a new configuration. This takes:
+
+- A message to trigger when an item is selected
+- A function to get a label to display from an item
+
+
+    Select.newConfig OnSelect .label
 -}
 newConfig : (item -> msg) -> (item -> String) -> Config msg item
 newConfig onSelectMessage toLabel =
@@ -37,7 +74,9 @@ newConfig onSelectMessage toLabel =
 
 
 {-|
-@public
+Add classes to the input
+
+    Select.withInputClass "col-12" config
 -}
 withInputClass : String -> Config msg item -> Config msg item
 withInputClass classes config =
@@ -49,7 +88,9 @@ withInputClass classes config =
 
 
 {-|
-@public
+Add classes to the menu
+
+    Select.withMenuClass "bg-white" config
 -}
 withMenuClass : String -> Config msg item -> Config msg item
 withMenuClass classes config =
@@ -61,7 +102,9 @@ withMenuClass classes config =
 
 
 {-|
-@public
+Add classes to the items
+
+    Select.withItemClass "border-bottom" config
 -}
 withItemClass : String -> Config msg item -> Config msg item
 withItemClass classes config =
@@ -72,6 +115,11 @@ withItemClass classes config =
         fmapConfig fn config
 
 
+{-|
+Set the maxium number of items to show
+
+    Select.withCutoff 6 config
+-}
 withCutoff : Int -> Config msg item -> Config msg item
 withCutoff n config =
     let
@@ -94,7 +142,12 @@ fmapConfig fn config =
 
 
 {-|
-@public
+Create a new state
+
+    {
+        ...
+        selectState = Select.newState
+    }
 -}
 newState : Model
 newState =
@@ -102,7 +155,9 @@ newState =
 
 
 {-|
-@public
+Render the view
+
+    Html.map SelectMsg (Select.view selectConfig model.selectState model.items selectedItem)
 -}
 view : Config msg item -> Model -> List item -> Maybe item -> Html (Msg item)
 view config model items selected =
@@ -117,7 +172,14 @@ view config model items selected =
 
 
 {-|
-@public
+Update the component state
+
+    SelectMsg subMsg ->
+        let
+            ( updated, cmd ) =
+                Select.update selectConfig subMsg model.selectState
+        in
+            ( { model | selectState = updated }, cmd )
 -}
 update : Config msg item -> Msg item -> Model -> ( Model, Cmd msg )
 update config msg model =
