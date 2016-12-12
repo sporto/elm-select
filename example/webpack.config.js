@@ -102,6 +102,7 @@ var prodConfig = {
   output: {
     path: path.resolve(__dirname + '/../docs'),
     filename: '[name]-[hash].js',
+    publicPath: '/elm-select/',
   },
 
   module: {
