@@ -2,7 +2,8 @@ module Select.Models exposing (..)
 
 
 type alias Config msg item =
-    { inputClass : String
+    { cutoff : Maybe Int
+    , inputClass : String
     , itemClass : String
     , menuClass : String
     , onQueryChange : Maybe (String -> msg)
@@ -13,7 +14,8 @@ type alias Config msg item =
 
 newConfig : (item -> msg) -> (item -> String) -> Config msg item
 newConfig onSelect toLabel =
-    { inputClass = ""
+    { cutoff = Nothing
+    , inputClass = ""
     , itemClass = ""
     , menuClass = ""
     , onQueryChange = Nothing

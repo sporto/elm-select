@@ -2,7 +2,7 @@ module Select.Select.Items exposing (..)
 
 import Fuzzy
 import Html exposing (..)
-import Html.Attributes exposing (style)
+import Html.Attributes exposing (class, style)
 import Select.Messages as Messages
 import Select.Models as Models
 import Select.Select.Item
@@ -15,13 +15,21 @@ view config model items selected =
     let
         relevantItems =
             matchedItems config model items
+
+        withCutoff =
+            case config.cutoff of
+                Just n ->
+                    List.take n relevantItems
+
+                Nothing ->
+                    relevantItems
     in
         case model.query of
             Nothing ->
                 span [] []
 
             Just query ->
-                div [ style viewStyles ] (List.map (Select.Select.Item.view config) relevantItems)
+                div [ class config.menuClass, style viewStyles ] (List.map (Select.Select.Item.view config) withCutoff)
 
 
 viewStyles : List ( String, String )

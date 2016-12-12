@@ -72,6 +72,15 @@ withItemClass classes config =
         fmapConfig fn config
 
 
+withCutoff : Int -> Config msg item -> Config msg item
+withCutoff n config =
+    let
+        fn c =
+            { c | cutoff = Just n }
+    in
+        fmapConfig fn config
+
+
 {-|
 @priv
 -}
