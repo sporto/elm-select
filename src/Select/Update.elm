@@ -1,17 +1,17 @@
 module Select.Update exposing (..)
 
 import Select.Models as Models
-import Select.Messages as Messages
+import Select.Messages exposing (..)
 import Task
 
 
-update : Models.Config msg item -> Messages.Msg item -> Models.State -> ( Models.State, Cmd msg )
+update : Models.Config msg item -> Msg item -> Models.State -> ( Models.State, Cmd msg )
 update config msg model =
     case msg of
-        Messages.OnQueryChange value ->
+        OnQueryChange value ->
             ( { model | query = Just value }, Cmd.none )
 
-        Messages.OnSelect item ->
+        OnSelect item ->
             let
                 cmd =
                     Task.succeed item
@@ -19,5 +19,5 @@ update config msg model =
             in
                 ( { model | query = Nothing }, cmd )
 
-        Messages.NoOp ->
+        NoOp ->
             ( model, Cmd.none )

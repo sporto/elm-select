@@ -36,7 +36,7 @@ selectConfig =
     Select.newConfig OnSelect .label
         |> Select.withInputClass "col-12"
         |> Select.withMenuClass "bg-white"
-        |> Select.withItemClass "border-bottom"
+        |> Select.withItemClass "border-bottom p1"
         |> Select.withCutoff 6
 
 
