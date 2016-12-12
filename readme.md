@@ -2,6 +2,10 @@
 
 An input component with autocompletion.
 
+## Example
+
+See 
+
 ## TODO
 
 - Allow passing classes to
@@ -16,13 +20,17 @@ An input component with autocompletion.
   - Items
   - First item
   - Last item
-- Hook OnQuery
-- Example using Async
+- Add hooks
+  - onQuery
 - Online examples
+  - ✔ Basic Example
+  - Example using Async
 - Keyboard navigation
-  - Add arrows navigation
   - ✔ Tab
   - ✔ Hit enter to select
   - ✔ Hit space to select
+  - Add arrows navigation
 - Hide the items when navigating away
 - Documentation
+  - ✔ API
+  - Example

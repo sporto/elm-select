@@ -1,5 +1,6 @@
 {
   "scripts": {
+    "build": "webpack",
     "start": "node dev-server.js"
   },
   "devDependencies": {

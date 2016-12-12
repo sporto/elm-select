@@ -6,7 +6,13 @@ var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 
+var DEVELOPMENT = 'development';
+var PRODUCTION = 'production';
 var ENTRY_FILE = './src/index.js';
+
+// Detemine build env
+var target = process.env.npm_lifecycle_event;
+var targetEnv = target === 'build' ? PRODUCTION : DEVELOPMENT;
 
 /*
 Shared configuration for both dev and production
@@ -87,5 +93,59 @@ var devConfig = {
   ],
 };
 
-module.exports = merge(baseConfig, devConfig);
+// Additional webpack settings for prod env (when invoked via 'npm run build')
+var prodConfig = {
+  entry: {
+    app: path.join(__dirname, ENTRY_FILE),
+  },
+
+  output: {
+    filename: '[name]-[hash].js',
+  },
+
+  module: {
+    loaders: [
+      {
+        test: /\.elm$/,
+        exclude: [/elm-stuff/, /node_modules/],
+        loader: 'elm-webpack'
+      },
+      {
+        test: /\.(css|scss)$/,
+        loader: ExtractTextPlugin.extract( 'style-loader', [
+          'css-loader',
+        ])
+      }
+    ]
+  },
+
+  plugins: [
+    // Generate index.html with links to webpack bundles
+    new HtmlWebpackPlugin({
+      title: 'Example',
+      xhtml: true,
+    }),
+
+    new webpack.optimize.OccurenceOrderPlugin(),
+
+    // extract CSS into a separate file
+    new ExtractTextPlugin( './[hash].css', { allChunks: true } ),
+
+    // minify & mangle JS/CSS
+    new webpack.optimize.UglifyJsPlugin({
+        minimize:   true,
+        compressor: { warnings: false }
+        // mangle:  true
+    })
+  ]
+}
+
+if (targetEnv === DEVELOPMENT) {
+  console.log('Serving locally...');
+  module.exports = merge(baseConfig, devConfig);
+} else {
+  console.log('Building for production...');
+  module.exports = merge(baseConfig, prodConfig);
+}
+
 
