@@ -2,7 +2,7 @@ module Main exposing (..)
 
 import Example1
 import Html exposing (..)
-import Html.Attributes exposing (class)
+import Html.Attributes exposing (class, href)
 
 
 type alias Model =
@@ -54,7 +54,8 @@ view : Model -> Html Msg
 view model =
     div [ class "p3" ]
         [ h1 [] [ text "Elm Select" ]
-        , div [ class "clearfix" ]
+        , a [ class "h3", href "https://github.com/sporto/elm-select" ] [ text "https://github.com/sporto/elm-select" ]
+        , div [ class "clearfix mt2" ]
             [ div [ class "col col-6" ]
                 [ Html.map Example1aMsg (Example1.view model.example1a)
                 ]
