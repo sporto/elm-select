@@ -24,7 +24,8 @@ In your main application model you should store:
 - The state for the select component
 -}
 type alias Model =
-    { movies : List Movie
+    { id : String
+    , movies : List Movie
     , selectedMovieId : Maybe String
     , selectState : Select.Model
     }
@@ -41,11 +42,12 @@ movies =
 {-|
 Your model should store the selected item and the state of the Select component(s)
 -}
-initialModel : Model
-initialModel =
-    { movies = movies
+initialModel : String -> Model
+initialModel id =
+    { id = id
+    , movies = movies
     , selectedMovieId = Nothing
-    , selectState = Select.newState
+    , selectState = Select.newState id
     }
 
 
@@ -119,6 +121,7 @@ view model =
             [ text (toString model.selectedMovieId)
               -- Render the Select view. You must pass:
               -- - The configuration
+              -- - A unique identifier for the select component
               -- - The Select internal state
               -- - A list of items
               -- - The currently selected item as Maybe

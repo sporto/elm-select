@@ -142,16 +142,16 @@ fmapConfig fn config =
 
 
 {-|
-Create a new state
+Create a new state. You must pass a unique identifier for each select component.
 
     {
         ...
-        selectState = Select.newState
+        selectState = Select.newState "1"
     }
 -}
-newState : Model
-newState =
-    PrivateModel (Models.newState)
+newState : String -> Model
+newState id =
+    PrivateModel (Models.newState id)
 
 
 {-|

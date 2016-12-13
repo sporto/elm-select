@@ -25,11 +25,13 @@ newConfig onSelect toLabel =
 
 
 type alias State =
-    { query : Maybe String
+    { id : String
+    , query : Maybe String
     }
 
 
-newState : State
-newState =
-    { query = Nothing
+newState : String -> State
+newState id =
+    { id = id
+    , query = Nothing
     }

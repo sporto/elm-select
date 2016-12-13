@@ -13,8 +13,8 @@ type alias Model =
 
 initialModel : Model
 initialModel =
-    { example1a = Example1.initialModel
-    , example1b = Example1.initialModel
+    { example1a = Example1.initialModel "1"
+    , example1b = Example1.initialModel "2"
     }
 
 
