@@ -1,5 +1,5 @@
 {
-    "version": "1.0.0",
+    "version": "1.1.0",
     "summary": "A selection input with auto-completion",
     "repository": "https://github.com/sporto/elm-select.git",
     "license": "MIT",
@@ -7,7 +7,7 @@
         "src/"
     ],
     "exposed-modules": [
-      "Select"
+        "Select"
     ],
     "dependencies": {
         "elm-lang/core": "5.0.0 <= v < 6.0.0",
