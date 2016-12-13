@@ -5,8 +5,11 @@ module Select
         , Msg
         , newConfig
         , withInputClass
+        , withInputStyles
         , withMenuClass
+        , withMenuStyles
         , withItemClass
+        , withItemStyles
         , withCutoff
         , newState
         , view
@@ -19,7 +22,10 @@ module Select
 @docs Config, Model, Msg
 
 # Configuration
-@docs newConfig, withInputClass, withMenuClass, withItemClass, withCutoff
+@docs newConfig
+
+# Styling
+@docs withInputClass, withInputStyles, withMenuClass, withMenuStyles, withItemClass, withItemStyles, withCutoff
 
 # State
 @docs newState
@@ -88,6 +94,20 @@ withInputClass classes config =
 
 
 {-|
+Add styles to the input
+
+    Select.withInputStyles [("color", "red")] config
+-}
+withInputStyles : List ( String, String ) -> Config msg item -> Config msg item
+withInputStyles styles config =
+    let
+        fn c =
+            { c | inputStyles = styles }
+    in
+        fmapConfig fn config
+
+
+{-|
 Add classes to the menu
 
     Select.withMenuClass "bg-white" config
@@ -102,6 +122,20 @@ withMenuClass classes config =
 
 
 {-|
+Add styles to the menu
+
+    Select.withMenuStyles [("padding", "1rem")] config
+-}
+withMenuStyles : List ( String, String ) -> Config msg item -> Config msg item
+withMenuStyles styles config =
+    let
+        fn c =
+            { c | menuStyles = styles }
+    in
+        fmapConfig fn config
+
+
+{-|
 Add classes to the items
 
     Select.withItemClass "border-bottom" config
@@ -111,6 +145,20 @@ withItemClass classes config =
     let
         fn c =
             { c | itemClass = classes }
+    in
+        fmapConfig fn config
+
+
+{-|
+Add styles to the items
+
+    Select.withItemStyles [("color", "peru")] config
+-}
+withItemStyles : List ( String, String ) -> Config msg item -> Config msg item
+withItemStyles styles config =
+    let
+        fn c =
+            { c | itemStyles = styles }
     in
         fmapConfig fn config
 

@@ -1,7 +1,7 @@
 module Select.Select.Input exposing (..)
 
 import Html exposing (..)
-import Html.Attributes exposing (attribute, class, value)
+import Html.Attributes exposing (attribute, class, value, style)
 import Html.Events exposing (on, onInput)
 import Select.Events exposing (onEsc, onBlurAttribute)
 import Select.Messages exposing (..)
@@ -30,6 +30,7 @@ view config model selected =
             , onEsc OnEsc
             , onInput OnQueryChange
             , referenceAttr config model
+            , style config.inputStyles
             , value val
             , viewClassAttr config
             ]

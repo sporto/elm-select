@@ -1,7 +1,7 @@
 module Example1 exposing (..)
 
 import Debug
-import Html exposing (Html, text, div)
+import Html exposing (..)
 import Html.Attributes exposing (class)
 import Movies
 import Select
@@ -74,8 +74,11 @@ selectConfig : Select.Config Msg Movie
 selectConfig =
     Select.newConfig OnSelect .label
         |> Select.withInputClass "col-12"
-        |> Select.withMenuClass "bg-white border border-gray"
+        |> Select.withInputStyles [ ( "padding", "0.5rem" ) ]
+        |> Select.withMenuClass "border border-gray"
+        |> Select.withMenuStyles [ ( "background", "white" ) ]
         |> Select.withItemClass "border-bottom border-silver p1"
+        |> Select.withItemStyles [ ( "color", "darkgrey" ) ]
         |> Select.withCutoff 6
 
 
@@ -125,5 +128,6 @@ view model =
               -- - The Select internal state
               -- - A list of items
               -- - The currently selected item as Maybe
+            , h4 [] [ text "Pick a movie" ]
             , Html.map SelectMsg (Select.view selectConfig model.selectState model.movies selectedMovie)
             ]

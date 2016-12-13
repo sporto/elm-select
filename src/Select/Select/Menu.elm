@@ -1,4 +1,4 @@
-module Select.Select.Items exposing (..)
+module Select.Select.Menu exposing (..)
 
 import Fuzzy
 import Html exposing (..)
@@ -31,7 +31,7 @@ view config model items selected =
             Just query ->
                 div
                     [ viewClassAttr config
-                    , style viewStyles
+                    , style (viewStyles config)
                     ]
                     (List.map (Select.Select.Item.view config model) withCutoff)
 
@@ -41,10 +41,9 @@ viewClassAttr config =
     class ("elm-select-menu " ++ config.menuClass)
 
 
-viewStyles : List ( String, String )
-viewStyles =
-    [ ( "position", "absolute" )
-    ]
+viewStyles : Config msg item -> List ( String, String )
+viewStyles config =
+    ( "position", "absolute" ) :: config.menuStyles
 
 
 matchedItems : Config msg item -> State -> List item -> List item

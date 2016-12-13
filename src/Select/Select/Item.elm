@@ -52,4 +52,4 @@ viewClassAttr config =
 
 viewStyles : Config msg item -> item -> List ( String, String )
 viewStyles config item =
-    [ ( "cursor", "pointer" ) ]
+    ( "cursor", "pointer" ) :: config.itemStyles
