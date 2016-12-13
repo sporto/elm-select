@@ -1,5 +1,6 @@
 module Example1 exposing (..)
 
+import Debug
 import Html exposing (Html, text, div)
 import Html.Attributes exposing (class)
 import Movies
@@ -81,7 +82,7 @@ Your update function should route messages back to the Select component, see `Se
 -}
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
-    case msg of
+    case Debug.log "msg" msg of
         -- OnSelect is triggered when a selection is made on the Select component.
         OnSelect movie ->
             ( { model | selectedMovieId = Just movie.id }, Cmd.none )

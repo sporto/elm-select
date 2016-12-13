@@ -1,7 +1,7 @@
 module Select.Select exposing (..)
 
 import Html exposing (..)
-import Html.Events exposing (onBlur)
+import Html.Attributes exposing (id)
 import Select.Messages exposing (..)
 import Select.Models exposing (..)
 import Select.Select.Items

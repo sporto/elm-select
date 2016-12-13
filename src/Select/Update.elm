@@ -14,7 +14,7 @@ update config msg model =
         OnEsc ->
             ( { model | query = Nothing }, Cmd.none )
 
-        OnInputBlur ->
+        OnBlur ->
             ( { model | query = Nothing }, Cmd.none )
 
         OnQueryChange value ->

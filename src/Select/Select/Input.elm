@@ -1,9 +1,9 @@
 module Select.Select.Input exposing (..)
 
 import Html exposing (..)
-import Html.Attributes exposing (class, value)
-import Html.Events exposing (onInput, onBlur)
-import Select.Events exposing (onEsc)
+import Html.Attributes exposing (attribute, class, value)
+import Html.Events exposing (on, onInput)
+import Select.Events exposing (onEsc, onBlurAttribute)
 import Select.Messages exposing (..)
 import Select.Models exposing (..)
 
@@ -25,7 +25,9 @@ view config model selected =
                     str
     in
         input
-            [ class config.inputClass
+            [ attribute "data-select" "true"
+            , class config.inputClass
+            , onBlurAttribute
             , onInput OnQueryChange
             , onEsc OnEsc
             , value val
