@@ -146,7 +146,7 @@ Create a new state. You must pass a unique identifier for each select component.
 
     {
         ...
-        selectState = Select.newState "1"
+        selectState = Select.newState "select1"
     }
 -}
 newState : String -> Model

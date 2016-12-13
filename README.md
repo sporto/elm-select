@@ -39,7 +39,7 @@ See commented example at `example/src/Example1.elm`
   - 💣 Add arrows navigation
 - Hide the items when navigating away
   - ✔ Esc
-  - 💣 on blur
+  - ✔ on blur
 - Documentation
   - ✔ API
-  - Example
+  - ✔ Example
