@@ -6,13 +6,15 @@ import Html.Attributes exposing (class)
 
 
 type alias Model =
-    { example1 : Example1.Model
+    { example1a : Example1.Model
+    , example1b : Example1.Model
     }
 
 
 initialModel : Model
 initialModel =
-    { example1 = Example1.initialModel
+    { example1a = Example1.initialModel
+    , example1b = Example1.initialModel
     }
 
 
@@ -23,18 +25,26 @@ init =
 
 type Msg
     = NoOp
-    | Example1Msg Example1.Msg
+    | Example1aMsg Example1.Msg
+    | Example1bMsg Example1.Msg
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        Example1Msg sub ->
+        Example1aMsg sub ->
             let
                 ( subModel, subCmd ) =
-                    Example1.update sub model.example1
+                    Example1.update sub model.example1a
             in
-                ( { model | example1 = subModel }, Cmd.map Example1Msg subCmd )
+                ( { model | example1a = subModel }, Cmd.map Example1aMsg subCmd )
+
+        Example1bMsg sub ->
+            let
+                ( subModel, subCmd ) =
+                    Example1.update sub model.example1b
+            in
+                ( { model | example1b = subModel }, Cmd.map Example1bMsg subCmd )
 
         NoOp ->
             ( model, Cmd.none )
@@ -46,7 +56,10 @@ view model =
         [ h1 [] [ text "Elm Select" ]
         , div [ class "clearfix" ]
             [ div [ class "col col-6" ]
-                [ Html.map Example1Msg (Example1.view model.example1)
+                [ Html.map Example1aMsg (Example1.view model.example1a)
+                ]
+            , div [ class "col col-6" ]
+                [ Html.map Example1bMsg (Example1.view model.example1b)
                 ]
             ]
         ]
