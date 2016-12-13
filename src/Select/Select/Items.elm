@@ -3,14 +3,14 @@ module Select.Select.Items exposing (..)
 import Fuzzy
 import Html exposing (..)
 import Html.Attributes exposing (class, style)
-import Select.Messages as Messages
-import Select.Models as Models
+import Select.Messages exposing (..)
+import Select.Models exposing (..)
 import Select.Select.Item
 import String
 import Tuple
 
 
-view : Models.Config msg item -> Models.State -> List item -> Maybe item -> Html (Messages.Msg item)
+view : Config msg item -> State -> List item -> Maybe item -> Html (Msg item)
 view config model items selected =
     let
         relevantItems =
@@ -29,7 +29,16 @@ view config model items selected =
                 span [] []
 
             Just query ->
-                div [ class config.menuClass, style viewStyles ] (List.map (Select.Select.Item.view config) withCutoff)
+                div
+                    [ viewClassAttr config
+                    , style viewStyles
+                    ]
+                    (List.map (Select.Select.Item.view config model) withCutoff)
+
+
+viewClassAttr : Config msg item -> Attribute msg2
+viewClassAttr config =
+    class ("elm-select-menu " ++ config.menuClass)
 
 
 viewStyles : List ( String, String )
@@ -38,7 +47,7 @@ viewStyles =
     ]
 
 
-matchedItems : Models.Config msg item -> Models.State -> List item -> List item
+matchedItems : Config msg item -> State -> List item -> List item
 matchedItems config model items =
     case model.query of
         Nothing ->

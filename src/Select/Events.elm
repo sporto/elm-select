@@ -4,6 +4,8 @@ import Html exposing (..)
 import Html.Events exposing (on, keyCode)
 import Json.Decode as Decode
 import Select.Messages exposing (..)
+import Select.Models exposing (..)
+import Select.Utils exposing (referenceDataName)
 
 
 traceDecoder : String -> Decode.Decoder msg -> Decode.Decoder msg
@@ -45,14 +47,14 @@ onEsc msg =
         on "keyup" (Decode.andThen isEsc keyCode)
 
 
-onBlurAttribute : Attribute (Msg item)
-onBlurAttribute =
+onBlurAttribute : Config msg item -> State -> Attribute (Msg item)
+onBlurAttribute config state =
     let
         dataDecoder =
-            Decode.at [ "relatedTarget", "attributes", "data-select", "value" ] Decode.string
+            Decode.at [ "relatedTarget", "attributes", referenceDataName, "value" ] Decode.string
 
         attrToMsg attr =
-            if attr == "true" then
+            if attr == state.id then
                 NoOp
             else
                 OnBlur
