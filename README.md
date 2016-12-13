@@ -10,6 +10,10 @@ See https://sporto.github.io/elm-select/
 
 See commented example at `example/src/Example1.elm`
 
+## API
+
+<http://package.elm-lang.org/packages/sporto/elm-select/latest>
+
 ### [Changelog](./CHANGELOG.md)
 
 ## To do
@@ -22,9 +26,9 @@ See commented example at `example/src/Example1.elm`
   - Last item
   - 💣 Item hover
 - Allow passing styles
-  - Input
-  - Menu
-  - Items
+  - ✔ Input
+  - ✔ Menu
+  - ✔ Items
   - First item
   - Last item
 - Add hooks
