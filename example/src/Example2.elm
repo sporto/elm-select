@@ -31,7 +31,7 @@ initialModel id =
 
 initialCmds : Cmd Msg
 initialCmds =
-    fetch
+    Cmd.none
 
 
 type Msg
@@ -46,20 +46,20 @@ selectConfig : Select.Config Msg Character
 selectConfig =
     Select.newConfig OnSelect identity
         |> Select.withInputClass "col-12"
-        |> Select.withMenuClass "border border-gray"
+        |> Select.withMenuClass "border border-gray bg-white"
         |> Select.withItemClass "border-bottom border-silver p1"
         |> Select.withCutoff 12
         |> Select.withOnQuery OnQuery
 
 
-fetchUrl : String
-fetchUrl =
-    "http://swapi.co/api/people/?search=han"
+fetchUrl : String -> String
+fetchUrl query =
+    "http://swapi.co/api/people/?search=" ++ query
 
 
-fetch : Cmd Msg
-fetch =
-    Http.get fetchUrl resultDecoder
+fetch : String -> Cmd Msg
+fetch query =
+    Http.get (fetchUrl query) resultDecoder
         |> Http.send OnFetch
 
 
@@ -82,7 +82,7 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case Debug.log "msg" msg of
         OnQuery query ->
-            ( model, Cmd.none )
+            ( model, fetch query )
 
         OnFetch result ->
             case result of
@@ -120,7 +120,8 @@ view model =
                         |> List.head
     in
         div [ class "bg-silver p1" ]
-            [ text (toString model.selectedCharacterId)
+            [ h3 [] [ text "Async example" ]
+            , text (toString model.selectedCharacterId)
             , h4 [] [ text "Pick an star wars character" ]
             , Html.map SelectMsg (Select.view selectConfig model.selectState model.characters selecteCharacter)
             ]

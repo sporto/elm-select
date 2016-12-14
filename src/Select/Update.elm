@@ -18,7 +18,17 @@ update config msg model =
             ( { model | query = Nothing }, Cmd.none )
 
         OnQueryChange value ->
-            ( { model | query = Just value }, Cmd.none )
+            let
+                cmd =
+                    case config.onQueryChange of
+                        Just constructor ->
+                            Task.succeed value
+                                |> Task.perform constructor
+
+                        Nothing ->
+                            Cmd.none
+            in
+                ( { model | query = Just value }, cmd )
 
         OnSelect item ->
             let

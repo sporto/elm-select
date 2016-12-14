@@ -121,7 +121,8 @@ view model =
                         |> List.head
     in
         div [ class "bg-silver p1" ]
-            [ text (toString model.selectedMovieId)
+            [ h3 [] [ text "Basic example" ]
+            , text (toString model.selectedMovieId)
               -- Render the Select view. You must pass:
               -- - The configuration
               -- - A unique identifier for the select component
