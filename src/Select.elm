@@ -11,6 +11,7 @@ module Select
         , withItemClass
         , withItemStyles
         , withCutoff
+        , withOnQuery
         , newState
         , view
         , update
@@ -22,10 +23,10 @@ module Select
 @docs Config, Model, Msg
 
 # Configuration
-@docs newConfig
+@docs newConfig, withCutoff, withOnQuery
 
 # Styling
-@docs withInputClass, withInputStyles, withMenuClass, withMenuStyles, withItemClass, withItemStyles, withCutoff
+@docs withInputClass, withInputStyles, withMenuClass, withMenuStyles, withItemClass, withItemStyles
 
 # State
 @docs newState
@@ -173,6 +174,20 @@ withCutoff n config =
     let
         fn c =
             { c | cutoff = Just n }
+    in
+        fmapConfig fn config
+
+
+{-|
+Add a callback for when the query changes
+
+    Select.withOnQuery OnQuery
+-}
+withOnQuery : (String -> msg) -> Config msg item -> Config msg item
+withOnQuery msg config =
+    let
+        fn c =
+            { c | onQueryChange = Just msg }
     in
         fmapConfig fn config
 

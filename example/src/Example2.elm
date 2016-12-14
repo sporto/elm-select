@@ -39,6 +39,7 @@ type Msg
     | OnSelect Character
     | SelectMsg (Select.Msg Character)
     | OnFetch (Result Http.Error (List Character))
+    | OnQuery String
 
 
 selectConfig : Select.Config Msg Character
@@ -48,6 +49,7 @@ selectConfig =
         |> Select.withMenuClass "border border-gray"
         |> Select.withItemClass "border-bottom border-silver p1"
         |> Select.withCutoff 12
+        |> Select.withOnQuery OnQuery
 
 
 fetchUrl : String
@@ -79,6 +81,9 @@ memberDecoder =
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case Debug.log "msg" msg of
+        OnQuery query ->
+            ( model, Cmd.none )
+
         OnFetch result ->
             case result of
                 Ok characters ->
