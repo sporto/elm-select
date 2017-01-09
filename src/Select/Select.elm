@@ -11,10 +11,13 @@ import Select.Select.Input
 view : Config msg item -> State -> List item -> Maybe item -> Html (Msg item)
 view config model items selected =
     let
+        classes =
+            "elm-select"
+
         styles =
             [ ( "position", "relative" ) ]
     in
-        div [ id model.id, class "elm-select", style styles ]
+        div [ id model.id, class classes, style styles ]
             [ Select.Select.Input.view config model selected
             , Select.Select.Menu.view config model items selected
             ]

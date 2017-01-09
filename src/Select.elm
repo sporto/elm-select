@@ -4,18 +4,22 @@ module Select
         , State
         , Msg
         , newConfig
+        , newState
+        , update
+        , view
         , withClearClass
+        , withClearStyles
+        , withClearSvgClass
+        , withCutoff
         , withInputClass
         , withInputStyles
-        , withMenuClass
-        , withMenuStyles
+        , withInputWrapperClass
+        , withInputWrapperStyles
         , withItemClass
         , withItemStyles
-        , withCutoff
+        , withMenuClass
+        , withMenuStyles
         , withOnQuery
-        , newState
-        , view
-        , update
         )
 
 {-| Select input with auto-complete
@@ -27,7 +31,17 @@ module Select
 @docs newConfig, withCutoff, withOnQuery
 
 # Styling
-@docs withClearClass, withInputClass, withInputStyles, withMenuClass, withMenuStyles, withItemClass, withItemStyles
+@docs withClearClass
+, withClearStyles
+, withClearSvgClass
+, withInputClass
+, withInputStyles
+, withInputWrapperClass
+, withInputWrapperStyles
+, withMenuClass
+, withMenuStyles
+, withItemClass
+, withItemStyles
 
 # State
 @docs newState
@@ -82,7 +96,7 @@ newConfig onSelectMessage toLabel =
 
 
 {-|
-Add classes to the clear icon
+Add classes to the clear button
 
     Select.withClearClass "clear" config
 -}
@@ -91,6 +105,34 @@ withClearClass classes config =
     let
         fn c =
             { c | clearClass = classes }
+    in
+        fmapConfig fn config
+
+
+{-|
+Add styles to the clear button
+
+    Select.withClearStyles [("width", "2rem")] config
+-}
+withClearStyles : List ( String, String ) -> Config msg item -> Config msg item
+withClearStyles styles config =
+    let
+        fn c =
+            { c | clearStyles = styles }
+    in
+        fmapConfig fn config
+
+
+{-|
+Add classes to the clear SVG icon
+
+    Select.withClearSvgClass "clear" config
+-}
+withClearSvgClass : String -> Config msg item -> Config msg item
+withClearSvgClass classes config =
+    let
+        fn c =
+            { c | clearSvgClass = classes }
     in
         fmapConfig fn config
 
@@ -119,6 +161,34 @@ withInputStyles styles config =
     let
         fn c =
             { c | inputStyles = styles }
+    in
+        fmapConfig fn config
+
+
+{-|
+Add classes to the input wrapper (element that wraps the input and the clear button)
+
+    Select.withInputWrapperClass "col-12" config
+-}
+withInputWrapperClass : String -> Config msg item -> Config msg item
+withInputWrapperClass classes config =
+    let
+        fn c =
+            { c | inputWrapperClass = classes }
+    in
+        fmapConfig fn config
+
+
+{-|
+Add styles to the input wrapper
+
+    Select.withInputWrapperStyles [("color", "red")] config
+-}
+withInputWrapperStyles : List ( String, String ) -> Config msg item -> Config msg item
+withInputWrapperStyles styles config =
+    let
+        fn c =
+            { c | inputWrapperStyles = styles }
     in
         fmapConfig fn config
 
