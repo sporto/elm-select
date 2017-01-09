@@ -17,6 +17,14 @@ update config msg model =
         OnBlur ->
             ( { model | query = Nothing }, Cmd.none )
 
+        OnClear ->
+            let
+                cmd =
+                    Task.succeed Nothing
+                        |> Task.perform config.onSelect
+            in
+                ( { model | query = Nothing }, cmd )
+
         OnQueryChange value ->
             let
                 cmd =
@@ -33,7 +41,7 @@ update config msg model =
         OnSelect item ->
             let
                 cmd =
-                    Task.succeed item
+                    Task.succeed (Just item)
                         |> Task.perform config.onSelect
             in
                 ( { model | query = Nothing }, cmd )

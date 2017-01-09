@@ -11,12 +11,12 @@ type alias Config msg item =
     , menuClass : String
     , menuStyles : List ( String, String )
     , onQueryChange : Maybe (String -> msg)
-    , onSelect : item -> msg
+    , onSelect : Maybe item -> msg
     , toLabel : item -> String
     }
 
 
-newConfig : (item -> msg) -> (item -> String) -> Config msg item
+newConfig : (Maybe item -> msg) -> (item -> String) -> Config msg item
 newConfig onSelect toLabel =
     { clearClass = ""
     , cutoff = Nothing

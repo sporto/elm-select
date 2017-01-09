@@ -26,7 +26,7 @@ view config model items selected =
     in
         case model.query of
             Nothing ->
-                span [] []
+                text ""
 
             Just query ->
                 div
@@ -43,7 +43,7 @@ viewClassAttr config =
 
 viewStyles : Config msg item -> List ( String, String )
 viewStyles config =
-    ( "position", "absolute" ) :: config.menuStyles
+    List.append [ ( "position", "absolute" ), ( "z-index", "1" ) ] config.menuStyles
 
 
 matchedItems : Config msg item -> State -> List item -> List item

@@ -27,7 +27,7 @@ type alias Model =
     { id : String
     , movies : List Movie
     , selectedMovieId : Maybe String
-    , selectState : Select.Model
+    , selectState : Select.State
     }
 
 
@@ -58,7 +58,7 @@ Your application messages need to include:
 -}
 type Msg
     = NoOp
-    | OnSelect Movie
+    | OnSelect (Maybe Movie)
     | SelectMsg (Select.Msg Movie)
 
 
@@ -89,8 +89,12 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case Debug.log "msg" msg of
         -- OnSelect is triggered when a selection is made on the Select component.
-        OnSelect movie ->
-            ( { model | selectedMovieId = Just movie.id }, Cmd.none )
+        OnSelect maybeMovie ->
+            let
+                maybeId =
+                    Maybe.map .id maybeMovie
+            in
+                ( { model | selectedMovieId = maybeId }, Cmd.none )
 
         -- Route message to the Select component.
         -- The returned command is important.

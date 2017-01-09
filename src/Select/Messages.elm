@@ -3,7 +3,8 @@ module Select.Messages exposing (..)
 
 type Msg item
     = NoOp
-    | OnEsc
     | OnBlur
+    | OnClear
+    | OnEsc
     | OnQueryChange String
     | OnSelect item

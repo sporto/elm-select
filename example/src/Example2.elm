@@ -12,7 +12,7 @@ type alias Model =
     { id : String
     , characters : List Character
     , selectedCharacterId : Maybe String
-    , selectState : Select.Model
+    , selectState : Select.State
     }
 
 
@@ -36,7 +36,7 @@ initialCmds =
 
 type Msg
     = NoOp
-    | OnSelect Character
+    | OnSelect (Maybe Character)
     | SelectMsg (Select.Msg Character)
     | OnFetch (Result Http.Error (List Character))
     | OnQuery String
@@ -92,8 +92,8 @@ update msg model =
                 Err _ ->
                     ( model, Cmd.none )
 
-        OnSelect character ->
-            ( { model | selectedCharacterId = Just character }, Cmd.none )
+        OnSelect maybeCharacterId ->
+            ( { model | selectedCharacterId = maybeCharacterId }, Cmd.none )
 
         SelectMsg subMsg ->
             let

@@ -66,11 +66,15 @@ update msg model =
             ( model, Cmd.none )
 
 
+projectUrl =
+    "https://github.com/sporto/elm-select"
+
+
 view : Model -> Html Msg
 view model =
     div [ class "p3" ]
         [ h1 [] [ text "Elm Select" ]
-        , a [ class "h3", href "https://github.com/sporto/elm-select" ] [ text "https://github.com/sporto/elm-select" ]
+        , a [ class "h3", href projectUrl ] [ text projectUrl ]
         , div [ class "clearfix mt2" ]
             [ div [ class "col col-6" ]
                 [ Html.map Example1aMsg (Example1.view model.example1a)

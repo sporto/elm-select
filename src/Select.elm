@@ -1,7 +1,7 @@
 module Select
     exposing
         ( Config
-        , Model
+        , State
         , Msg
         , newConfig
         , withClearClass
@@ -21,7 +21,7 @@ module Select
 {-| Select input with auto-complete
 
 # Types
-@docs Config, Model, Msg
+@docs Config, State, Msg
 
 # Configuration
 @docs newConfig, withCutoff, withOnQuery
@@ -56,8 +56,8 @@ type Config msg item
 {-|
 Opaque type that holds the current state
 -}
-type Model
-    = PrivateModel Models.State
+type State
+    = PrivateState Models.State
 
 
 {-|
@@ -76,7 +76,7 @@ Create a new configuration. This takes:
 
     Select.newConfig OnSelect .label
 -}
-newConfig : (item -> msg) -> (item -> String) -> Config msg item
+newConfig : (Maybe item -> msg) -> (item -> String) -> Config msg item
 newConfig onSelectMessage toLabel =
     PrivateConfig (Models.newConfig onSelectMessage toLabel)
 
@@ -227,9 +227,9 @@ Create a new state. You must pass a unique identifier for each select component.
         selectState = Select.newState "select1"
     }
 -}
-newState : String -> Model
+newState : String -> State
 newState id =
-    PrivateModel (Models.newState id)
+    PrivateState (Models.newState id)
 
 
 {-|
@@ -237,7 +237,7 @@ Render the view
 
     Html.map SelectMsg (Select.view selectConfig model.selectState model.items selectedItem)
 -}
-view : Config msg item -> Model -> List item -> Maybe item -> Html (Msg item)
+view : Config msg item -> State -> List item -> Maybe item -> Html (Msg item)
 view config model items selected =
     let
         config_ =
@@ -259,7 +259,7 @@ Update the component state
         in
             ( { model | selectState = updated }, cmd )
 -}
-update : Config msg item -> Msg item -> Model -> ( Model, Cmd msg )
+update : Config msg item -> Msg item -> State -> ( State, Cmd msg )
 update config msg model =
     let
         config_ =
@@ -275,7 +275,7 @@ update config msg model =
             ( mdl, cmd ) =
                 Select.Update.update config_ msg_ model_
         in
-            ( PrivateModel mdl, cmd )
+            ( PrivateState mdl, cmd )
 
 
 {-|
@@ -301,8 +301,8 @@ unwrapMsg msg =
 {-|
 @priv
 -}
-unwrapModel : Model -> Models.State
+unwrapModel : State -> Models.State
 unwrapModel model =
     case model of
-        PrivateModel m ->
+        PrivateState m ->
             m
