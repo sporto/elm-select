@@ -24,11 +24,13 @@ view config model selected =
             List.append [ ( "width", "100%" ) ] config.inputStyles
 
         clearStyles =
-            [ ( "position", "absolute" )
-            , ( "cursor", "pointer" )
+            [ ( "cursor", "pointer" )
+            , ( "height", "1rem" )
+            , ( "line-height", "0rem" )
+            , ( "margin-top", "-0.5rem" )
+            , ( "position", "absolute" )
             , ( "right", "0.25rem" )
             , ( "top", "50%" )
-            , ( "margin-top", "-0.5rem" )
             ]
 
         val =
@@ -49,7 +51,7 @@ view config model selected =
                 |> onWithOptions "click" { stopPropagation = True, preventDefault = False }
 
         clear =
-            span [ onClickWithoutPropagation OnClear, style clearStyles ] [ Clear.view config ]
+            div [ onClickWithoutPropagation OnClear, style clearStyles ] [ Clear.view config ]
     in
         div [ class classes, style rootStyles ]
             [ input
