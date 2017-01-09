@@ -31,17 +31,7 @@ module Select
 @docs newConfig, withCutoff, withOnQuery
 
 # Styling
-@docs withClearClass
-, withClearStyles
-, withClearSvgClass
-, withInputClass
-, withInputStyles
-, withInputWrapperClass
-, withInputWrapperStyles
-, withMenuClass
-, withMenuStyles
-, withItemClass
-, withItemStyles
+@docs withClearClass, withClearStyles, withClearSvgClass, withInputClass, withInputStyles, withInputWrapperClass, withInputWrapperStyles, withMenuClass, withMenuStyles, withItemClass, withItemStyles
 
 # State
 @docs newState
