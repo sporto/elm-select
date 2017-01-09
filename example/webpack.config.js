@@ -58,7 +58,6 @@ var baseConfig = {
 var devConfig = {
   entry: {
     index: [
-      'webpack-hot-middleware/client',  // HMR
       ENTRY_FILE,
     ]
   },
@@ -86,11 +85,7 @@ var devConfig = {
 
   },
 
-  plugins: [
-    new webpack.optimize.OccurenceOrderPlugin(), // HMR
-    new webpack.HotModuleReplacementPlugin(), // HMR
-    new webpack.NoErrorsPlugin(), // HMR
-  ],
+  plugins: [],
 };
 
 // Additional webpack settings for prod env (when invoked via 'npm run build')

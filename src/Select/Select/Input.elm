@@ -42,4 +42,5 @@ view config model selected =
                 ]
                 []
             , clear
+            , clear
             ]
