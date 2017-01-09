@@ -8,7 +8,7 @@
     "copy-webpack-plugin": "^4.0.1",
     "css-loader": "^0.26.1",
     "elm-hot-loader": "^0.5.3",
-    "elm-webpack-loader": "^3.1.0",
+    "elm-webpack-loader": "^4.1.1",
     "express": "^4.14.0",
     "extract-text-webpack-plugin": "^1.0.1",
     "file-loader": "^0.9.0",
@@ -18,6 +18,6 @@
     "webpack": "^1.14.0",
     "webpack-dev-middleware": "^1.8.4",
     "webpack-hot-middleware": "^2.13.2",
-    "webpack-merge": "^1.1.0"
+    "webpack-merge": "^2.3.1"
   }
 }

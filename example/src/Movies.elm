@@ -1,6 +1,7 @@
 module Movies exposing (..)
 
 
+movies : List ( String, String )
 movies =
     [ ( "1", "Avatar (2009)" )
     , ( "2", "Titanic (1997)" )

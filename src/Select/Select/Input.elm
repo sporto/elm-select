@@ -6,12 +6,16 @@ import Html.Events exposing (on, onInput)
 import Select.Events exposing (onEsc, onBlurAttribute)
 import Select.Messages exposing (..)
 import Select.Models exposing (..)
+import Select.Select.Clear as Clear
 import Select.Utils exposing (referenceAttr)
 
 
 view : Config msg item -> State -> Maybe item -> Html (Msg item)
 view config model selected =
     let
+        classes =
+            "elm-select-input " ++ config.inputClass
+
         val =
             case model.query of
                 Nothing ->
@@ -24,19 +28,18 @@ view config model selected =
 
                 Just str ->
                     str
+
+        clear =
+            Clear.view config
     in
-        input
-            [ onBlurAttribute config model
-            , onEsc OnEsc
-            , onInput OnQueryChange
-            , referenceAttr config model
-            , style config.inputStyles
-            , value val
-            , viewClassAttr config
+        div [ class classes, style config.inputStyles ]
+            [ input
+                [ onBlurAttribute config model
+                , onEsc OnEsc
+                , onInput OnQueryChange
+                , referenceAttr config model
+                , value val
+                ]
+                []
+            , clear
             ]
-            []
-
-
-viewClassAttr : Config msg item -> Attribute msg2
-viewClassAttr config =
-    class ("elm-select-input " ++ config.inputClass)

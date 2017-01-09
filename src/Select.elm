@@ -4,6 +4,7 @@ module Select
         , Model
         , Msg
         , newConfig
+        , withClearClass
         , withInputClass
         , withInputStyles
         , withMenuClass
@@ -26,7 +27,7 @@ module Select
 @docs newConfig, withCutoff, withOnQuery
 
 # Styling
-@docs withInputClass, withInputStyles, withMenuClass, withMenuStyles, withItemClass, withItemStyles
+@docs withClearClass, withInputClass, withInputStyles, withMenuClass, withMenuStyles, withItemClass, withItemStyles
 
 # State
 @docs newState
@@ -56,7 +57,7 @@ type Config msg item
 Opaque type that holds the current state
 -}
 type Model
-    = PrivateModel (Models.State)
+    = PrivateModel Models.State
 
 
 {-|
@@ -78,6 +79,20 @@ Create a new configuration. This takes:
 newConfig : (item -> msg) -> (item -> String) -> Config msg item
 newConfig onSelectMessage toLabel =
     PrivateConfig (Models.newConfig onSelectMessage toLabel)
+
+
+{-|
+Add classes to the clear icon
+
+    Select.withClearClass "clear" config
+-}
+withClearClass : String -> Config msg item -> Config msg item
+withClearClass classes config =
+    let
+        fn c =
+            { c | clearClass = classes }
+    in
+        fmapConfig fn config
 
 
 {-|
