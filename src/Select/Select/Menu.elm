@@ -23,17 +23,22 @@ view config model items selected =
 
                 Nothing ->
                     relevantItems
-    in
-        case model.query of
-            Nothing ->
-                text ""
 
-            Just query ->
-                div
-                    [ viewClassAttr config
-                    , style (viewStyles config)
-                    ]
-                    (List.map (Select.Select.Item.view config model) withCutoff)
+        menu =
+            div
+                [ viewClassAttr config
+                , style (viewStyles config)
+                ]
+                (List.map (Select.Select.Item.view config model) withCutoff)
+
+        query =
+            model.query
+                |> Maybe.withDefault ""
+    in
+        if query == "" then
+            text ""
+        else
+            menu
 
 
 viewClassAttr : Config msg item -> Attribute msg2
