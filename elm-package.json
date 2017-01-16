@@ -1,5 +1,9 @@
 {
+<<<<<<< HEAD
     "version": "2.0.1",
+=======
+    "version": "2.1.0",
+>>>>>>> e139185c08f759b93cf119297fd4abc6be678743
     "summary": "A selection input with auto-completion",
     "repository": "https://github.com/sporto/elm-select.git",
     "license": "MIT",

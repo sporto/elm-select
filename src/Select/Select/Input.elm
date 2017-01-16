@@ -14,24 +14,32 @@ import Select.Utils exposing (referenceAttr)
 view : Config msg item -> State -> Maybe item -> Html (Msg item)
 view config model selected =
     let
-        classes =
-            "elm-select-input " ++ config.inputClass
+        rootClasses =
+            "elm-select-input-wrapper " ++ config.inputWrapperClass
 
         rootStyles =
-            [ ( "position", "relative" ) ]
+            List.append [ ( "position", "relative" ) ] config.inputWrapperStyles
+
+        inputClasses =
+            "elm-select-input " ++ config.inputClass
 
         inputStyles =
             List.append [ ( "width", "100%" ) ] config.inputStyles
 
+        clearClasses =
+            "elm-select-clear " ++ config.clearClass
+
         clearStyles =
-            [ ( "cursor", "pointer" )
-            , ( "height", "1rem" )
-            , ( "line-height", "0rem" )
-            , ( "margin-top", "-0.5rem" )
-            , ( "position", "absolute" )
-            , ( "right", "0.25rem" )
-            , ( "top", "50%" )
-            ]
+            List.append
+                [ ( "cursor", "pointer" )
+                , ( "height", "1rem" )
+                , ( "line-height", "0rem" )
+                , ( "margin-top", "-0.5rem" )
+                , ( "position", "absolute" )
+                , ( "right", "0.25rem" )
+                , ( "top", "50%" )
+                ]
+                config.clearStyles
 
         val =
             case model.query of
@@ -51,11 +59,17 @@ view config model selected =
                 |> onWithOptions "click" { stopPropagation = True, preventDefault = False }
 
         clear =
-            div [ onClickWithoutPropagation OnClear, style clearStyles ] [ Clear.view config ]
+            div
+                [ class clearClasses
+                , onClickWithoutPropagation OnClear
+                , style clearStyles
+                ]
+                [ Clear.view config ]
     in
-        div [ class classes, style rootStyles ]
+        div [ class rootClasses, style rootStyles ]
             [ input
-                [ onBlurAttribute config model
+                [ class inputClasses
+                , onBlurAttribute config model
                 , onEsc OnEsc
                 , onInput OnQueryChange
                 , referenceAttr config model
