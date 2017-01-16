@@ -59,12 +59,18 @@ view config model selected =
                 |> onWithOptions "click" { stopPropagation = True, preventDefault = False }
 
         clear =
-            div
-                [ class clearClasses
-                , onClickWithoutPropagation OnClear
-                , style clearStyles
-                ]
-                [ Clear.view config ]
+            case selected of
+                Nothing ->
+                    text ""
+                
+                Just _ ->
+                    div
+                        [ class clearClasses
+                        , onClickWithoutPropagation OnClear
+                        , style clearStyles
+                        ]
+                        [ Clear.view config ]
+
     in
         div [ class rootClasses, style rootStyles ]
             [ input
