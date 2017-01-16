@@ -35,7 +35,7 @@ module Select
 
 # Styling
 
-@docs withClearClass, withClearStyles, withClearSvgClass, withInputClass, withInputStyles, withInputWrapperClass, withInputWrapperStyles, withMenuClass, withMenuStyles, withItemClass, withItemStyles
+@docs withClearClass, withClearStyles, withClearSvgClass, withInputClass, withInputStyles, withInputWrapperClass, withInputWrapperStyles, withMenuClass, withMenuStyles, withItemClass, withItemStyles, withPrompt, withPromptClass, withPromptStyles
 
 # State
 @docs newState
