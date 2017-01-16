@@ -1,7 +1,7 @@
 module Select.Select.Input exposing (..)
 
 import Html exposing (..)
-import Html.Attributes exposing (attribute, class, value, style)
+import Html.Attributes exposing (attribute, class, placeholder, value, style)
 import Html.Events exposing (on, onInput, onWithOptions)
 import Json.Decode as Decode
 import Select.Events exposing (onEsc, onBlurAttribute)
@@ -20,11 +20,27 @@ view config model selected =
         rootStyles =
             List.append [ ( "position", "relative" ) ] config.inputWrapperStyles
 
+        ( promptClass, promptStyles ) =
+            case selected of
+                Nothing ->
+                    ( config.promptClass, config.promptStyles )
+
+                Just _ ->
+                    ( "", [] )
+
         inputClasses =
-            "elm-select-input " ++ config.inputClass
+            String.join " "
+                [ "elm-select-input"
+                , config.inputClass
+                , promptClass
+                ]
 
         inputStyles =
-            List.append [ ( "width", "100%" ) ] config.inputStyles
+            List.concat
+                [ [ ( "width", "100%" ) ]
+                , config.inputStyles
+                , promptStyles
+                ]
 
         clearClasses =
             "elm-select-clear " ++ config.clearClass
@@ -62,7 +78,7 @@ view config model selected =
             case selected of
                 Nothing ->
                     text ""
-                
+
                 Just _ ->
                     div
                         [ class clearClasses
@@ -70,7 +86,6 @@ view config model selected =
                         , style clearStyles
                         ]
                         [ Clear.view config ]
-
     in
         div [ class rootClasses, style rootStyles ]
             [ input
@@ -78,6 +93,7 @@ view config model selected =
                 , onBlurAttribute config model
                 , onEsc OnEsc
                 , onInput OnQueryChange
+                , placeholder config.prompt
                 , referenceAttr config model
                 , style inputStyles
                 , value val

@@ -20,6 +20,9 @@ module Select
         , withMenuClass
         , withMenuStyles
         , withOnQuery
+        , withPrompt
+        , withPromptClass
+        , withPromptStyles
         )
 
 {-| Select input with auto-complete
@@ -31,6 +34,7 @@ module Select
 @docs newConfig, withCutoff, withOnQuery
 
 # Styling
+
 @docs withClearClass, withClearStyles, withClearSvgClass, withInputClass, withInputStyles, withInputWrapperClass, withInputWrapperStyles, withMenuClass, withMenuStyles, withItemClass, withItemStyles
 
 # State
@@ -215,7 +219,7 @@ withMenuStyles styles config =
 Add classes to the items
 
     Select.withItemClass "border-bottom" config
--}
+-}  
 withItemClass : String -> Config msg item -> Config msg item
 withItemClass classes config =
     let
@@ -263,6 +267,45 @@ withOnQuery msg config =
     let
         fn c =
             { c | onQueryChange = Just msg }
+    in
+        fmapConfig fn config
+
+
+{-|
+Add classes to the prompt text (When no item is selected)
+    Dropdown.withPromptClass "prompt" config
+-}
+withPromptClass : String -> Config msg item -> Config msg item
+withPromptClass classes config =
+    let
+        fn c =
+            { c | promptClass = classes }
+    in
+        fmapConfig fn config
+
+
+{-|
+Add a prompt text to be displayed when no element is selected
+    Dropdown.withPrompt "Select a movie" config
+-}
+withPrompt : String -> Config msg item -> Config msg item
+withPrompt prompt config =
+    let
+        fn c =
+            { c | prompt = prompt }
+    in
+        fmapConfig fn config
+
+
+{-|
+Add styles to prompt text
+    Dropdown.withPromptStyles [("color", "red")] config
+-}
+withPromptStyles : List ( String, String ) -> Config msg item -> Config msg item
+withPromptStyles styles config =
+    let
+        fn c =
+            { c | promptStyles = styles }
     in
         fmapConfig fn config
 

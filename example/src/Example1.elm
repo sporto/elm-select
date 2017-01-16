@@ -73,13 +73,15 @@ Create the configuration for the Select component
 selectConfig : Select.Config Msg Movie
 selectConfig =
     Select.newConfig OnSelect .label
+        |> Select.withCutoff 6
         |> Select.withInputClass "col-12"
         |> Select.withInputStyles [ ( "padding", "0.5rem" ) ]
-        |> Select.withMenuClass "border border-gray"
-        |> Select.withMenuStyles [ ( "background", "white" ) ]
         |> Select.withItemClass "border-bottom border-silver p1"
         |> Select.withItemStyles [ ( "color", "darkgrey" ) ]
-        |> Select.withCutoff 6
+        |> Select.withMenuClass "border border-gray"
+        |> Select.withMenuStyles [ ( "background", "white" ) ]
+        |> Select.withPrompt "Select a movie"
+        |> Select.withPromptClass "grey"
 
 
 {-|

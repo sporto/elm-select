@@ -15,11 +15,16 @@ type alias Config msg item =
     , inputWrapperClass : String
     , inputWrapperStyles : List Style
     , itemClass : String
+    , itemClass : String
     , itemStyles : List Style
+    , menuClass : String
     , menuClass : String
     , menuStyles : List Style
     , onQueryChange : Maybe (String -> msg)
     , onSelect : Maybe item -> msg
+    , prompt : String
+    , promptClass : String
+    , promptStyles : List Style
     , toLabel : item -> String
     }
 
@@ -40,6 +45,9 @@ newConfig onSelect toLabel =
     , menuStyles = []
     , onQueryChange = Nothing
     , onSelect = onSelect
+    , prompt = ""
+    , promptClass = ""
+    , promptStyles = []
     , toLabel = toLabel
     }
 
