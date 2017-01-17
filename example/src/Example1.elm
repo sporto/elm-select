@@ -76,10 +76,13 @@ selectConfig =
         |> Select.withCutoff 6
         |> Select.withInputClass "col-12"
         |> Select.withInputStyles [ ( "padding", "0.5rem" ) ]
-        |> Select.withItemClass "border-bottom border-silver p1"
-        |> Select.withItemStyles [ ( "color", "darkgrey" ) ]
+        |> Select.withItemClass "border-bottom border-silver p1 gray"
+        |> Select.withItemStyles [ ( "font-size", "1rem" ) ]
         |> Select.withMenuClass "border border-gray"
         |> Select.withMenuStyles [ ( "background", "white" ) ]
+        |> Select.withNotFound "No matches"
+        |> Select.withNotFoundClass "red"
+        |> Select.withNotFoundStyles [ ( "padding", "0 2rem" ) ]
         |> Select.withPrompt "Select a movie"
         |> Select.withPromptClass "grey"
 

@@ -5,7 +5,7 @@ import Html exposing (..)
 import Html.Attributes exposing (class, style)
 import Select.Messages exposing (..)
 import Select.Models exposing (..)
-import Select.Select.Item
+import Select.Select.Item as Item
 import String
 import Tuple
 
@@ -24,16 +24,27 @@ view config model items selected =
                 Nothing ->
                     relevantItems
 
+        elements =
+            withCutoff
+                |> List.map (Item.view config model)
+
+        noResultElement =
+            if relevantItems == [] then
+                Item.viewNotFound config
+            else
+                text ""
+
+        -- Treat Nothing and "" as empty query
+        query =
+            model.query
+                |> Maybe.withDefault ""
+
         menu =
             div
                 [ viewClassAttr config
                 , style (viewStyles config)
                 ]
-                (List.map (Select.Select.Item.view config model) withCutoff)
-
-        query =
-            model.query
-                |> Maybe.withDefault ""
+                (noResultElement :: elements)
     in
         if query == "" then
             text ""

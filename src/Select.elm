@@ -19,6 +19,9 @@ module Select
         , withItemStyles
         , withMenuClass
         , withMenuStyles
+        , withNotFound
+        , withNotFoundClass
+        , withNotFoundStyles
         , withOnQuery
         , withPrompt
         , withPromptClass
@@ -33,9 +36,29 @@ module Select
 # Configuration
 @docs newConfig, withCutoff, withOnQuery
 
-# Styling
+# Configure the clear button
 
-@docs withClearClass, withClearStyles, withClearSvgClass, withInputClass, withInputStyles, withInputWrapperClass, withInputWrapperStyles, withMenuClass, withMenuStyles, withItemClass, withItemStyles, withPrompt, withPromptClass, withPromptStyles
+@docs withClearClass, withClearStyles, withClearSvgClass
+
+# Configure the input
+
+@docs withInputClass, withInputStyles, withInputWrapperClass, withInputWrapperStyles
+
+# Configure the items
+
+@docs withItemClass, withItemStyles
+
+# Configure the menu
+
+@docs withMenuClass, withMenuStyles
+
+# Configure the not found message
+
+@docs withNotFound, withNotFoundClass
+
+# Configure the prompt
+
+@docs withPrompt, withPromptClass, withPromptStyles
 
 # State
 @docs newState
@@ -132,6 +155,20 @@ withClearSvgClass classes config =
 
 
 {-|
+Set the maxium number of items to show
+
+    Select.withCutoff 6 config
+-}
+withCutoff : Int -> Config msg item -> Config msg item
+withCutoff n config =
+    let
+        fn c =
+            { c | cutoff = Just n }
+    in
+        fmapConfig fn config
+
+
+{-|
 Add classes to the input
 
     Select.withInputClass "col-12" config
@@ -188,6 +225,34 @@ withInputWrapperStyles styles config =
 
 
 {-|
+Add classes to the items
+
+    Select.withItemClass "border-bottom" config
+-}
+withItemClass : String -> Config msg item -> Config msg item
+withItemClass classes config =
+    let
+        fn c =
+            { c | itemClass = classes }
+    in
+        fmapConfig fn config
+
+
+{-|
+Add styles to the items
+
+    Select.withItemStyles [("color", "peru")] config
+-}
+withItemStyles : List ( String, String ) -> Config msg item -> Config msg item
+withItemStyles styles config =
+    let
+        fn c =
+            { c | itemStyles = styles }
+    in
+        fmapConfig fn config
+
+
+{-|
 Add classes to the menu
 
     Select.withMenuClass "bg-white" config
@@ -216,43 +281,43 @@ withMenuStyles styles config =
 
 
 {-|
-Add classes to the items
+Text that will appear when no matches are found
 
-    Select.withItemClass "border-bottom" config
--}  
-withItemClass : String -> Config msg item -> Config msg item
-withItemClass classes config =
+    Select.withNotFound "No matches" config
+-}
+withNotFound : String -> Config msg item -> Config msg item
+withNotFound text config =
     let
         fn c =
-            { c | itemClass = classes }
+            { c | notFound = text }
     in
         fmapConfig fn config
 
 
 {-|
-Add styles to the items
+Class for the not found message
 
-    Select.withItemStyles [("color", "peru")] config
+    Select.withNotFoundClass "red" config
 -}
-withItemStyles : List ( String, String ) -> Config msg item -> Config msg item
-withItemStyles styles config =
+withNotFoundClass : String -> Config msg item -> Config msg item
+withNotFoundClass class config =
     let
         fn c =
-            { c | itemStyles = styles }
+            { c | notFoundClass = class }
     in
         fmapConfig fn config
 
 
 {-|
-Set the maxium number of items to show
+Styles for the not found message
 
-    Select.withCutoff 6 config
+    Select.withNotFoundStyles [("padding", "1rem")] config
 -}
-withCutoff : Int -> Config msg item -> Config msg item
-withCutoff n config =
+withNotFoundStyles : List ( String, String ) -> Config msg item -> Config msg item
+withNotFoundStyles styles config =
     let
         fn c =
-            { c | cutoff = Just n }
+            { c | notFoundStyles = styles }
     in
         fmapConfig fn config
 

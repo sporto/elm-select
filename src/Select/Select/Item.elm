@@ -32,24 +32,54 @@ onKeyUpAttribute item =
 
 view : Config msg item -> State -> item -> Html (Msg item)
 view config state item =
-    div
-        [ onBlurAttribute config state
-        , onClick (OnSelect item)
-        , onKeyUpAttribute item
-        , referenceAttr config state
-        , style (viewStyles config item)
-        , tabindex 0
-        , viewClassAttr config
-        ]
-        [ text (config.toLabel item)
-        ]
+    let
+        classes =
+            baseItemClasses config
+
+        styles =
+            ( "cursor", "pointer" ) :: (baseItemStyles config)
+    in
+        div
+            [ class classes
+            , onBlurAttribute config state
+            , onClick (OnSelect item)
+            , onKeyUpAttribute item
+            , referenceAttr config state
+            , style styles
+            , tabindex 0
+            ]
+            [ text (config.toLabel item)
+            ]
 
 
-viewClassAttr : Config msg item -> Attribute msg2
-viewClassAttr config =
-    class ("elm-select-item " ++ config.itemClass)
+viewNotFound : Config msg item -> Html (Msg item)
+viewNotFound config =
+    let
+        classes =
+            String.join " "
+                [ baseItemClasses config
+                , config.notFoundClass
+                ]
+
+        styles =
+            List.append (baseItemStyles config) config.notFoundStyles
+    in
+        if config.notFound == "" then
+            text ""
+        else
+            div
+                [ class classes
+                , style styles
+                ]
+                [ text config.notFound
+                ]
 
 
-viewStyles : Config msg item -> item -> List ( String, String )
-viewStyles config item =
-    ( "cursor", "pointer" ) :: config.itemStyles
+baseItemClasses : Config msg item -> String
+baseItemClasses config =
+    ("elm-select-item " ++ config.itemClass)
+
+
+baseItemStyles : Config msg item -> List ( String, String )
+baseItemStyles config =
+    config.itemStyles

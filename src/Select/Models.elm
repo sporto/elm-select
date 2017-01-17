@@ -20,6 +20,9 @@ type alias Config msg item =
     , menuClass : String
     , menuClass : String
     , menuStyles : List Style
+    , notFound : String
+    , notFoundClass : String
+    , notFoundStyles : List Style
     , onQueryChange : Maybe (String -> msg)
     , onSelect : Maybe item -> msg
     , prompt : String
@@ -43,6 +46,9 @@ newConfig onSelect toLabel =
     , itemStyles = []
     , menuClass = ""
     , menuStyles = []
+    , notFound = "No results found"
+    , notFoundClass = ""
+    , notFoundStyles = []
     , onQueryChange = Nothing
     , onSelect = onSelect
     , prompt = ""
