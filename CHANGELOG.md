@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.3.0
+
+- Add not found message
+- Add not found styles
+
 ## 2.2.0
 
 - Add withPrompt
