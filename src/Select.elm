@@ -54,7 +54,7 @@ module Select
 
 # Configure the not found message
 
-@docs withNotFound, withNotFoundClass
+@docs withNotFound, withNotFoundClass, withNotFoundStyles
 
 # Configure the prompt
 
