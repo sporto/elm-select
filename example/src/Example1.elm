@@ -73,7 +73,7 @@ Create the configuration for the Select component
 selectConfig : Select.Config Msg Movie
 selectConfig =
     Select.newConfig OnSelect .label
-        |> Select.withCutoff 6
+        |> Select.withCutoff 12
         |> Select.withInputClass "col-12"
         |> Select.withInputStyles [ ( "padding", "0.5rem" ) ]
         |> Select.withItemClass "border-bottom border-silver p1 gray"

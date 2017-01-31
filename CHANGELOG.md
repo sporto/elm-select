@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.4.0
+
+- Add `withScoreThreshold`
+
 ## 2.3.0
 
 - Add not found message

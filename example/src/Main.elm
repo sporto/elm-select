@@ -66,6 +66,7 @@ update msg model =
             ( model, Cmd.none )
 
 
+projectUrl : String
 projectUrl =
     "https://github.com/sporto/elm-select"
 

@@ -28,6 +28,7 @@ type alias Config msg item =
     , prompt : String
     , promptClass : String
     , promptStyles : List Style
+    , scoreThreshold : Int
     , toLabel : item -> String
     }
 
@@ -54,6 +55,7 @@ newConfig onSelect toLabel =
     , prompt = ""
     , promptClass = ""
     , promptStyles = []
+    , scoreThreshold = 500
     , toLabel = toLabel
     }
 

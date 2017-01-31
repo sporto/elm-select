@@ -26,6 +26,7 @@ module Select
         , withPrompt
         , withPromptClass
         , withPromptStyles
+        , withScoreThreshold
         )
 
 {-| Select input with auto-complete
@@ -34,7 +35,7 @@ module Select
 @docs Config, State, Msg
 
 # Configuration
-@docs newConfig, withCutoff, withOnQuery
+@docs newConfig, withCutoff, withOnQuery, withScoreThreshold
 
 # Configure the clear button
 
@@ -338,7 +339,7 @@ withOnQuery msg config =
 
 {-|
 Add classes to the prompt text (When no item is selected)
-    Dropdown.withPromptClass "prompt" config
+    Select.withPromptClass "prompt" config
 -}
 withPromptClass : String -> Config msg item -> Config msg item
 withPromptClass classes config =
@@ -351,7 +352,8 @@ withPromptClass classes config =
 
 {-|
 Add a prompt text to be displayed when no element is selected
-    Dropdown.withPrompt "Select a movie" config
+
+    Select.withPrompt "Select a movie" config
 -}
 withPrompt : String -> Config msg item -> Config msg item
 withPrompt prompt config =
@@ -364,13 +366,30 @@ withPrompt prompt config =
 
 {-|
 Add styles to prompt text
-    Dropdown.withPromptStyles [("color", "red")] config
+
+    Select.withPromptStyles [("color", "red")] config
 -}
 withPromptStyles : List ( String, String ) -> Config msg item -> Config msg item
 withPromptStyles styles config =
     let
         fn c =
             { c | promptStyles = styles }
+    in
+        fmapConfig fn config
+
+
+{-|
+Change the threshold used for filtering matches out.
+A higher threshold will keep more matches.
+Default is 500.
+
+    Select.withScoreThreshold 1000 config
+-}
+withScoreThreshold : Int -> Config msg item -> Config msg item
+withScoreThreshold score config =
+    let
+        fn c =
+            { c | scoreThreshold = score }
     in
         fmapConfig fn config
 
