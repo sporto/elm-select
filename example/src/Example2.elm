@@ -54,7 +54,7 @@ selectConfig =
 
 fetchUrl : String -> String
 fetchUrl query =
-    "http://swapi.co/api/people/?search=" ++ query
+    "https://swapi.co/api/people/?search=" ++ query
 
 
 fetch : String -> Cmd Msg
