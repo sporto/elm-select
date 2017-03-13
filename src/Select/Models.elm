@@ -28,6 +28,10 @@ type alias Config msg item =
     , prompt : String
     , promptClass : String
     , promptStyles : List Style
+    , fuzzySearchAddPenalty : Maybe Int
+    , fuzzySearchRemovePenalty : Maybe Int
+    , fuzzySearchMovePenalty : Maybe Int
+    , fuzzySearchSeparators : List String
     , toLabel : item -> String
     }
 
@@ -54,6 +58,10 @@ newConfig onSelect toLabel =
     , prompt = ""
     , promptClass = ""
     , promptStyles = []
+    , fuzzySearchAddPenalty = Nothing
+    , fuzzySearchRemovePenalty = Nothing
+    , fuzzySearchMovePenalty = Nothing
+    , fuzzySearchSeparators = []
     , toLabel = toLabel
     }
 
