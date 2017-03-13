@@ -10,14 +10,16 @@ type alias Config msg item =
     , clearStyles : List Style
     , clearSvgClass : String
     , cutoff : Maybe Int
+    , fuzzySearchAddPenalty : Maybe Int
+    , fuzzySearchMovePenalty : Maybe Int
+    , fuzzySearchRemovePenalty : Maybe Int
+    , fuzzySearchSeparators : List String
     , inputClass : String
     , inputStyles : List Style
     , inputWrapperClass : String
     , inputWrapperStyles : List Style
     , itemClass : String
-    , itemClass : String
     , itemStyles : List Style
-    , menuClass : String
     , menuClass : String
     , menuStyles : List Style
     , notFound : String
@@ -39,6 +41,10 @@ newConfig onSelect toLabel =
     , clearStyles = []
     , clearSvgClass = ""
     , cutoff = Nothing
+    , fuzzySearchAddPenalty = Nothing
+    , fuzzySearchMovePenalty = Nothing
+    , fuzzySearchRemovePenalty = Nothing
+    , fuzzySearchSeparators = []
     , inputClass = ""
     , inputStyles = []
     , inputWrapperClass = ""

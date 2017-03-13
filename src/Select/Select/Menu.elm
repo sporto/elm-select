@@ -58,3 +58,54 @@ viewClassAttr config =
 viewStyles : Config msg item -> List ( String, String )
 viewStyles config =
     List.append [ ( "position", "absolute" ), ( "z-index", "1" ) ] config.menuStyles
+
+
+
+matchedItems : Config msg item -> State -> List item -> List item
+matchedItems config model items =
+    case model.query of
+        Nothing ->
+            items
+
+        Just query ->
+            let
+                options =
+                    []
+
+                options1 =
+                    case config.fuzzySearchAddPenalty of
+                        Just penalty ->
+                            options ++ [ Fuzzy.addPenalty penalty ]
+
+                        _ ->
+                            options
+
+                options2 =
+                    case config.fuzzySearchRemovePenalty of
+                        Just penalty ->
+                            options1 ++ [ Fuzzy.removePenalty penalty ]
+
+                        _ ->
+                            options1
+
+                options3 =
+                    case config.fuzzySearchMovePenalty of
+                        Just penalty ->
+                            options2 ++ [ Fuzzy.movePenalty penalty ]
+
+                        _ ->
+                            options2
+
+                separators =
+                    config.fuzzySearchSeparators
+
+                scoreFor item =
+                    Fuzzy.match options3 separators (String.toLower query) (String.toLower (config.toLabel item))
+                        |> .score
+            in
+                items
+                    |> List.map (\item -> ( scoreFor item, item ))
+                    |> List.filter (\( score, item ) -> score < 100)
+                    |> List.sortBy Tuple.first
+                    |> List.map Tuple.second
+

@@ -87,6 +87,11 @@ selectConfig =
         |> Select.withPromptClass "grey"
 
 
+
+--        |> Select.withFuzzySearchMovePenalty 100
+--        |> Select.withFuzzySearchSeparators [ " " ]
+
+
 {-|
 Your update function should route messages back to the Select component, see `SelectMsg`.
 -}

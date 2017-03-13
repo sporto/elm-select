@@ -11,6 +11,10 @@ module Select
         , withClearStyles
         , withClearSvgClass
         , withCutoff
+        , withFuzzySearchAddPenalty
+        , withFuzzySearchMovePenalty
+        , withFuzzySearchRemovePenalty
+        , withFuzzySearchSeparators
         , withInputClass
         , withInputStyles
         , withInputWrapperClass
@@ -390,6 +394,59 @@ withScoreThreshold score config =
     let
         fn c =
             { c | scoreThreshold = score }
+
+{-|
+Add fuzzy search add penalty
+
+    Select.withFuzzySearchAddPenalty 1 config
+-}
+withFuzzySearchAddPenalty : Int -> Config msg item -> Config msg item
+withFuzzySearchAddPenalty penalty config =
+    let
+        fn c =
+            { c | fuzzySearchAddPenalty = Just penalty }
+    in
+        fmapConfig fn config
+
+
+{-|
+Add fuzzy search add penalty
+
+    Select.withFuzzySearchRemovePenalty 100 config
+-}
+withFuzzySearchRemovePenalty : Int -> Config msg item -> Config msg item
+withFuzzySearchRemovePenalty penalty config =
+    let
+        fn c =
+            { c | fuzzySearchRemovePenalty = Just penalty }
+    in
+        fmapConfig fn config
+
+
+{-|
+Add fuzzy search move penalty
+
+    Select.withFuzzySearchMovePenalty 1000 config
+-}
+withFuzzySearchMovePenalty : Int -> Config msg item -> Config msg item
+withFuzzySearchMovePenalty penalty config =
+    let
+        fn c =
+            { c | fuzzySearchMovePenalty = Just penalty }
+    in
+        fmapConfig fn config
+
+
+{-|
+Add fuzzy search separators
+
+    Select.withFuzzySearchSeparators ["|", " "] config
+-}
+withFuzzySearchSeparators : List String -> Config msg item -> Config msg item
+withFuzzySearchSeparators separators config =
+    let
+        fn c =
+            { c | fuzzySearchSeparators = separators }
     in
         fmapConfig fn config
 
