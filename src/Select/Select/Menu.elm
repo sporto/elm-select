@@ -70,8 +70,38 @@ matchedItems config model items =
 
         Just query ->
             let
+                options =
+                    []
+
+                options1 =
+                    case config.fuzzySearchAddPenalty of
+                        Just penalty ->
+                            options ++ [ Fuzzy.addPenalty penalty ]
+
+                        _ ->
+                            options
+
+                options2 =
+                    case config.fuzzySearchRemovePenalty of
+                        Just penalty ->
+                            options1 ++ [ Fuzzy.removePenalty penalty ]
+
+                        _ ->
+                            options1
+
+                options3 =
+                    case config.fuzzySearchMovePenalty of
+                        Just penalty ->
+                            options2 ++ [ Fuzzy.movePenalty penalty ]
+
+                        _ ->
+                            options2
+
+                separators =
+                    config.fuzzySearchSeparators
+
                 scoreFor item =
-                    Fuzzy.match [] [] (String.toLower query) (String.toLower (config.toLabel item))
+                    Fuzzy.match options3 separators (String.toLower query) (String.toLower (config.toLabel item))
                         |> .score
             in
                 items
