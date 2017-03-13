@@ -15,7 +15,6 @@ type alias Config msg item =
     , inputWrapperClass : String
     , inputWrapperStyles : List Style
     , itemClass : String
-    , itemClass : String
     , itemStyles : List Style
     , menuClass : String
     , menuClass : String
