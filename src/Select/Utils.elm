@@ -18,6 +18,40 @@ referenceAttr config model =
     attribute referenceDataName model.id
 
 
+fuzzyOptions config =
+    []
+        |> fuzzyAddPenalty config
+        |> fuzzyRemovePenalty config
+        |> fuzzyMovePenalty config
+
+
+fuzzyAddPenalty config options =
+    case config.fuzzySearchAddPenalty of
+        Just penalty ->
+            options ++ [ Fuzzy.addPenalty penalty ]
+
+        _ ->
+            options
+
+
+fuzzyRemovePenalty config options =
+    case config.fuzzySearchRemovePenalty of
+        Just penalty ->
+            options ++ [ Fuzzy.removePenalty penalty ]
+
+        _ ->
+            options
+
+
+fuzzyMovePenalty config options =
+    case config.fuzzySearchMovePenalty of
+        Just penalty ->
+            options ++ [ Fuzzy.movePenalty penalty ]
+
+        _ ->
+            options
+
+
 matchedItems : Config msg item -> State -> List item -> List item
 matchedItems config model items =
     case model.query of
@@ -45,6 +79,12 @@ scoreForItem config query item =
         lowerItem =
             config.toLabel item
                 |> String.toLower
+
+        options =
+            fuzzyOptions config
+
+        fuzzySeparators =
+            config.fuzzySearchSeparators
     in
-        Fuzzy.match [] [] lowerQuery lowerItem
+        Fuzzy.match options fuzzySeparators lowerQuery lowerItem
             |> .score

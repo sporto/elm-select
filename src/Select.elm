@@ -39,7 +39,7 @@ module Select
 @docs Config, State, Msg
 
 # Configuration
-@docs newConfig, withCutoff, withOnQuery, withScoreThreshold
+@docs newConfig, withCutoff, withOnQuery
 
 # Configure the clear button
 
@@ -64,6 +64,10 @@ module Select
 # Configure the prompt
 
 @docs withPrompt, withPromptClass, withPromptStyles
+
+# Configure the Fuzzy search
+
+@docs withScoreThreshold, withFuzzySearchAddPenalty, withFuzzySearchMovePenalty, withFuzzySearchRemovePenalty, withFuzzySearchSeparators
 
 # State
 @docs newState
@@ -394,6 +398,9 @@ withScoreThreshold score config =
     let
         fn c =
             { c | scoreThreshold = score }
+    in
+        fmapConfig fn config
+
 
 {-|
 Add fuzzy search add penalty
