@@ -17,7 +17,6 @@ type alias Config msg item =
     , itemClass : String
     , itemStyles : List Style
     , menuClass : String
-    , menuClass : String
     , menuStyles : List Style
     , notFound : String
     , notFoundClass : String
