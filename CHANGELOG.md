@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.5.0
+
+- Add:
+  - `withFuzzySearchAddPenalty`
+  - `withFuzzySearchMovePenalty`
+  - `withFuzzySearchRemovePenalty`
+  - `withFuzzySearchSeparators`
+
 ## 2.4.0
 
 - Add `withScoreThreshold`
