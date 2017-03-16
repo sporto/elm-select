@@ -64,4 +64,4 @@ onBlurAttribute config state =
                 |> Decode.map (Maybe.map attrToMsg)
                 |> Decode.map (Maybe.withDefault OnBlur)
     in
-        on "blur" blur
+        on "focusout" blur
