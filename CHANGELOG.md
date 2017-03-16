@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.5.1
+
+- Fix issue with on blur in IE and Firefox
+
 ## 2.5.0
 
 - Add:
