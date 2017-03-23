@@ -27,14 +27,14 @@ var baseConfig = {
   target: 'web',
 
   resolve: {
-    modulesDirectories: ['node_modules'],
-    extensions: ["", ".webpack.js", ".web.js", ".ts", ".js"]
+    modules: ['node_modules'],
+    extensions: [".webpack.js", ".web.js", ".ts", ".js"]
   },
 
   module: {
     noParse: /\.elm$/,
 
-    loaders: [
+    rules: [
       {
         test: /\.tsx?$/,
         loader: "ts-loader"
@@ -63,10 +63,10 @@ var devConfig = {
   },
 
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.(css|scss)$/,
-        loaders: [
+        use: [
           'style-loader',
           'css-loader',
         ]
@@ -79,7 +79,7 @@ var devConfig = {
       {
         test: /\.elm$/,
         exclude: [/elm-stuff/, /node_modules/],
-        loader: 'elm-hot!elm-webpack?verbose=true&warn=true&debug=true',
+        loader: 'elm-hot-loader!elm-webpack-loader?verbose=true&warn=true&debug=true',
       },
     ],
 
@@ -101,7 +101,7 @@ var prodConfig = {
   },
 
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.elm$/,
         exclude: [/elm-stuff/, /node_modules/],
@@ -109,9 +109,10 @@ var prodConfig = {
       },
       {
         test: /\.(css|scss)$/,
-        loader: ExtractTextPlugin.extract( 'style-loader', [
-          'css-loader',
-        ])
+        loader: ExtractTextPlugin.extract({
+          fallback: "style-loader",
+          use: "css-loader",
+        })
       }
     ]
   },
@@ -123,10 +124,8 @@ var prodConfig = {
       xhtml: true,
     }),
 
-    new webpack.optimize.OccurenceOrderPlugin(),
-
     // extract CSS into a separate file
-    new ExtractTextPlugin( './[hash].css', { allChunks: true } ),
+    new ExtractTextPlugin({ filename: 'css/[name].css', disable: false, allChunks: true }),
 
     // minify & mangle JS/CSS
     new webpack.optimize.UglifyJsPlugin({
