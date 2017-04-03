@@ -75,7 +75,7 @@ selectConfig =
     Select.newConfig OnSelect .label
         |> Select.withCutoff 12
         |> Select.withInputClass "col-12"
-        |> Select.withInputStyles [ ( "padding", "0.5rem" ) ]
+        |> Select.withInputStyles [ ( "padding", "0.5rem" ), ( "outline", "none" ) ]
         |> Select.withItemClass "border-bottom border-silver p1 gray"
         |> Select.withItemStyles [ ( "font-size", "1rem" ) ]
         |> Select.withMenuClass "border border-gray"
@@ -85,6 +85,7 @@ selectConfig =
         |> Select.withNotFoundStyles [ ( "padding", "0 2rem" ) ]
         |> Select.withPrompt "Select a movie"
         |> Select.withPromptClass "grey"
+        |> Select.withUnderlineClass "underline"
 
 
 

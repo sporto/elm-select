@@ -9,6 +9,8 @@ type alias Config msg item =
     { clearClass : String
     , clearStyles : List Style
     , clearSvgClass : String
+    , underlineClass : String
+    , underlineStyles : List Style
     , cutoff : Maybe Int
     , fuzzySearchAddPenalty : Maybe Int
     , fuzzySearchMovePenalty : Maybe Int
@@ -40,6 +42,8 @@ newConfig onSelect toLabel =
     { clearClass = ""
     , clearStyles = []
     , clearSvgClass = ""
+    , underlineClass = ""
+    , underlineStyles = []
     , cutoff = Nothing
     , fuzzySearchAddPenalty = Nothing
     , fuzzySearchMovePenalty = Nothing

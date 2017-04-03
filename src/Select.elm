@@ -10,6 +10,8 @@ module Select
         , withClearClass
         , withClearStyles
         , withClearSvgClass
+        , withUnderlineClass
+        , withUnderlineStyles
         , withCutoff
         , withFuzzySearchAddPenalty
         , withFuzzySearchMovePenalty
@@ -119,6 +121,34 @@ Create a new configuration. This takes:
 newConfig : (Maybe item -> msg) -> (item -> String) -> Config msg item
 newConfig onSelectMessage toLabel =
     PrivateConfig (Models.newConfig onSelectMessage toLabel)
+
+
+{-|
+Add classes to the underline div
+
+    Select.withUnderlineClass "underline" config
+-}
+withUnderlineClass : String -> Config msg item -> Config msg item
+withUnderlineClass classes config =
+    let
+        fn c =
+            { c | underlineClass = classes }
+    in
+        fmapConfig fn config
+
+
+{-|
+Add styles to the underline div
+
+    Select.withUnderlineStyles [("width", "2rem")] config
+-}
+withUnderlineStyles : List ( String, String ) -> Config msg item -> Config msg item
+withUnderlineStyles styles config =
+    let
+        fn c =
+            { c | underlineStyles = styles }
+    in
+        fmapConfig fn config
 
 
 {-|
