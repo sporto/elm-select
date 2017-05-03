@@ -86,6 +86,19 @@ view config model selected =
                         , style clearStyles
                         ]
                         [ Clear.view config ]
+
+        underlineClasses =
+            "elm-select-underline " ++ config.underlineClass
+
+        underlineStyles =
+            config.underlineStyles
+
+        underline =
+            div
+                [ class underlineClasses
+                , style underlineStyles
+                ]
+                []
     in
         div [ class rootClasses, style rootStyles ]
             [ input
@@ -99,5 +112,6 @@ view config model selected =
                 , value val
                 ]
                 []
+            , underline
             , clear
             ]
