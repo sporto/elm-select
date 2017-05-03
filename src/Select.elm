@@ -51,6 +51,10 @@ module Select
 
 @docs withInputClass, withInputStyles, withInputWrapperClass, withInputWrapperStyles
 
+# Configure an underline element under the input
+
+@docs withUnderlineClass, withUnderlineStyles
+
 # Configure the items
 
 @docs withItemClass, withItemStyles
