@@ -32,6 +32,17 @@ view config model items selected =
             else
                 text ""
 
+        menuStyle =
+            if
+                (relevantItems == [])
+                    && (config.notFoundStyles == [])
+                    && (config.notFoundClass == "")
+                    && (config.notFoundHidden /= [])
+            then
+                style config.notFoundHidden
+            else
+                style (viewStyles config)
+
         -- Treat Nothing and "" as empty query
         query =
             model.query
@@ -40,7 +51,7 @@ view config model items selected =
         menu =
             div
                 [ viewClassAttr config
-                , style (viewStyles config)
+                , menuStyle
                 ]
                 (noResultElement :: elements)
     in

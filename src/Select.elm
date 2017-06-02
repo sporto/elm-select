@@ -27,6 +27,7 @@ module Select
         , withMenuStyles
         , withNotFound
         , withNotFoundClass
+        , withNotFoundHidden
         , withNotFoundStyles
         , withOnQuery
         , withPrompt
@@ -65,7 +66,7 @@ module Select
 
 # Configure the not found message
 
-@docs withNotFound, withNotFoundClass, withNotFoundStyles
+@docs withNotFound, withNotFoundClass, withNotFoundHidden, withNotFoundStyles
 
 # Configure the prompt
 
@@ -347,6 +348,20 @@ withNotFoundClass class config =
     let
         fn c =
             { c | notFoundClass = class }
+    in
+        fmapConfig fn config
+
+
+{-|
+Hide menu when no matches found unless withNotFoundClass or withNotFoundStyles is used
+
+    Select.withNotFoundHidden config
+-}
+withNotFoundHidden : Config msg item -> Config msg item
+withNotFoundHidden config =
+    let
+        fn c =
+            { c | notFoundHidden = [ ( "display", "none" ) ] }
     in
         fmapConfig fn config
 

@@ -48,6 +48,7 @@ selectConfig =
         |> Select.withInputClass "col-12"
         |> Select.withMenuClass "border border-gray bg-white"
         |> Select.withItemClass "border-bottom border-silver p1"
+        |> Select.withNotFoundHidden
         |> Select.withCutoff 12
         |> Select.withOnQuery OnQuery
 
