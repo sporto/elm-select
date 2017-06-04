@@ -33,13 +33,8 @@ view config model items selected =
                 text ""
 
         menuStyle =
-            if
-                (relevantItems == [])
-                    && (config.notFoundStyles == [])
-                    && (config.notFoundClass == "")
-                    && (config.notFoundHidden /= [])
-            then
-                style config.notFoundHidden
+            if relevantItems == [] && config.notFoundShown == False then
+                style [ ( "display", "none" ) ]
             else
                 style (viewStyles config)
 
