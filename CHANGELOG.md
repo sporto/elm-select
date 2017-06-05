@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.7.0
+
+- Added `withNotFoundHidden`
+
 ## 2.6.0
 
 - Added `withUnderlineClass`, `withUnderlineStyles`
