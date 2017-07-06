@@ -7,8 +7,7 @@ import Movies
 import Select
 
 
-{-|
-Model to be passed to the select component. You model can be anything.
+{-| Model to be passed to the select component. You model can be anything.
 E.g. Records, tuples or just strings.
 -}
 type alias Movie =
@@ -17,11 +16,11 @@ type alias Movie =
     }
 
 
-{-|
-In your main application model you should store:
+{-| In your main application model you should store:
 
-- The selected item e.g. selectedMovieId
-- The state for the select component
+  - The selected item e.g. selectedMovieId
+  - The state for the select component
+
 -}
 type alias Model =
     { id : String
@@ -31,16 +30,14 @@ type alias Model =
     }
 
 
-{-|
-This just transforms a list of tuples into records
+{-| This just transforms a list of tuples into records
 -}
 movies : List Movie
 movies =
     List.map (\( id, name ) -> Movie id name) Movies.movies
 
 
-{-|
-Your model should store the selected item and the state of the Select component(s)
+{-| Your model should store the selected item and the state of the Select component(s)
 -}
 initialModel : String -> Model
 initialModel id =
@@ -51,10 +48,11 @@ initialModel id =
     }
 
 
-{-|
-Your application messages need to include:
-- OnSelect item : This will be called when an item is selected
-- SelectMsg (Select.Msg item) : A message that wraps internal Select library messages. This is necessary to route messages back to the component.
+{-| Your application messages need to include:
+
+  - OnSelect item : This will be called when an item is selected
+  - SelectMsg (Select.Msg item) : A message that wraps internal Select library messages. This is necessary to route messages back to the component.
+
 -}
 type Msg
     = NoOp
@@ -62,13 +60,21 @@ type Msg
     | SelectMsg (Select.Msg Movie)
 
 
-{-|
-Create the configuration for the Select component
+transformQuery : String -> Maybe String
+transformQuery query =
+    if String.length query < 4 then
+        Nothing
+    else
+        Just query
+
+
+{-| Create the configuration for the Select component
 
 `Select.newConfig` takes two args:
 
-- The selection message e.g. `OnSelect`
-- A function that extract a label from an item e.g. `.label`
+  - The selection message e.g. `OnSelect`
+  - A function that extract a label from an item e.g. `.label`
+
 -}
 selectConfig : Select.Config Msg Movie
 selectConfig =
@@ -86,6 +92,7 @@ selectConfig =
         |> Select.withPrompt "Select a movie"
         |> Select.withPromptClass "grey"
         |> Select.withUnderlineClass "underline"
+        |> Select.withTransformQuery transformQuery
 
 
 
@@ -93,8 +100,7 @@ selectConfig =
 --        |> Select.withFuzzySearchSeparators [ " " ]
 
 
-{-|
-Your update function should route messages back to the Select component, see `SelectMsg`.
+{-| Your update function should route messages back to the Select component, see `SelectMsg`.
 -}
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
@@ -120,8 +126,7 @@ update msg model =
             ( model, Cmd.none )
 
 
-{-|
-Your view renders the select component passing the config, state, list of items and the currently selected item.
+{-| Your view renders the select component passing the config, state, list of items and the currently selected item.
 -}
 view : Model -> Html Msg
 view model =
@@ -138,12 +143,13 @@ view model =
         div [ class "bg-silver p1" ]
             [ h3 [] [ text "Basic example" ]
             , text (toString model.selectedMovieId)
-              -- Render the Select view. You must pass:
-              -- - The configuration
-              -- - A unique identifier for the select component
-              -- - The Select internal state
-              -- - A list of items
-              -- - The currently selected item as Maybe
+
+            -- Render the Select view. You must pass:
+            -- - The configuration
+            -- - A unique identifier for the select component
+            -- - The Select internal state
+            -- - A list of items
+            -- - The currently selected item as Maybe
             , h4 [] [ text "Pick a movie" ]
             , Html.map SelectMsg (Select.view selectConfig model.selectState model.movies selectedMovie)
             ]

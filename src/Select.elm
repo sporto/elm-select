@@ -34,56 +34,76 @@ module Select
         , withPromptClass
         , withPromptStyles
         , withScoreThreshold
+        , withTransformQuery
         )
 
 {-| Select input with auto-complete
 
+
 # Types
+
 @docs Config, State, Msg
 
+
 # Configuration
+
 @docs newConfig, withCutoff, withOnQuery
+
 
 # Configure the clear button
 
 @docs withClearClass, withClearStyles, withClearSvgClass
 
+
 # Configure the input
 
 @docs withInputClass, withInputStyles, withInputWrapperClass, withInputWrapperStyles
+
 
 # Configure an underline element under the input
 
 @docs withUnderlineClass, withUnderlineStyles
 
+
 # Configure the items
 
 @docs withItemClass, withItemStyles
+
 
 # Configure the menu
 
 @docs withMenuClass, withMenuStyles
 
+
 # Configure the not found message
 
 @docs withNotFound, withNotFoundClass, withNotFoundShown, withNotFoundStyles
+
 
 # Configure the prompt
 
 @docs withPrompt, withPromptClass, withPromptStyles
 
+
 # Configure the Fuzzy search
 
-@docs withScoreThreshold, withFuzzySearchAddPenalty, withFuzzySearchMovePenalty, withFuzzySearchRemovePenalty, withFuzzySearchSeparators
+@docs withTransformQuery, withScoreThreshold, withFuzzySearchAddPenalty, withFuzzySearchMovePenalty, withFuzzySearchRemovePenalty, withFuzzySearchSeparators
+
 
 # State
+
 @docs newState
 
+
 # view
+
 @docs view
 
+
 # Update
+
 @docs update
+
 -}
 
 import Html exposing (..)
@@ -93,45 +113,42 @@ import Select.Messages as Messages
 import Select.Update
 
 
-{-|
-Opaque type that holds the configuration
+{-| Opaque type that holds the configuration
 -}
 type Config msg item
     = PrivateConfig (Models.Config msg item)
 
 
-{-|
-Opaque type that holds the current state
+{-| Opaque type that holds the current state
 -}
 type State
     = PrivateState Models.State
 
 
-{-|
-Opaque type for internal library messages
+{-| Opaque type for internal library messages
 -}
 type Msg item
     = PrivateMsg (Messages.Msg item)
 
 
-{-|
-Create a new configuration. This takes:
+{-| Create a new configuration. This takes:
 
-- A message to trigger when an item is selected
-- A function to get a label to display from an item
+  - A message to trigger when an item is selected
 
+  - A function to get a label to display from an item
 
     Select.newConfig OnSelect .label
+
 -}
 newConfig : (Maybe item -> msg) -> (item -> String) -> Config msg item
 newConfig onSelectMessage toLabel =
     PrivateConfig (Models.newConfig onSelectMessage toLabel)
 
 
-{-|
-Add classes to the underline div
+{-| Add classes to the underline div
 
     Select.withUnderlineClass "underline" config
+
 -}
 withUnderlineClass : String -> Config msg item -> Config msg item
 withUnderlineClass classes config =
@@ -142,10 +159,10 @@ withUnderlineClass classes config =
         fmapConfig fn config
 
 
-{-|
-Add styles to the underline div
+{-| Add styles to the underline div
 
     Select.withUnderlineStyles [("width", "2rem")] config
+
 -}
 withUnderlineStyles : List ( String, String ) -> Config msg item -> Config msg item
 withUnderlineStyles styles config =
@@ -156,10 +173,10 @@ withUnderlineStyles styles config =
         fmapConfig fn config
 
 
-{-|
-Add classes to the clear button
+{-| Add classes to the clear button
 
     Select.withClearClass "clear" config
+
 -}
 withClearClass : String -> Config msg item -> Config msg item
 withClearClass classes config =
@@ -170,10 +187,10 @@ withClearClass classes config =
         fmapConfig fn config
 
 
-{-|
-Add styles to the clear button
+{-| Add styles to the clear button
 
     Select.withClearStyles [("width", "2rem")] config
+
 -}
 withClearStyles : List ( String, String ) -> Config msg item -> Config msg item
 withClearStyles styles config =
@@ -184,10 +201,10 @@ withClearStyles styles config =
         fmapConfig fn config
 
 
-{-|
-Add classes to the clear SVG icon
+{-| Add classes to the clear SVG icon
 
     Select.withClearSvgClass "clear" config
+
 -}
 withClearSvgClass : String -> Config msg item -> Config msg item
 withClearSvgClass classes config =
@@ -198,10 +215,10 @@ withClearSvgClass classes config =
         fmapConfig fn config
 
 
-{-|
-Set the maxium number of items to show
+{-| Set the maxium number of items to show
 
     Select.withCutoff 6 config
+
 -}
 withCutoff : Int -> Config msg item -> Config msg item
 withCutoff n config =
@@ -212,10 +229,10 @@ withCutoff n config =
         fmapConfig fn config
 
 
-{-|
-Add classes to the input
+{-| Add classes to the input
 
     Select.withInputClass "col-12" config
+
 -}
 withInputClass : String -> Config msg item -> Config msg item
 withInputClass classes config =
@@ -226,10 +243,10 @@ withInputClass classes config =
         fmapConfig fn config
 
 
-{-|
-Add styles to the input
+{-| Add styles to the input
 
     Select.withInputStyles [("color", "red")] config
+
 -}
 withInputStyles : List ( String, String ) -> Config msg item -> Config msg item
 withInputStyles styles config =
@@ -240,10 +257,10 @@ withInputStyles styles config =
         fmapConfig fn config
 
 
-{-|
-Add classes to the input wrapper (element that wraps the input and the clear button)
+{-| Add classes to the input wrapper (element that wraps the input and the clear button)
 
     Select.withInputWrapperClass "col-12" config
+
 -}
 withInputWrapperClass : String -> Config msg item -> Config msg item
 withInputWrapperClass classes config =
@@ -254,10 +271,10 @@ withInputWrapperClass classes config =
         fmapConfig fn config
 
 
-{-|
-Add styles to the input wrapper
+{-| Add styles to the input wrapper
 
     Select.withInputWrapperStyles [("color", "red")] config
+
 -}
 withInputWrapperStyles : List ( String, String ) -> Config msg item -> Config msg item
 withInputWrapperStyles styles config =
@@ -268,10 +285,10 @@ withInputWrapperStyles styles config =
         fmapConfig fn config
 
 
-{-|
-Add classes to the items
+{-| Add classes to the items
 
     Select.withItemClass "border-bottom" config
+
 -}
 withItemClass : String -> Config msg item -> Config msg item
 withItemClass classes config =
@@ -282,10 +299,10 @@ withItemClass classes config =
         fmapConfig fn config
 
 
-{-|
-Add styles to the items
+{-| Add styles to the items
 
     Select.withItemStyles [("color", "peru")] config
+
 -}
 withItemStyles : List ( String, String ) -> Config msg item -> Config msg item
 withItemStyles styles config =
@@ -296,10 +313,10 @@ withItemStyles styles config =
         fmapConfig fn config
 
 
-{-|
-Add classes to the menu
+{-| Add classes to the menu
 
     Select.withMenuClass "bg-white" config
+
 -}
 withMenuClass : String -> Config msg item -> Config msg item
 withMenuClass classes config =
@@ -310,10 +327,10 @@ withMenuClass classes config =
         fmapConfig fn config
 
 
-{-|
-Add styles to the menu
+{-| Add styles to the menu
 
     Select.withMenuStyles [("padding", "1rem")] config
+
 -}
 withMenuStyles : List ( String, String ) -> Config msg item -> Config msg item
 withMenuStyles styles config =
@@ -324,10 +341,10 @@ withMenuStyles styles config =
         fmapConfig fn config
 
 
-{-|
-Text that will appear when no matches are found
+{-| Text that will appear when no matches are found
 
     Select.withNotFound "No matches" config
+
 -}
 withNotFound : String -> Config msg item -> Config msg item
 withNotFound text config =
@@ -338,10 +355,10 @@ withNotFound text config =
         fmapConfig fn config
 
 
-{-|
-Class for the not found message
+{-| Class for the not found message
 
     Select.withNotFoundClass "red" config
+
 -}
 withNotFoundClass : String -> Config msg item -> Config msg item
 withNotFoundClass class config =
@@ -352,10 +369,10 @@ withNotFoundClass class config =
         fmapConfig fn config
 
 
-{-|
-Hide menu when no matches found
+{-| Hide menu when no matches found
 
     Select.withNotFoundShown False config
+
 -}
 withNotFoundShown : Bool -> Config msg item -> Config msg item
 withNotFoundShown shown config =
@@ -366,10 +383,10 @@ withNotFoundShown shown config =
         fmapConfig fn config
 
 
-{-|
-Styles for the not found message
+{-| Styles for the not found message
 
     Select.withNotFoundStyles [("padding", "1rem")] config
+
 -}
 withNotFoundStyles : List ( String, String ) -> Config msg item -> Config msg item
 withNotFoundStyles styles config =
@@ -380,10 +397,10 @@ withNotFoundStyles styles config =
         fmapConfig fn config
 
 
-{-|
-Add a callback for when the query changes
+{-| Add a callback for when the query changes
 
     Select.withOnQuery OnQuery
+
 -}
 withOnQuery : (String -> msg) -> Config msg item -> Config msg item
 withOnQuery msg config =
@@ -394,9 +411,8 @@ withOnQuery msg config =
         fmapConfig fn config
 
 
-{-|
-Add classes to the prompt text (When no item is selected)
-    Select.withPromptClass "prompt" config
+{-| Add classes to the prompt text (When no item is selected)
+Select.withPromptClass "prompt" config
 -}
 withPromptClass : String -> Config msg item -> Config msg item
 withPromptClass classes config =
@@ -407,10 +423,10 @@ withPromptClass classes config =
         fmapConfig fn config
 
 
-{-|
-Add a prompt text to be displayed when no element is selected
+{-| Add a prompt text to be displayed when no element is selected
 
     Select.withPrompt "Select a movie" config
+
 -}
 withPrompt : String -> Config msg item -> Config msg item
 withPrompt prompt config =
@@ -421,10 +437,10 @@ withPrompt prompt config =
         fmapConfig fn config
 
 
-{-|
-Add styles to prompt text
+{-| Add styles to prompt text
 
     Select.withPromptStyles [("color", "red")] config
+
 -}
 withPromptStyles : List ( String, String ) -> Config msg item -> Config msg item
 withPromptStyles styles config =
@@ -435,26 +451,10 @@ withPromptStyles styles config =
         fmapConfig fn config
 
 
-{-|
-Change the threshold used for filtering matches out.
-A higher threshold will keep more matches.
-Default is 500.
-
-    Select.withScoreThreshold 1000 config
--}
-withScoreThreshold : Int -> Config msg item -> Config msg item
-withScoreThreshold score config =
-    let
-        fn c =
-            { c | scoreThreshold = score }
-    in
-        fmapConfig fn config
-
-
-{-|
-Add fuzzy search add penalty
+{-| Add fuzzy search add penalty
 
     Select.withFuzzySearchAddPenalty 1 config
+
 -}
 withFuzzySearchAddPenalty : Int -> Config msg item -> Config msg item
 withFuzzySearchAddPenalty penalty config =
@@ -465,10 +465,10 @@ withFuzzySearchAddPenalty penalty config =
         fmapConfig fn config
 
 
-{-|
-Add fuzzy search add penalty
+{-| Add fuzzy search add penalty
 
     Select.withFuzzySearchRemovePenalty 100 config
+
 -}
 withFuzzySearchRemovePenalty : Int -> Config msg item -> Config msg item
 withFuzzySearchRemovePenalty penalty config =
@@ -479,10 +479,10 @@ withFuzzySearchRemovePenalty penalty config =
         fmapConfig fn config
 
 
-{-|
-Add fuzzy search move penalty
+{-| Add fuzzy search move penalty
 
     Select.withFuzzySearchMovePenalty 1000 config
+
 -}
 withFuzzySearchMovePenalty : Int -> Config msg item -> Config msg item
 withFuzzySearchMovePenalty penalty config =
@@ -493,10 +493,10 @@ withFuzzySearchMovePenalty penalty config =
         fmapConfig fn config
 
 
-{-|
-Add fuzzy search separators
+{-| Add fuzzy search separators
 
     Select.withFuzzySearchSeparators ["|", " "] config
+
 -}
 withFuzzySearchSeparators : List String -> Config msg item -> Config msg item
 withFuzzySearchSeparators separators config =
@@ -507,8 +507,45 @@ withFuzzySearchSeparators separators config =
         fmapConfig fn config
 
 
-{-|
-@priv
+{-| Change the threshold used for filtering matches out.
+A higher threshold will keep more matches.
+Default is 500.
+
+    Select.withScoreThreshold 1000 config
+
+-}
+withScoreThreshold : Int -> Config msg item -> Config msg item
+withScoreThreshold score config =
+    let
+        fn c =
+            { c | scoreThreshold = score }
+    in
+        fmapConfig fn config
+
+
+{-| Transform the input query before performing the search
+Return Nothing to prevent searching
+
+    transform : String -> Maybe String
+    transform query =
+        if String.length query < 4 then
+            Nothing
+        else
+            Just query
+
+    Select.withTransformQuery transform config
+
+-}
+withTransformQuery : (String -> Maybe String) -> Config msg item -> Config msg item
+withTransformQuery transform config =
+    let
+        fn c =
+            { c | transformQuery = transform }
+    in
+        fmapConfig fn config
+
+
+{-| @priv
 -}
 fmapConfig : (Models.Config msg item -> Models.Config msg item) -> Config msg item -> Config msg item
 fmapConfig fn config =
@@ -519,23 +556,23 @@ fmapConfig fn config =
         PrivateConfig (fn config_)
 
 
-{-|
-Create a new state. You must pass a unique identifier for each select component.
+{-| Create a new state. You must pass a unique identifier for each select component.
 
     {
         ...
         selectState = Select.newState "select1"
     }
+
 -}
 newState : String -> State
 newState id =
     PrivateState (Models.newState id)
 
 
-{-|
-Render the view
+{-| Render the view
 
     Html.map SelectMsg (Select.view selectConfig model.selectState model.items selectedItem)
+
 -}
 view : Config msg item -> State -> List item -> Maybe item -> Html (Msg item)
 view config model items selected =
@@ -549,8 +586,7 @@ view config model items selected =
         Html.map PrivateMsg (Select.Select.view config_ model_ items selected)
 
 
-{-|
-Update the component state
+{-| Update the component state
 
     SelectMsg subMsg ->
         let
@@ -558,6 +594,7 @@ Update the component state
                 Select.update selectConfig subMsg model.selectState
         in
             ( { model | selectState = updated }, cmd )
+
 -}
 update : Config msg item -> Msg item -> State -> ( State, Cmd msg )
 update config msg model =
@@ -578,8 +615,7 @@ update config msg model =
             ( PrivateState mdl, cmd )
 
 
-{-|
-@priv
+{-| @priv
 -}
 unwrapConfig : Config msg item -> Models.Config msg item
 unwrapConfig config =
@@ -588,8 +624,7 @@ unwrapConfig config =
             c
 
 
-{-|
-@priv
+{-| @priv
 -}
 unwrapMsg : Msg item -> Messages.Msg item
 unwrapMsg msg =
@@ -598,8 +633,7 @@ unwrapMsg msg =
             m
 
 
-{-|
-@priv
+{-| @priv
 -}
 unwrapModel : State -> Models.State
 unwrapModel model =

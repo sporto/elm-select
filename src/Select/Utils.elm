@@ -54,20 +54,26 @@ fuzzyMovePenalty config options =
 
 matchedItems : Config msg item -> State -> List item -> List item
 matchedItems config model items =
-    case model.query of
-        Nothing ->
-            items
-
-        Just query ->
-            let
-                scoreFor =
-                    scoreForItem config query
-            in
+    let
+        maybeQuery : Maybe String
+        maybeQuery =
+            model.query
+                |> Maybe.andThen config.transformQuery
+    in
+        case maybeQuery of
+            Nothing ->
                 items
-                    |> List.map (\item -> ( scoreFor item, item ))
-                    |> List.filter (\( score, item ) -> score < config.scoreThreshold)
-                    |> List.sortBy Tuple.first
-                    |> List.map Tuple.second
+
+            Just query ->
+                let
+                    scoreFor =
+                        scoreForItem config query
+                in
+                    items
+                        |> List.map (\item -> ( scoreFor item, item ))
+                        |> List.filter (\( score, item ) -> score < config.scoreThreshold)
+                        |> List.sortBy Tuple.first
+                        |> List.map Tuple.second
 
 
 scoreForItem : Config msg item -> String -> item -> Int

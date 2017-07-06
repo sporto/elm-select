@@ -35,6 +35,7 @@ type alias Config msg item =
     , promptStyles : List Style
     , scoreThreshold : Int
     , toLabel : item -> String
+    , transformQuery : String -> Maybe String
     }
 
 
@@ -69,7 +70,13 @@ newConfig onSelect toLabel =
     , promptStyles = []
     , scoreThreshold = 500
     , toLabel = toLabel
+    , transformQuery = transformQuery
     }
+
+
+transformQuery : String -> Maybe String
+transformQuery query =
+    Just query
 
 
 type alias State =
