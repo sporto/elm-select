@@ -8,52 +8,62 @@ import Select.Select.Item as Item
 import Select.Utils as Utils
 
 
-view : Config msg item -> State -> List item -> Maybe item -> Html (Msg item)
-view config model items selected =
+view : Config msg item -> State -> List item -> Html (Msg item)
+view config model items =
     let
-        relevantItems =
-            Utils.matchedItems config model items
-
-        withCutoff =
-            case config.cutoff of
-                Just n ->
-                    List.take n relevantItems
-
-                Nothing ->
-                    relevantItems
-
-        elements =
-            withCutoff
-                |> List.map (Item.view config model)
-
-        noResultElement =
-            if relevantItems == [] then
-                Item.viewNotFound config
-            else
-                text ""
-
-        menuStyle =
-            if relevantItems == [] && config.notFoundShown == False then
-                style [ ( "display", "none" ) ]
-            else
-                style (viewStyles config)
-
         -- Treat Nothing and "" as empty query
         query =
             model.query
                 |> Maybe.withDefault ""
 
-        menu =
-            div
-                [ viewClassAttr config
-                , menuStyle
-                ]
-                (noResultElement :: elements)
+        searchResult =
+            Utils.matchedItems config model items
     in
         if query == "" then
             text ""
         else
-            menu
+            case searchResult of
+                Utils.NotSearched ->
+                    text ""
+
+                Utils.ItemsFound matchedItems ->
+                    menu config model matchedItems
+
+
+menu config model matchedItems =
+    let
+        hideWhenNotFound =
+            config.notFoundShown == False && matchedItems == []
+
+        menuStyle =
+            if hideWhenNotFound then
+                style [ ( "display", "none" ) ]
+            else
+                style (viewStyles config)
+
+        noResultElement =
+            if matchedItems == [] then
+                Item.viewNotFound config
+            else
+                text ""
+
+        withCutoff =
+            case config.cutoff of
+                Just n ->
+                    List.take n matchedItems
+
+                Nothing ->
+                    matchedItems
+
+        elements =
+            withCutoff
+                |> List.map (Item.view config model)
+    in
+        div
+            [ viewClassAttr config
+            , menuStyle
+            ]
+            (noResultElement :: elements)
 
 
 viewClassAttr : Config msg item -> Attribute msg2
