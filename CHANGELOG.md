@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.8.0
+
+- Added `withTransformQuery`
+
 ## 2.7.0
 
 - Added `withNotFoundHidden`

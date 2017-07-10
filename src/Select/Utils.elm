@@ -8,6 +8,11 @@ import String
 import Tuple
 
 
+type SearchResult item
+    = NotSearched
+    | ItemsFound (List item)
+
+
 referenceDataName : String
 referenceDataName =
     "data-select-id"
@@ -52,22 +57,29 @@ fuzzyMovePenalty config options =
             options
 
 
-matchedItems : Config msg item -> State -> List item -> List item
+matchedItems : Config msg item -> State -> List item -> SearchResult item
 matchedItems config model items =
-    case model.query of
-        Nothing ->
-            items
+    let
+        maybeQuery : Maybe String
+        maybeQuery =
+            model.query
+                |> Maybe.andThen config.transformQuery
+    in
+        case maybeQuery of
+            Nothing ->
+                NotSearched
 
-        Just query ->
-            let
-                scoreFor =
-                    scoreForItem config query
-            in
-                items
-                    |> List.map (\item -> ( scoreFor item, item ))
-                    |> List.filter (\( score, item ) -> score < config.scoreThreshold)
-                    |> List.sortBy Tuple.first
-                    |> List.map Tuple.second
+            Just query ->
+                let
+                    scoreFor =
+                        scoreForItem config query
+                in
+                    items
+                        |> List.map (\item -> ( scoreFor item, item ))
+                        |> List.filter (\( score, item ) -> score < config.scoreThreshold)
+                        |> List.sortBy Tuple.first
+                        |> List.map Tuple.second
+                        |> ItemsFound
 
 
 scoreForItem : Config msg item -> String -> item -> Int

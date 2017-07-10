@@ -29,12 +29,12 @@ update config msg model =
             let
                 cmd =
                     case config.onQueryChange of
+                        Nothing ->
+                            Cmd.none
+
                         Just constructor ->
                             Task.succeed value
                                 |> Task.perform constructor
-
-                        Nothing ->
-                            Cmd.none
             in
                 ( { model | query = Just value }, cmd )
 
