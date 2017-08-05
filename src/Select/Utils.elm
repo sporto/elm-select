@@ -28,6 +28,7 @@ fuzzyOptions config =
         |> fuzzyAddPenalty config
         |> fuzzyRemovePenalty config
         |> fuzzyMovePenalty config
+        |> fuzzyInsertPenalty config
 
 
 fuzzyAddPenalty config options =
@@ -52,6 +53,15 @@ fuzzyMovePenalty config options =
     case config.fuzzySearchMovePenalty of
         Just penalty ->
             options ++ [ Fuzzy.movePenalty penalty ]
+
+        _ ->
+            options
+
+
+fuzzyInsertPenalty config options =
+    case config.fuzzySearchInsertPenalty of
+        Just penalty ->
+            options ++ [ Fuzzy.insertPenalty penalty ]
 
         _ ->
             options

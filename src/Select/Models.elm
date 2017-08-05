@@ -15,6 +15,7 @@ type alias Config msg item =
     , fuzzySearchAddPenalty : Maybe Int
     , fuzzySearchMovePenalty : Maybe Int
     , fuzzySearchRemovePenalty : Maybe Int
+    , fuzzySearchInsertPenalty : Maybe Int
     , fuzzySearchSeparators : List String
     , inputClass : String
     , inputStyles : List Style
@@ -50,6 +51,7 @@ newConfig onSelect toLabel =
     , fuzzySearchAddPenalty = Nothing
     , fuzzySearchMovePenalty = Nothing
     , fuzzySearchRemovePenalty = Nothing
+    , fuzzySearchInsertPenalty = Nothing
     , fuzzySearchSeparators = []
     , inputClass = ""
     , inputStyles = []
