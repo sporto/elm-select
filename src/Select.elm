@@ -16,6 +16,7 @@ module Select
         , withFuzzySearchAddPenalty
         , withFuzzySearchMovePenalty
         , withFuzzySearchRemovePenalty
+        , withFuzzySearchInsertPenalty
         , withFuzzySearchSeparators
         , withInputClass
         , withInputStyles
@@ -87,7 +88,7 @@ module Select
 
 # Configure the Fuzzy search
 
-@docs withTransformQuery, withScoreThreshold, withFuzzySearchAddPenalty, withFuzzySearchMovePenalty, withFuzzySearchRemovePenalty, withFuzzySearchSeparators
+@docs withTransformQuery, withScoreThreshold, withFuzzySearchAddPenalty, withFuzzySearchMovePenalty, withFuzzySearchRemovePenalty, withFuzzySearchInsertPenalty, withFuzzySearchSeparators
 
 
 # State
@@ -489,6 +490,20 @@ withFuzzySearchMovePenalty penalty config =
     let
         fn c =
             { c | fuzzySearchMovePenalty = Just penalty }
+    in
+        fmapConfig fn config
+
+
+{-| Add fuzzy search insert penalty
+
+    Select.withFuzzySearchInsertPenalty 1 config
+
+-}
+withFuzzySearchInsertPenalty : Int -> Config msg item -> Config msg item
+withFuzzySearchInsertPenalty penalty config =
+    let
+        fn c =
+            { c | fuzzySearchInsertPenalty = Just penalty }
     in
         fmapConfig fn config
 
