@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.9.0
+
+- Added `withFuzzySearchInsertPenalty`
+
 ## 2.8.0
 
 - Added `withTransformQuery`
