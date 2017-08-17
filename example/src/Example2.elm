@@ -49,6 +49,8 @@ selectConfig =
         |> Select.withMenuClass "border border-gray bg-white"
         |> Select.withItemClass "border-bottom border-silver p1"
         |> Select.withNotFoundShown False
+        |> Select.withHighlightedItemClass "bg-silver"
+        |> Select.withHighlightedItemStyles [ ( "color", "black" ) ]
         |> Select.withCutoff 12
         |> Select.withOnQuery OnQuery
 

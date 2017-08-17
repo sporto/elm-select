@@ -1,52 +1,44 @@
 module Select.Select.Item exposing (..)
 
 import Html exposing (..)
-import Html.Attributes exposing (attribute, class, style, tabindex)
-import Html.Events exposing (onClick, on, keyCode)
-import Json.Decode as Decode
-import Select.Events exposing (onBlurAttribute)
+import Html.Attributes exposing (attribute, class, style)
+import Html.Events exposing (onMouseDown)
 import Select.Messages exposing (..)
 import Select.Models exposing (..)
 import Select.Utils exposing (referenceAttr)
 
-
-onKeyUpAttribute : item -> Attribute (Msg item)
-onKeyUpAttribute item =
+view : Config msg item -> State -> Int -> Int -> item -> Html (Msg item)
+view config state itemCount index item =
     let
-        fn code =
-            case code of
-                13 ->
-                    Decode.succeed (OnSelect item)
 
-                32 ->
-                    Decode.succeed (OnSelect item)
+        ( highlightedItemClass, highlightedItemStyles ) =
+          case state.highlightedItem of
+            Nothing -> ( "", [] )
+            Just highlighted ->
+              -- take remainder as item numbers wrap around
+              if (rem highlighted itemCount) == index
+                then ( config.highlightedItemClass, config.highlightedItemStyles )
+                else ( "", [] )
 
-                27 ->
-                    Decode.succeed OnEsc
-
-                _ ->
-                    Decode.fail "not ENTER"
-    in
-        on "keyup" (Decode.andThen fn keyCode)
-
-
-view : Config msg item -> State -> item -> Html (Msg item)
-view config state item =
-    let
         classes =
-            baseItemClasses config
+            String.join " "
+                [ baseItemClasses config
+                , highlightedItemClass
+                ]
 
         styles =
-            ( "cursor", "pointer" ) :: (baseItemStyles config)
+            List.concat
+                [ [ ( "cursor", "pointer" ) ]
+                , baseItemStyles config
+                , highlightedItemStyles
+                ]
+
     in
         div
             [ class classes
-            , onBlurAttribute config state
-            , onClick (OnSelect item)
-            , onKeyUpAttribute item
+            , onMouseDown (OnSelect item)
             , referenceAttr config state
             , style styles
-            , tabindex 0
             ]
             [ text (config.toLabel item)
             ]

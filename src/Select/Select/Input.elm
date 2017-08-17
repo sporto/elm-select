@@ -2,17 +2,45 @@ module Select.Select.Input exposing (..)
 
 import Html exposing (..)
 import Html.Attributes exposing (attribute, class, placeholder, value, style)
-import Html.Events exposing (on, onInput, onWithOptions)
+import Html.Events exposing (on, onInput, onWithOptions, keyCode)
+import Array
 import Json.Decode as Decode
-import Select.Events exposing (onEsc, onBlurAttribute)
+import Select.Events exposing (onBlurAttribute)
 import Select.Messages exposing (..)
 import Select.Models exposing (..)
 import Select.Select.Clear as Clear
-import Select.Utils exposing (referenceAttr)
+import Select.Utils exposing (referenceAttr, matchedItemsWithCutoff)
 
 
-view : Config msg item -> State -> Maybe item -> Html (Msg item)
-view config model selected =
+onKeyUpAttribute : Maybe item -> Attribute (Msg item)
+onKeyUpAttribute maybeItem =
+    let
+        selectItem =
+          case maybeItem of
+            Nothing -> Decode.fail "not Enter"
+            Just item -> Decode.succeed (OnSelect item)
+
+        fn code =
+            case Debug.log "input keycode" code of
+                13 ->
+                    selectItem
+
+                38 ->
+                    Decode.succeed OnUpArrow
+
+                40 ->
+                    Decode.succeed OnDownArrow
+
+                27 ->
+                    Decode.succeed OnEsc
+
+                _ ->
+                    Decode.fail "not ENTER"
+    in
+        on "keyup" (Decode.andThen fn keyCode)
+
+view : Config msg item -> State -> List item -> Maybe item -> Html (Msg item)
+view config model items selected =
     let
         rootClasses =
             "elm-select-input-wrapper " ++ config.inputWrapperClass
@@ -99,12 +127,27 @@ view config model selected =
                 , style underlineStyles
                 ]
                 []
+
+        matchedItems =
+          matchedItemsWithCutoff config model items
+
+        highlightedItem =
+          case matchedItems of
+            Select.Utils.NotSearched ->
+              Nothing
+
+            Select.Utils.ItemsFound found ->
+              case model.highlightedItem of
+                Nothing ->
+                  Nothing
+                Just n ->
+                  Array.fromList found |> Array.get (rem n (List.length found)) -- items wrap around
     in
         div [ class rootClasses, style rootStyles ]
             [ input
                 [ class inputClasses
                 , onBlurAttribute config model
-                , onEsc OnEsc
+                , onKeyUpAttribute highlightedItem
                 , onInput OnQueryChange
                 , placeholder config.prompt
                 , referenceAttr config model

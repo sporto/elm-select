@@ -14,6 +14,25 @@ update config msg model =
         OnEsc ->
             ( { model | query = Nothing }, Cmd.none )
 
+        OnDownArrow ->
+            let
+                newHightlightedItem =
+                  case model.highlightedItem of
+                    Nothing -> Just 0
+                    Just n -> Just (n + 1)
+            in
+              ( { model | highlightedItem =  newHightlightedItem }, Cmd.none )
+
+        OnUpArrow ->
+            let
+                newHightlightedItem =
+                  case model.highlightedItem of
+                    Nothing -> Nothing
+                    Just 0 -> Nothing
+                    Just n -> Just (n - 1)
+            in
+              ( { model | highlightedItem =  newHightlightedItem }, Cmd.none)
+
         OnBlur ->
             ( { model | query = Nothing }, Cmd.none )
 
@@ -36,7 +55,7 @@ update config msg model =
                             Task.succeed value
                                 |> Task.perform constructor
             in
-                ( { model | query = Just value }, cmd )
+                ( { model | highlightedItem = Nothing, query = Just value }, cmd )
 
         OnSelect item ->
             let

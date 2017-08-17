@@ -23,30 +23,6 @@ traceDecoder message decoder =
             |> Decode.andThen log
 
 
-onEnterOrSpace : msg -> Attribute msg
-onEnterOrSpace msg =
-    let
-        isEnterOrSpace code =
-            if code == 13 || code == 32 then
-                Decode.succeed msg
-            else
-                Decode.fail "not ENTER"
-    in
-        on "keyup" (Decode.andThen isEnterOrSpace keyCode)
-
-
-onEsc : msg -> Attribute msg
-onEsc msg =
-    let
-        isEsc code =
-            if code == 27 then
-                Decode.succeed msg
-            else
-                Decode.fail "not ENTER"
-    in
-        on "keyup" (Decode.andThen isEsc keyCode)
-
-
 onBlurAttribute : Config msg item -> State -> Attribute (Msg item)
 onBlurAttribute config state =
     let

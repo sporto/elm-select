@@ -67,6 +67,22 @@ fuzzyInsertPenalty config options =
             options
 
 
+matchedItemsWithCutoff : Config msg item -> State -> List item -> SearchResult item
+matchedItemsWithCutoff config model items =
+  case matchedItems config model items of
+
+    NotSearched ->
+      NotSearched
+
+    ItemsFound matching ->
+      case config.cutoff of
+
+        Just n ->
+          ItemsFound (List.take n matching)
+
+        Nothing ->
+          ItemsFound matching
+
 matchedItems : Config msg item -> State -> List item -> SearchResult item
 matchedItems config model items =
     let

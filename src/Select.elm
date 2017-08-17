@@ -30,6 +30,8 @@ module Select
         , withNotFoundClass
         , withNotFoundShown
         , withNotFoundStyles
+        , withHighlightedItemClass
+        , withHighlightedItemStyles
         , withOnQuery
         , withPrompt
         , withPromptClass
@@ -397,6 +399,32 @@ withNotFoundStyles styles config =
     in
         fmapConfig fn config
 
+
+{-| Class for the hightlighted tem
+
+    Select.withHighlightedItemClass "red" config
+
+-}
+withHighlightedItemClass : String -> Config msg item -> Config msg item
+withHighlightedItemClass class config =
+    let
+        fn c =
+            { c | highlightedItemClass = class }
+    in
+        fmapConfig fn config
+
+{-| Styles for the highlighted item
+
+    Select.withHighlightedItemStyles [("padding", "1rem")] config
+
+-}
+withHighlightedItemStyles : List ( String, String ) -> Config msg item -> Config msg item
+withHighlightedItemStyles styles config =
+    let
+        fn c =
+            { c | highlightedItemStyles = styles }
+    in
+        fmapConfig fn config
 
 {-| Add a callback for when the query changes
 
