@@ -7,18 +7,21 @@ import Select.Messages exposing (..)
 import Select.Models exposing (..)
 import Select.Utils exposing (referenceAttr)
 
+
 view : Config msg item -> State -> Int -> Int -> item -> Html (Msg item)
 view config state itemCount index item =
     let
-
         ( highlightedItemClass, highlightedItemStyles ) =
-          case state.highlightedItem of
-            Nothing -> ( "", [] )
-            Just highlighted ->
-              -- take remainder as item numbers wrap around
-              if (rem highlighted itemCount) == index
-                then ( config.highlightedItemClass, config.highlightedItemStyles )
-                else ( "", [] )
+            case state.highlightedItem of
+                Nothing ->
+                    ( "", [] )
+
+                Just highlighted ->
+                    -- take remainder as item numbers wrap around
+                    if rem highlighted itemCount == index then
+                        ( config.highlightedItemClass, config.highlightedItemStyles )
+                    else
+                        ( "", [] )
 
         classes =
             String.join " "
@@ -32,7 +35,6 @@ view config state itemCount index item =
                 , baseItemStyles config
                 , highlightedItemStyles
                 ]
-
     in
         div
             [ class classes

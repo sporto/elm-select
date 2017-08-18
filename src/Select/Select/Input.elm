@@ -21,7 +21,7 @@ onKeyUpAttribute maybeItem =
             Just item -> Decode.succeed (OnSelect item)
 
         fn code =
-            case Debug.log "input keycode" code of
+            case code of
                 13 ->
                     selectItem
 
