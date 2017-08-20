@@ -17,7 +17,7 @@ view config model items =
                 |> Maybe.withDefault ""
 
         searchResult =
-            Utils.matchedItems config model items
+            Utils.matchedItemsWithCutoff config model items
     in
         if query == "" then
             text ""
@@ -47,17 +47,12 @@ menu config model matchedItems =
             else
                 text ""
 
-        withCutoff =
-            case config.cutoff of
-                Just n ->
-                    List.take n matchedItems
-
-                Nothing ->
-                    matchedItems
+        itemCount =
+          List.length matchedItems
 
         elements =
-            withCutoff
-                |> List.map (Item.view config model)
+            matchedItems
+                |> List.indexedMap (Item.view config model itemCount)
     in
         div
             [ viewClassAttr config

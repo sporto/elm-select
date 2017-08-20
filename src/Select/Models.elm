@@ -29,6 +29,8 @@ type alias Config msg item =
     , notFoundClass : String
     , notFoundShown : Bool
     , notFoundStyles : List Style
+    , highlightedItemClass : String
+    , highlightedItemStyles : List Style
     , onQueryChange : Maybe (String -> msg)
     , onSelect : Maybe item -> msg
     , prompt : String
@@ -65,6 +67,8 @@ newConfig onSelect toLabel =
     , notFoundClass = ""
     , notFoundShown = True
     , notFoundStyles = []
+    , highlightedItemClass = ""
+    , highlightedItemStyles = []
     , onQueryChange = Nothing
     , onSelect = onSelect
     , prompt = ""
@@ -84,6 +88,7 @@ transformQuery query =
 type alias State =
     { id : String
     , query : Maybe String
+    , highlightedItem : Maybe Int
     }
 
 
@@ -91,4 +96,5 @@ newState : String -> State
 newState id =
     { id = id
     , query = Nothing
+    , highlightedItem = Nothing
     }

@@ -89,6 +89,8 @@ selectConfig =
         |> Select.withNotFound "No matches"
         |> Select.withNotFoundClass "red"
         |> Select.withNotFoundStyles [ ( "padding", "0 2rem" ) ]
+        |> Select.withHighlightedItemClass "bg-silver"
+        |> Select.withHighlightedItemStyles [ ( "color", "black" ) ]
         |> Select.withPrompt "Select a movie"
         |> Select.withPromptClass "grey"
         |> Select.withUnderlineClass "underline"

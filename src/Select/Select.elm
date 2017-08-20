@@ -18,6 +18,6 @@ view config model items selected =
             [ ( "position", "relative" ) ]
     in
         div [ id model.id, class classes, style styles ]
-            [ Select.Select.Input.view config model selected
+            [ Select.Select.Input.view config model items selected
             , Select.Select.Menu.view config model items
             ]
