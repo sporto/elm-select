@@ -2,11 +2,11 @@ docs:
 	elm-make --docs=documentation.json
 
 run-demo:
-	cd example && npm start
+	cd demo && npm start
 
 # Make the github page (demo)
 build-demo:
 	rm -rf docs/*
-	NODE_ENV=production cd example && npm run build
+	NODE_ENV=production cd demo && npm run build
 
-.PHONY: example
+.PHONY: demo
