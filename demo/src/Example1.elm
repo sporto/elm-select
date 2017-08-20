@@ -19,7 +19,7 @@ type alias Movie =
 {-| In your main application model you should store:
 
   - The selected item e.g. selectedMovieId
-  - The state for the select component
+  - The state for the select component e.g. selectState
 
 -}
 type alias Model =
@@ -30,7 +30,7 @@ type alias Model =
     }
 
 
-{-| This just transforms a list of tuples into records
+{-| A helper function that transforms a list of tuples into records
 -}
 movies : List Movie
 movies =
@@ -60,6 +60,8 @@ type Msg
     | SelectMsg (Select.Msg Movie)
 
 
+{-| A helper function for the configuration below
+-}
 transformQuery : String -> Maybe String
 transformQuery query =
     if String.length query < 4 then
@@ -74,6 +76,8 @@ transformQuery query =
 
   - The selection message e.g. `OnSelect`
   - A function that extract a label from an item e.g. `.label`
+
+All the functions after |> are optional configuration.
 
 -}
 selectConfig : Select.Config Msg Movie
@@ -95,11 +99,6 @@ selectConfig =
         |> Select.withPromptClass "grey"
         |> Select.withUnderlineClass "underline"
         |> Select.withTransformQuery transformQuery
-
-
-
---        |> Select.withFuzzySearchMovePenalty 100
---        |> Select.withFuzzySearchSeparators [ " " ]
 
 
 {-| Your update function should route messages back to the Select component, see `SelectMsg`.
