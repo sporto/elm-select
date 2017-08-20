@@ -8,13 +8,15 @@ See https://sporto.github.io/elm-select/
 
 ## Example and Getting started
 
-See commented example at `example/src/Example1.elm`
+See commented example at `demo/src/Example1.elm`
 
 ## API
 
 <http://package.elm-lang.org/packages/sporto/elm-select/latest>
 
 ### [Changelog](./CHANGELOG.md)
+
+---
 
 ## Run demo
 
