@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.10.0
+
+- Add arrow navigation
+
 ## 2.9.0
 
 - Added `withFuzzySearchInsertPenalty`
