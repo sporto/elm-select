@@ -1,7 +1,7 @@
 module Select.Select.Input exposing (..)
 
 import Html exposing (..)
-import Html.Attributes exposing (attribute, class, placeholder, value, style)
+import Html.Attributes exposing (attribute, class, placeholder, value, style, autocomplete)
 import Html.Events exposing (on, onInput, onWithOptions, keyCode)
 import Array
 import Json.Decode as Decode
@@ -146,6 +146,8 @@ view config model items selected =
         div [ class rootClasses, style rootStyles ]
             [ input
                 [ class inputClasses
+                , autocomplete False
+                , attribute "autocorrect" "off" -- for mobile Safari
                 , onBlurAttribute config model
                 , onKeyUpAttribute highlightedItem
                 , onInput OnQueryChange
