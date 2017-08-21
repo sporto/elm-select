@@ -70,7 +70,7 @@ module Select
 
 # Configure the items
 
-@docs withItemClass, withItemStyles
+@docs withItemClass, withItemStyles, withHighlightedItemClass, withHighlightedItemStyles
 
 
 # Configure the menu
@@ -413,6 +413,7 @@ withHighlightedItemClass class config =
     in
         fmapConfig fn config
 
+
 {-| Styles for the highlighted item
 
     Select.withHighlightedItemStyles [("padding", "1rem")] config
@@ -425,6 +426,7 @@ withHighlightedItemStyles styles config =
             { c | highlightedItemStyles = styles }
     in
         fmapConfig fn config
+
 
 {-| Add a callback for when the query changes
 
