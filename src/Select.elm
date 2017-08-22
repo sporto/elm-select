@@ -18,6 +18,7 @@ module Select
         , withFuzzySearchRemovePenalty
         , withFuzzySearchInsertPenalty
         , withFuzzySearchSeparators
+        , withInputId
         , withInputClass
         , withInputStyles
         , withInputWrapperClass
@@ -60,7 +61,7 @@ module Select
 
 # Configure the input
 
-@docs withInputClass, withInputStyles, withInputWrapperClass, withInputWrapperStyles
+@docs withInputId, withInputClass, withInputStyles, withInputWrapperClass, withInputWrapperStyles
 
 
 # Configure an underline element under the input
@@ -231,6 +232,19 @@ withCutoff n config =
     in
         fmapConfig fn config
 
+
+{-| Set the ID of the input
+
+    Select.withInputId "input-id" config
+
+-}
+withInputId : String -> Config msg item -> Config msg item
+withInputId id config =
+    let
+        fn c =
+            { c | inputId = Just id }
+    in
+        fmapConfig fn config
 
 {-| Add classes to the input
 

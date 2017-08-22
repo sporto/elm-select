@@ -1,7 +1,7 @@
 module Select.Select.Input exposing (..)
 
 import Html exposing (..)
-import Html.Attributes exposing (attribute, class, placeholder, value, style, autocomplete)
+import Html.Attributes exposing (attribute, class, placeholder, value, style, autocomplete, id)
 import Html.Events exposing (on, onInput, onWithOptions, keyCode)
 import Array
 import Json.Decode as Decode
@@ -142,20 +142,29 @@ view config model items selected =
                   Nothing
                 Just n ->
                   Array.fromList found |> Array.get (rem n (List.length found)) -- items wrap around
+
+        idAttribute =
+          case config.inputId of
+            Nothing ->
+              []
+            Just inputId ->
+              [ id inputId ]
     in
         div [ class rootClasses, style rootStyles ]
             [ input
-                [ class inputClasses
-                , autocomplete False
-                , attribute "autocorrect" "off" -- for mobile Safari
-                , onBlurAttribute config model
-                , onKeyUpAttribute highlightedItem
-                , onInput OnQueryChange
-                , placeholder config.prompt
-                , referenceAttr config model
-                , style inputStyles
-                , value val
-                ]
+                (
+                  [ class inputClasses
+                  , autocomplete False
+                  , attribute "autocorrect" "off" -- for mobile Safari
+                  , onBlurAttribute config model
+                  , onKeyUpAttribute highlightedItem
+                  , onInput OnQueryChange
+                  , placeholder config.prompt
+                  , referenceAttr config model
+                  , style inputStyles
+                  , value val
+                  ] ++ idAttribute
+                )
                 []
             , underline
             , clear
