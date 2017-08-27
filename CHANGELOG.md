@@ -1,24 +1,28 @@
 # Changelog
 
+## 2.11.0
+
+- Add `withInputId`
+
 ## 2.10.0
 
 - Add arrow navigation
 
 ## 2.9.0
 
-- Added `withFuzzySearchInsertPenalty`
+- Add `withFuzzySearchInsertPenalty`
 
 ## 2.8.0
 
-- Added `withTransformQuery`
+- Add `withTransformQuery`
 
 ## 2.7.0
 
-- Added `withNotFoundHidden`
+- Add `withNotFoundHidden`
 
 ## 2.6.0
 
-- Added `withUnderlineClass`, `withUnderlineStyles`
+- Add `withUnderlineClass`, `withUnderlineStyles`
 
 ## 2.5.1
 
