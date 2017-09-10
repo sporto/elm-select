@@ -33,6 +33,17 @@ update config msg model =
             in
               ( { model | highlightedItem =  newHightlightedItem }, Cmd.none)
 
+        OnFocus ->
+            let
+                cmd =
+                    case config.onFocus of
+                      Nothing -> Cmd.none
+                      Just focusMessage ->
+                          Task.succeed Nothing
+                              |> Task.perform (\x -> focusMessage)
+            in
+              ( model, cmd )
+
         OnBlur ->
             ( { model | query = Nothing }, Cmd.none )
 

@@ -2,7 +2,7 @@ module Select.Select.Input exposing (..)
 
 import Html exposing (..)
 import Html.Attributes exposing (attribute, class, placeholder, value, style, autocomplete, id)
-import Html.Events exposing (on, onInput, onWithOptions, keyCode)
+import Html.Events exposing (on, onInput, onWithOptions, keyCode, onFocus)
 import Array
 import Json.Decode as Decode
 import Select.Events exposing (onBlurAttribute)
@@ -159,11 +159,13 @@ view config model items selected =
                   , onBlurAttribute config model
                   , onKeyUpAttribute highlightedItem
                   , onInput OnQueryChange
+                  , onFocus OnFocus
                   , placeholder config.prompt
                   , referenceAttr config model
                   , style inputStyles
                   , value val
                   ] ++ idAttribute
+
                 )
                 []
             , underline
