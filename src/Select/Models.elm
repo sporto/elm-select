@@ -34,6 +34,7 @@ type alias Config msg item =
     , highlightedItemStyles : List Style
     , onQueryChange : Maybe (String -> msg)
     , onSelect : Maybe item -> msg
+    , onFocus : Maybe msg
     , prompt : String
     , promptClass : String
     , promptStyles : List Style
@@ -73,6 +74,7 @@ newConfig onSelect toLabel =
     , highlightedItemStyles = []
     , onQueryChange = Nothing
     , onSelect = onSelect
+    , onFocus = Nothing
     , prompt = ""
     , promptClass = ""
     , promptStyles = []

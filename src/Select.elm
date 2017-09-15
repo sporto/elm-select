@@ -34,6 +34,7 @@ module Select
         , withHighlightedItemClass
         , withHighlightedItemStyles
         , withOnQuery
+        , withOnFocus
         , withPrompt
         , withPromptClass
         , withPromptStyles
@@ -61,7 +62,7 @@ module Select
 
 # Configure the input
 
-@docs withInputId, withInputClass, withInputStyles, withInputWrapperClass, withInputWrapperStyles
+@docs withInputId, withInputClass, withInputStyles, withInputWrapperClass, withInputWrapperStyles, withOnFocus
 
 
 # Configure an underline element under the input
@@ -455,6 +456,18 @@ withOnQuery msg config =
     in
         fmapConfig fn config
 
+{-| Add a callback for when the input field receives focus
+
+    Select.withOnFocus OnFocus
+
+-}
+withOnFocus : msg -> Config msg item -> Config msg item
+withOnFocus msg config =
+    let
+        fn c =
+            { c | onFocus = Just msg }
+    in
+        fmapConfig fn config
 
 {-| Add classes to the prompt text (When no item is selected)
 Select.withPromptClass "prompt" config
