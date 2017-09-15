@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.12.0
+
+- Add `OnFocus`
+- Allow to select item using Enter when there is only one item in search results
+
 ## 2.11.0
 
 - Add `withInputId`
