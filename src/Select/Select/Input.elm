@@ -131,10 +131,14 @@ view config model items selected =
         matchedItems =
           matchedItemsWithCutoff config model items
 
-        highlightedItem =
+        -- item that will be selected if enter if pressed
+        preselectedItem =
           case matchedItems of
             Select.Utils.NotSearched ->
               Nothing
+
+            Select.Utils.ItemsFound [singleItem] ->
+              Just singleItem
 
             Select.Utils.ItemsFound found ->
               case model.highlightedItem of
@@ -157,7 +161,7 @@ view config model items selected =
                   , autocomplete False
                   , attribute "autocorrect" "off" -- for mobile Safari
                   , onBlurAttribute config model
-                  , onKeyUpAttribute highlightedItem
+                  , onKeyUpAttribute preselectedItem
                   , onInput OnQueryChange
                   , onFocus OnFocus
                   , placeholder config.prompt
