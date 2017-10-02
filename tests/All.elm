@@ -1,10 +1,12 @@
-module Example exposing (..)
+module All exposing (..)
 
-import Expect exposing (Expectation)
 import Fuzz exposing (Fuzzer, int, list, string)
 import Test exposing (..)
+import Select.SearchTest
 
 
 suite : Test
 suite =
-    todo "Implement our first test. See http://package.elm-lang.org/packages/elm-community/elm-test/latest for how to do this!"
+    describe "all"
+        [ Select.SearchTest.all
+        ]
