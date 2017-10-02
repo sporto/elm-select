@@ -5,7 +5,7 @@ import Html.Attributes exposing (class, style)
 import Select.Messages exposing (..)
 import Select.Models exposing (..)
 import Select.Select.Item as Item
-import Select.Utils as Utils
+import Select.Search as Search
 
 
 view : Config msg item -> State -> List item -> Html (Msg item)
@@ -17,16 +17,16 @@ view config model items =
                 |> Maybe.withDefault ""
 
         searchResult =
-            Utils.matchedItemsWithCutoff config model items
+            Search.matchedItemsWithCutoff config model items
     in
         if query == "" then
             text ""
         else
             case searchResult of
-                Utils.NotSearched ->
+                Search.NotSearched ->
                     text ""
 
-                Utils.ItemsFound matchedItems ->
+                Search.ItemsFound matchedItems ->
                     menu config model matchedItems
 
 
@@ -48,7 +48,7 @@ menu config model matchedItems =
                 text ""
 
         itemCount =
-          List.length matchedItems
+            List.length matchedItems
 
         elements =
             matchedItems

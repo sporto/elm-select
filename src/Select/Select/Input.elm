@@ -9,16 +9,20 @@ import Select.Events exposing (onBlurAttribute)
 import Select.Messages exposing (..)
 import Select.Models exposing (..)
 import Select.Select.Clear as Clear
-import Select.Utils exposing (referenceAttr, matchedItemsWithCutoff)
+import Select.Utils exposing (referenceAttr)
+import Select.Search exposing (matchedItemsWithCutoff)
 
 
 onKeyUpAttribute : Maybe item -> Attribute (Msg item)
 onKeyUpAttribute maybeItem =
     let
         selectItem =
-          case maybeItem of
-            Nothing -> Decode.fail "not Enter"
-            Just item -> Decode.succeed (OnSelect item)
+            case maybeItem of
+                Nothing ->
+                    Decode.fail "not Enter"
+
+                Just item ->
+                    Decode.succeed (OnSelect item)
 
         fn code =
             case code of
@@ -38,6 +42,7 @@ onKeyUpAttribute maybeItem =
                     Decode.fail "not ENTER"
     in
         on "keyup" (Decode.andThen fn keyCode)
+
 
 view : Config msg item -> State -> List item -> Maybe item -> Html (Msg item)
 view config model items selected =
@@ -129,47 +134,49 @@ view config model items selected =
                 []
 
         matchedItems =
-          matchedItemsWithCutoff config model items
+            matchedItemsWithCutoff config model items
 
         -- item that will be selected if enter if pressed
         preselectedItem =
-          case matchedItems of
-            Select.Utils.NotSearched ->
-              Nothing
+            case matchedItems of
+                Select.Search.NotSearched ->
+                    Nothing
 
-            Select.Utils.ItemsFound [singleItem] ->
-              Just singleItem
+                Select.Search.ItemsFound [ singleItem ] ->
+                    Just singleItem
 
-            Select.Utils.ItemsFound found ->
-              case model.highlightedItem of
-                Nothing ->
-                  Nothing
-                Just n ->
-                  Array.fromList found |> Array.get (rem n (List.length found)) -- items wrap around
+                Select.Search.ItemsFound found ->
+                    case model.highlightedItem of
+                        Nothing ->
+                            Nothing
 
+                        Just n ->
+                            Array.fromList found |> Array.get (rem n (List.length found))
+
+        -- items wrap around
         idAttribute =
-          case config.inputId of
-            Nothing ->
-              []
-            Just inputId ->
-              [ id inputId ]
+            case config.inputId of
+                Nothing ->
+                    []
+
+                Just inputId ->
+                    [ id inputId ]
     in
         div [ class rootClasses, style rootStyles ]
             [ input
-                (
-                  [ class inputClasses
-                  , autocomplete False
-                  , attribute "autocorrect" "off" -- for mobile Safari
-                  , onBlurAttribute config model
-                  , onKeyUpAttribute preselectedItem
-                  , onInput OnQueryChange
-                  , onFocus OnFocus
-                  , placeholder config.prompt
-                  , referenceAttr config model
-                  , style inputStyles
-                  , value val
-                  ] ++ idAttribute
-
+                ([ class inputClasses
+                 , autocomplete False
+                 , attribute "autocorrect" "off" -- for mobile Safari
+                 , onBlurAttribute config model
+                 , onKeyUpAttribute preselectedItem
+                 , onInput OnQueryChange
+                 , onFocus OnFocus
+                 , placeholder config.prompt
+                 , referenceAttr config model
+                 , style inputStyles
+                 , value val
+                 ]
+                    ++ idAttribute
                 )
                 []
             , underline
