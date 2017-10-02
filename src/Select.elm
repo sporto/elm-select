@@ -161,7 +161,7 @@ withUnderlineClass classes config =
         fn c =
             { c | underlineClass = classes }
     in
-        fmapConfig fn config
+        mapConfig fn config
 
 
 {-| Add styles to the underline div
@@ -175,7 +175,7 @@ withUnderlineStyles styles config =
         fn c =
             { c | underlineStyles = styles }
     in
-        fmapConfig fn config
+        mapConfig fn config
 
 
 {-| Add classes to the clear button
@@ -189,7 +189,7 @@ withClearClass classes config =
         fn c =
             { c | clearClass = classes }
     in
-        fmapConfig fn config
+        mapConfig fn config
 
 
 {-| Add styles to the clear button
@@ -203,7 +203,7 @@ withClearStyles styles config =
         fn c =
             { c | clearStyles = styles }
     in
-        fmapConfig fn config
+        mapConfig fn config
 
 
 {-| Add classes to the clear SVG icon
@@ -217,7 +217,7 @@ withClearSvgClass classes config =
         fn c =
             { c | clearSvgClass = classes }
     in
-        fmapConfig fn config
+        mapConfig fn config
 
 
 {-| Set the maxium number of items to show
@@ -231,7 +231,7 @@ withCutoff n config =
         fn c =
             { c | cutoff = Just n }
     in
-        fmapConfig fn config
+        mapConfig fn config
 
 
 {-| Set the ID of the input
@@ -245,7 +245,8 @@ withInputId id config =
         fn c =
             { c | inputId = Just id }
     in
-        fmapConfig fn config
+        mapConfig fn config
+
 
 {-| Add classes to the input
 
@@ -258,7 +259,7 @@ withInputClass classes config =
         fn c =
             { c | inputClass = classes }
     in
-        fmapConfig fn config
+        mapConfig fn config
 
 
 {-| Add styles to the input
@@ -272,7 +273,7 @@ withInputStyles styles config =
         fn c =
             { c | inputStyles = styles }
     in
-        fmapConfig fn config
+        mapConfig fn config
 
 
 {-| Add classes to the input wrapper (element that wraps the input and the clear button)
@@ -286,7 +287,7 @@ withInputWrapperClass classes config =
         fn c =
             { c | inputWrapperClass = classes }
     in
-        fmapConfig fn config
+        mapConfig fn config
 
 
 {-| Add styles to the input wrapper
@@ -300,7 +301,7 @@ withInputWrapperStyles styles config =
         fn c =
             { c | inputWrapperStyles = styles }
     in
-        fmapConfig fn config
+        mapConfig fn config
 
 
 {-| Add classes to the items
@@ -314,7 +315,7 @@ withItemClass classes config =
         fn c =
             { c | itemClass = classes }
     in
-        fmapConfig fn config
+        mapConfig fn config
 
 
 {-| Add styles to the items
@@ -328,7 +329,7 @@ withItemStyles styles config =
         fn c =
             { c | itemStyles = styles }
     in
-        fmapConfig fn config
+        mapConfig fn config
 
 
 {-| Add classes to the menu
@@ -342,7 +343,7 @@ withMenuClass classes config =
         fn c =
             { c | menuClass = classes }
     in
-        fmapConfig fn config
+        mapConfig fn config
 
 
 {-| Add styles to the menu
@@ -356,7 +357,7 @@ withMenuStyles styles config =
         fn c =
             { c | menuStyles = styles }
     in
-        fmapConfig fn config
+        mapConfig fn config
 
 
 {-| Text that will appear when no matches are found
@@ -370,7 +371,7 @@ withNotFound text config =
         fn c =
             { c | notFound = text }
     in
-        fmapConfig fn config
+        mapConfig fn config
 
 
 {-| Class for the not found message
@@ -384,7 +385,7 @@ withNotFoundClass class config =
         fn c =
             { c | notFoundClass = class }
     in
-        fmapConfig fn config
+        mapConfig fn config
 
 
 {-| Hide menu when no matches found
@@ -398,7 +399,7 @@ withNotFoundShown shown config =
         fn c =
             { c | notFoundShown = shown }
     in
-        fmapConfig fn config
+        mapConfig fn config
 
 
 {-| Styles for the not found message
@@ -412,7 +413,7 @@ withNotFoundStyles styles config =
         fn c =
             { c | notFoundStyles = styles }
     in
-        fmapConfig fn config
+        mapConfig fn config
 
 
 {-| Class for the hightlighted tem
@@ -426,7 +427,7 @@ withHighlightedItemClass class config =
         fn c =
             { c | highlightedItemClass = class }
     in
-        fmapConfig fn config
+        mapConfig fn config
 
 
 {-| Styles for the highlighted item
@@ -440,7 +441,7 @@ withHighlightedItemStyles styles config =
         fn c =
             { c | highlightedItemStyles = styles }
     in
-        fmapConfig fn config
+        mapConfig fn config
 
 
 {-| Add a callback for when the query changes
@@ -454,7 +455,8 @@ withOnQuery msg config =
         fn c =
             { c | onQueryChange = Just msg }
     in
-        fmapConfig fn config
+        mapConfig fn config
+
 
 {-| Add a callback for when the input field receives focus
 
@@ -467,7 +469,8 @@ withOnFocus msg config =
         fn c =
             { c | onFocus = Just msg }
     in
-        fmapConfig fn config
+        mapConfig fn config
+
 
 {-| Add classes to the prompt text (When no item is selected)
 Select.withPromptClass "prompt" config
@@ -478,7 +481,7 @@ withPromptClass classes config =
         fn c =
             { c | promptClass = classes }
     in
-        fmapConfig fn config
+        mapConfig fn config
 
 
 {-| Add a prompt text to be displayed when no element is selected
@@ -492,7 +495,7 @@ withPrompt prompt config =
         fn c =
             { c | prompt = prompt }
     in
-        fmapConfig fn config
+        mapConfig fn config
 
 
 {-| Add styles to prompt text
@@ -506,7 +509,7 @@ withPromptStyles styles config =
         fn c =
             { c | promptStyles = styles }
     in
-        fmapConfig fn config
+        mapConfig fn config
 
 
 {-| Add fuzzy search add penalty
@@ -520,7 +523,7 @@ withFuzzySearchAddPenalty penalty config =
         fn c =
             { c | fuzzySearchAddPenalty = Just penalty }
     in
-        fmapConfig fn config
+        mapConfig fn config
 
 
 {-| Add fuzzy search add penalty
@@ -534,7 +537,7 @@ withFuzzySearchRemovePenalty penalty config =
         fn c =
             { c | fuzzySearchRemovePenalty = Just penalty }
     in
-        fmapConfig fn config
+        mapConfig fn config
 
 
 {-| Add fuzzy search move penalty
@@ -548,7 +551,7 @@ withFuzzySearchMovePenalty penalty config =
         fn c =
             { c | fuzzySearchMovePenalty = Just penalty }
     in
-        fmapConfig fn config
+        mapConfig fn config
 
 
 {-| Add fuzzy search insert penalty
@@ -562,7 +565,7 @@ withFuzzySearchInsertPenalty penalty config =
         fn c =
             { c | fuzzySearchInsertPenalty = Just penalty }
     in
-        fmapConfig fn config
+        mapConfig fn config
 
 
 {-| Add fuzzy search separators
@@ -576,7 +579,7 @@ withFuzzySearchSeparators separators config =
         fn c =
             { c | fuzzySearchSeparators = separators }
     in
-        fmapConfig fn config
+        mapConfig fn config
 
 
 {-| Change the threshold used for filtering matches out.
@@ -592,7 +595,7 @@ withScoreThreshold score config =
         fn c =
             { c | scoreThreshold = score }
     in
-        fmapConfig fn config
+        mapConfig fn config
 
 
 {-| Transform the input query before performing the search
@@ -614,13 +617,13 @@ withTransformQuery transform config =
         fn c =
             { c | transformQuery = transform }
     in
-        fmapConfig fn config
+        mapConfig fn config
 
 
 {-| @priv
 -}
-fmapConfig : (Models.Config msg item -> Models.Config msg item) -> Config msg item -> Config msg item
-fmapConfig fn config =
+mapConfig : (Models.Config msg item -> Models.Config msg item) -> Config msg item -> Config msg item
+mapConfig fn config =
     let
         config_ =
             unwrapConfig config
