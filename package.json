@@ -1,0 +1,8 @@
+{
+  "name": "elm-select",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:sporto/elm-select.git",
+  "author": "Sebastian Porto <s@porto5.com>",
+  "license": "MIT"
+}
