@@ -4,5 +4,8 @@
   "main": "index.js",
   "repository": "git@github.com:sporto/elm-select.git",
   "author": "Sebastian Porto <s@porto5.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "elm-test": "^0.18.9"
+  }
 }
