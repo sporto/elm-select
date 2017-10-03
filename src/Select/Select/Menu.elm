@@ -17,7 +17,7 @@ view config model items =
                 |> Maybe.withDefault ""
 
         searchResult =
-            Search.matchedItemsWithCutoff config model items
+            Search.matchedItemsWithCutoff config model.query items
     in
         if query == "" then
             text ""

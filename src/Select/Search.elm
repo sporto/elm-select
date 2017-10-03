@@ -1,7 +1,8 @@
 module Select.Search exposing (..)
 
 import Fuzzy
-import Select.Models exposing (..)
+import Select.Config exposing (Config)
+import Select.Models exposing (State)
 import String
 import Tuple
 
@@ -11,6 +12,7 @@ type SearchResult item
     | ItemsFound (List item)
 
 
+fuzzyOptions : Config msg item -> List Fuzzy.Config
 fuzzyOptions config =
     []
         |> fuzzyAddPenalty config
@@ -55,9 +57,9 @@ fuzzyInsertPenalty config options =
             options
 
 
-matchedItemsWithCutoff : Config msg item -> State -> List item -> SearchResult item
-matchedItemsWithCutoff config model items =
-    case matchedItems config model items of
+matchedItemsWithCutoff : Config msg item -> Maybe String -> List item -> SearchResult item
+matchedItemsWithCutoff config query items =
+    case matchedItems config query items of
         NotSearched ->
             NotSearched
 
@@ -70,12 +72,12 @@ matchedItemsWithCutoff config model items =
                     ItemsFound matching
 
 
-matchedItems : Config msg item -> State -> List item -> SearchResult item
-matchedItems config model items =
+matchedItems : Config msg item -> Maybe String -> List item -> SearchResult item
+matchedItems config query items =
     let
         maybeQuery : Maybe String
         maybeQuery =
-            model.query
+            query
                 |> Maybe.andThen config.transformQuery
     in
         case maybeQuery of

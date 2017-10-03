@@ -147,7 +147,8 @@ type Msg item
 -}
 newConfig : (Maybe item -> msg) -> (item -> String) -> Config msg item
 newConfig onSelectMessage toLabel =
-    PrivateConfig (Models.newConfig onSelectMessage toLabel)
+    Config.newConfig onSelectMessage toLabel
+        |> PrivateConfig
 
 
 {-| Add classes to the underline div

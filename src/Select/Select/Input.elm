@@ -134,7 +134,7 @@ view config model items selected =
                 []
 
         matchedItems =
-            matchedItemsWithCutoff config model items
+            matchedItemsWithCutoff config model.query items
 
         -- item that will be selected if enter if pressed
         preselectedItem =
