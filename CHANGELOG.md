@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.12.1
+
+- Change the default `fuzzySearchSeparators` to `[" "]`. This makes the default search more intuitive.
+
 ## 2.12.0
 
 - Add `OnFocus`
