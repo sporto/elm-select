@@ -2,8 +2,9 @@ module Select.Select exposing (..)
 
 import Html exposing (..)
 import Html.Attributes exposing (class, id, style)
+import Select.Config exposing (Config)
 import Select.Messages exposing (..)
-import Select.Models exposing (..)
+import Select.Models exposing (State)
 import Select.Select.Menu
 import Select.Select.Input
 

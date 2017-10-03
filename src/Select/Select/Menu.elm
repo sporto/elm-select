@@ -3,7 +3,8 @@ module Select.Select.Menu exposing (..)
 import Html exposing (..)
 import Html.Attributes exposing (class, style)
 import Select.Messages exposing (..)
-import Select.Models exposing (..)
+import Select.Config exposing (Config)
+import Select.Models exposing (State)
 import Select.Select.Item as Item
 import Select.Search as Search
 
@@ -30,6 +31,7 @@ view config model items =
                     menu config model matchedItems
 
 
+menu : Config msg item -> State -> List item -> Html (Msg item)
 menu config model matchedItems =
     let
         hideWhenNotFound =

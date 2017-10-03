@@ -2,7 +2,8 @@ module Select.Utils exposing (..)
 
 import Html exposing (Attribute)
 import Html.Attributes exposing (attribute)
-import Select.Models exposing (..)
+import Select.Config exposing (Config)
+import Select.Models exposing (State)
 
 
 referenceDataName : String

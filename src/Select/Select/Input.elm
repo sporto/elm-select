@@ -5,9 +5,10 @@ import Html.Attributes exposing (attribute, class, placeholder, value, style, au
 import Html.Events exposing (on, onInput, onWithOptions, keyCode, onFocus)
 import Array
 import Json.Decode as Decode
+import Select.Config exposing (Config)
 import Select.Events exposing (onBlurAttribute)
 import Select.Messages exposing (..)
-import Select.Models exposing (..)
+import Select.Models exposing (State)
 import Select.Select.Clear as Clear
 import Select.Utils exposing (referenceAttr)
 import Select.Search exposing (matchedItemsWithCutoff)

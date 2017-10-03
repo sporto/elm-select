@@ -1,11 +1,12 @@
 module Select.Update exposing (..)
 
-import Select.Models as Models
+import Select.Config exposing (Config)
+import Select.Models exposing (State)
 import Select.Messages exposing (..)
 import Task
 
 
-update : Models.Config msg item -> Msg item -> Models.State -> ( Models.State, Cmd msg )
+update : Config msg item -> Msg item -> State -> ( State, Cmd msg )
 update config msg model =
     case msg of
         NoOp ->
@@ -17,32 +18,42 @@ update config msg model =
         OnDownArrow ->
             let
                 newHightlightedItem =
-                  case model.highlightedItem of
-                    Nothing -> Just 0
-                    Just n -> Just (n + 1)
+                    case model.highlightedItem of
+                        Nothing ->
+                            Just 0
+
+                        Just n ->
+                            Just (n + 1)
             in
-              ( { model | highlightedItem =  newHightlightedItem }, Cmd.none )
+                ( { model | highlightedItem = newHightlightedItem }, Cmd.none )
 
         OnUpArrow ->
             let
                 newHightlightedItem =
-                  case model.highlightedItem of
-                    Nothing -> Nothing
-                    Just 0 -> Nothing
-                    Just n -> Just (n - 1)
+                    case model.highlightedItem of
+                        Nothing ->
+                            Nothing
+
+                        Just 0 ->
+                            Nothing
+
+                        Just n ->
+                            Just (n - 1)
             in
-              ( { model | highlightedItem =  newHightlightedItem }, Cmd.none)
+                ( { model | highlightedItem = newHightlightedItem }, Cmd.none )
 
         OnFocus ->
             let
                 cmd =
                     case config.onFocus of
-                      Nothing -> Cmd.none
-                      Just focusMessage ->
-                          Task.succeed Nothing
-                              |> Task.perform (\x -> focusMessage)
+                        Nothing ->
+                            Cmd.none
+
+                        Just focusMessage ->
+                            Task.succeed Nothing
+                                |> Task.perform (\x -> focusMessage)
             in
-              ( model, cmd )
+                ( model, cmd )
 
         OnBlur ->
             ( { model | query = Nothing }, Cmd.none )

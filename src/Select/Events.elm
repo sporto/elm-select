@@ -3,8 +3,9 @@ module Select.Events exposing (..)
 import Html exposing (..)
 import Html.Events exposing (on, keyCode)
 import Json.Decode as Decode
+import Select.Config exposing (Config)
 import Select.Messages exposing (..)
-import Select.Models exposing (..)
+import Select.Models exposing (State)
 import Select.Utils exposing (referenceDataName)
 
 

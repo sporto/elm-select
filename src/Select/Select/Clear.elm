@@ -1,11 +1,11 @@
 module Select.Select.Clear exposing (..)
 
-import Select.Models as Models
+import Select.Config exposing (Config)
 import Svg exposing (..)
 import Svg.Attributes as Attrs
 
 
-view : Models.Config userMsg item -> Svg msg
+view : Config userMsg item -> Svg msg
 view config =
     svg [ Attrs.class config.clearSvgClass, Attrs.width "16", Attrs.height "16", Attrs.viewBox "0 0 16 16" ]
         [ g [ Attrs.transform "translate(3, 3)" ]

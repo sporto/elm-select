@@ -3,8 +3,9 @@ module Select.Select.Item exposing (..)
 import Html exposing (..)
 import Html.Attributes exposing (attribute, class, style)
 import Html.Events exposing (onMouseDown)
+import Select.Config exposing (Config)
 import Select.Messages exposing (..)
-import Select.Models exposing (..)
+import Select.Models exposing (State)
 import Select.Utils exposing (referenceAttr)
 
 

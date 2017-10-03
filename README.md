@@ -22,6 +22,8 @@ See commented example at `demo/src/Example1.elm`
 
 make run-demo
 
+Open `localhost:4000`
+
 ## Generate demo
 
 make build-demo

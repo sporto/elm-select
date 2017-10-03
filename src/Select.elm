@@ -112,16 +112,17 @@ module Select
 -}
 
 import Html exposing (..)
-import Select.Select
-import Select.Models as Models
+import Select.Config as Config
 import Select.Messages as Messages
+import Select.Models as Models
+import Select.Select
 import Select.Update
 
 
 {-| Opaque type that holds the configuration
 -}
 type Config msg item
-    = PrivateConfig (Models.Config msg item)
+    = PrivateConfig (Config.Config msg item)
 
 
 {-| Opaque type that holds the current state
@@ -623,7 +624,7 @@ withTransformQuery transform config =
 
 {-| @priv
 -}
-mapConfig : (Models.Config msg item -> Models.Config msg item) -> Config msg item -> Config msg item
+mapConfig : (Config.Config msg item -> Config.Config msg item) -> Config msg item -> Config msg item
 mapConfig fn config =
     let
         config_ =
@@ -693,7 +694,7 @@ update config msg model =
 
 {-| @priv
 -}
-unwrapConfig : Config msg item -> Models.Config msg item
+unwrapConfig : Config msg item -> Config.Config msg item
 unwrapConfig config =
     case config of
         PrivateConfig c ->
