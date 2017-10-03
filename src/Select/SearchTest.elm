@@ -63,55 +63,6 @@ movies =
     , "The Lord of the Rings: The Fellowship of the Ring (2001)"
     , "The Hunger Games: Catching Fire (2013)"
     , "Inside Out (2015)"
-    , "Star Wars: Episode III - Revenge of the Sith (2005)"
-    , "Transformers: Revenge of the Fallen (2009)"
-    , "The Twilight Saga: Breaking Dawn, Part 2 (2012)"
-    , "Inception (2010)"
-    , "Spider-Man (2002)"
-    , "Independence Day (1996)"
-    , "Shrek the Third (2007)"
-    , "Harry Potter and the Prisoner of Azkaban (2004)"
-    , " E. T. The Extra-Terrestrial (1982)"
-    , "Fast & Furious 6 (2013)"
-    , "Indiana Jones and the Kingdom of the Crystal Skull (2008)"
-    , "Spider-Man 2 (2004)"
-    , " Star Wars: Episode IV - A New Hope (1977)"
-    , "Deadpool (2016)"
-    , "Guardians of the Galaxy (2014)"
-    , "2012 (2009)"
-    , "Maleficent (2014)"
-    , "The Da Vinci Code (2006)"
-    , "The Amazing Spider-Man (2012)"
-    , "The Hunger Games: Mockingjay - Part 1 (2014)"
-    , "Shrek Forever After (2010)"
-    , "X-Men: Days of Future Past (2014)"
-    , "Madagascar 3: Europe's Most Wanted (2012)"
-    , "The Chronicles of Narnia: The Lion, the Witch and the Wardrobe (2005)"
-    , "Monsters University (2013)"
-    , "Suicide Squad (2016)"
-    , "The Matrix Reloaded (2003)"
-    , "Up (2009)"
-    , "Gravity (2013)"
-    , "Captain America: The Winter Soldier (2014)"
-    , "The Twilight Saga: Breaking Dawn, Part 1 (2011)"
-    , "Dawn of the Planet of the Apes (2014)"
-    , "The Twilight Saga: New Moon (2009)"
-    , "Transformers (2007)"
-    , "The Amazing Spider-Man 2 (2014)"
-    , "The Twilight Saga: Eclipse (2010)"
-    , "Mission: Impossible - Ghost Protocol (2011)"
-    , "The Hunger Games (2012)"
-    , "Mission: Impossible - Rogue Nation (2015)"
-    , "Forrest Gump (1994)"
-    , "Interstellar (2014)"
-    , "The Sixth Sense (1999)"
-    , "Man of Steel (2013)"
-    , "Kung Fu Panda 2 (2011)"
-    , "Ice Age: The Meltdown (2006)"
-    , "Big Hero 6 (2014)"
-    , "Pirates of the Caribbean: The Curse of the Black Pearl (2003)"
-    , "The Hunger Games: Mockingjay - Part 2 (2015)"
-    , "Star Wars: Episode II - Attack of the Clones (2002)"
     ]
 
 
@@ -130,13 +81,13 @@ testScoreForItem =
               , baseConfig
               , movie1
               , "star"
-              , 380
+              , 38
               )
             , ( "Scores at the end"
               , baseConfig
               , movie1
               , "force"
-              , 2395
+              , 2062
               )
             ]
 
@@ -153,22 +104,61 @@ testScoreForItem =
         describe "scoreForItem" (List.map run inputs)
 
 
+testRelevantScoreForItem =
+    let
+        inputs =
+            [ ( "Relevant scores better"
+              , baseConfig
+              , "Star Wars: Episode VII - The Force Awakens"
+              , "The Hunger Games: Catching Fire (2013)"
+              , "star"
+              , GT
+              )
+            ]
+
+        run ( testCase, config, movie1, movie2, query, expectedOrder ) =
+            let
+                score1 =
+                    scoreForItem config query movie1
+
+                score2 =
+                    scoreForItem config query movie2
+
+                actual =
+                    compare score1 score2
+
+                expectation =
+                    Expect.equal actual expectedOrder
+            in
+                test testCase (\_ -> expectation)
+    in
+        describe "scoreForItem comparison" (List.map run inputs)
+
+
 testMatchedItems =
     let
         inputs =
             [ ( "Query can be at the beginning"
               , baseConfig
               , Just "star"
+              , ItemsFound
+                    [ "Star Wars: Episode I - The Phantom Menace (1999)"
+                    , "Star Wars: Episode VII - The Force Awakens (2015)"
+                    ]
+              )
+            , ( "Query can be at the end"
+              , baseConfig
+              , Just "menace"
+              , ItemsFound
+                    [ "Star Wars: Episode I - The Phantom Menace (1999)"
+                    ]
               )
             ]
 
-        run ( testCase, config, query ) =
+        run ( testCase, config, query, expected ) =
             let
                 actual =
                     matchedItems config query movies
-
-                expected =
-                    ItemsFound [ " Star Wars: Episode IV - A New Hope (1977)", "Star Wars: Episode I - The Phantom Menace (1999)", "Star Wars: Episode VII - The Force Awakens (2015)", "Star Wars: Episode III - Revenge of the Sith (2005)", "Star Wars: Episode II - Attack of the Clones (2002)" ]
 
                 expectation =
                     Expect.equal actual expected
@@ -181,5 +171,6 @@ testMatchedItems =
 all =
     describe "SearchTest"
         [ testScoreForItem
+        , testRelevantScoreForItem
         , testMatchedItems
         ]

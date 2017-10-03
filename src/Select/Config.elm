@@ -1,5 +1,7 @@
 module Select.Config exposing (..)
 
+import Fuzzy
+
 
 type alias Style =
     ( String, String )
@@ -50,13 +52,13 @@ newConfig onSelect toLabel =
     , clearStyles = []
     , clearSvgClass = ""
     , underlineClass = ""
-    , underlineStyles = []
     , cutoff = Nothing
     , fuzzySearchAddPenalty = Nothing
+    , fuzzySearchInsertPenalty = Nothing
     , fuzzySearchMovePenalty = Nothing
     , fuzzySearchRemovePenalty = Nothing
-    , fuzzySearchInsertPenalty = Nothing
     , fuzzySearchSeparators = []
+    , underlineStyles = []
     , inputId = Nothing
     , inputClass = ""
     , inputStyles = []
@@ -78,7 +80,7 @@ newConfig onSelect toLabel =
     , prompt = ""
     , promptClass = ""
     , promptStyles = []
-    , scoreThreshold = 500
+    , scoreThreshold = 2000
     , toLabel = toLabel
     , transformQuery = transformQuery
     }
@@ -87,3 +89,52 @@ newConfig onSelect toLabel =
 transformQuery : String -> Maybe String
 transformQuery query =
     Just query
+
+
+fuzzyOptions : Config msg item -> List Fuzzy.Config
+fuzzyOptions config =
+    []
+        |> fuzzyAddPenalty config
+        |> fuzzyRemovePenalty config
+        |> fuzzyMovePenalty config
+        |> fuzzyInsertPenalty config
+
+
+fuzzyAddPenalty : Config msg item -> List Fuzzy.Config -> List Fuzzy.Config
+fuzzyAddPenalty config options =
+    case config.fuzzySearchAddPenalty of
+        Just penalty ->
+            options ++ [ Fuzzy.addPenalty penalty ]
+
+        _ ->
+            options
+
+
+fuzzyRemovePenalty : Config msg item -> List Fuzzy.Config -> List Fuzzy.Config
+fuzzyRemovePenalty config options =
+    case config.fuzzySearchRemovePenalty of
+        Just penalty ->
+            options ++ [ Fuzzy.removePenalty penalty ]
+
+        _ ->
+            options
+
+
+fuzzyMovePenalty : Config msg item -> List Fuzzy.Config -> List Fuzzy.Config
+fuzzyMovePenalty config options =
+    case config.fuzzySearchMovePenalty of
+        Just penalty ->
+            options ++ [ Fuzzy.movePenalty penalty ]
+
+        _ ->
+            options
+
+
+fuzzyInsertPenalty : Config msg item -> List Fuzzy.Config -> List Fuzzy.Config
+fuzzyInsertPenalty config options =
+    case config.fuzzySearchInsertPenalty of
+        Just penalty ->
+            options ++ [ Fuzzy.insertPenalty penalty ]
+
+        _ ->
+            options

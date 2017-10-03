@@ -1,8 +1,7 @@
 module Select.Search exposing (..)
 
 import Fuzzy
-import Select.Config exposing (Config)
-import Select.Models exposing (State)
+import Select.Config exposing (Config, fuzzyOptions)
 import String
 import Tuple
 
@@ -10,51 +9,6 @@ import Tuple
 type SearchResult item
     = NotSearched
     | ItemsFound (List item)
-
-
-fuzzyOptions : Config msg item -> List Fuzzy.Config
-fuzzyOptions config =
-    []
-        |> fuzzyAddPenalty config
-        |> fuzzyRemovePenalty config
-        |> fuzzyMovePenalty config
-        |> fuzzyInsertPenalty config
-
-
-fuzzyAddPenalty config options =
-    case config.fuzzySearchAddPenalty of
-        Just penalty ->
-            options ++ [ Fuzzy.addPenalty penalty ]
-
-        _ ->
-            options
-
-
-fuzzyRemovePenalty config options =
-    case config.fuzzySearchRemovePenalty of
-        Just penalty ->
-            options ++ [ Fuzzy.removePenalty penalty ]
-
-        _ ->
-            options
-
-
-fuzzyMovePenalty config options =
-    case config.fuzzySearchMovePenalty of
-        Just penalty ->
-            options ++ [ Fuzzy.movePenalty penalty ]
-
-        _ ->
-            options
-
-
-fuzzyInsertPenalty config options =
-    case config.fuzzySearchInsertPenalty of
-        Just penalty ->
-            options ++ [ Fuzzy.insertPenalty penalty ]
-
-        _ ->
-            options
 
 
 matchedItemsWithCutoff : Config msg item -> Maybe String -> List item -> SearchResult item
