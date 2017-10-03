@@ -81,13 +81,13 @@ testScoreForItem =
               , baseConfig
               , movie1
               , "star"
-              , 38
+              , 0
               )
             , ( "Scores at the end"
               , baseConfig
               , movie1
               , "force"
-              , 2062
+              , 0
               )
             ]
 
@@ -107,12 +107,12 @@ testScoreForItem =
 testRelevantScoreForItem =
     let
         inputs =
-            [ ( "Relevant scores better"
+            [ ( "Relevant scores better (lower)"
               , baseConfig
               , "Star Wars: Episode VII - The Force Awakens"
               , "The Hunger Games: Catching Fire (2013)"
               , "star"
-              , GT
+              , LT
               )
             ]
 
@@ -142,8 +142,9 @@ testMatchedItems =
               , baseConfig
               , Just "star"
               , ItemsFound
-                    [ "Star Wars: Episode I - The Phantom Menace (1999)"
-                    , "Star Wars: Episode VII - The Force Awakens (2015)"
+                    [ "Star Wars: Episode VII - The Force Awakens (2015)"
+                    , "Star Wars: Episode I - The Phantom Menace (1999)"
+                    , "Pirates of the Caribbean: On Stranger Tides (2011)"
                     ]
               )
             , ( "Query can be at the end"
