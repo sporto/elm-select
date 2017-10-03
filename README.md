@@ -1,5 +1,7 @@
 # Elm Select
 
+[ ![Codeship Status for sporto/elm-select](https://app.codeship.com/projects/dbe35340-8a15-0135-1341-166aadcd1cb7/status?branch=master)](https://app.codeship.com/projects/248929)
+
 An input component with autocompletion.
 
 ## Demo
