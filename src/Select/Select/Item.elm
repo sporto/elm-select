@@ -36,6 +36,14 @@ view config state itemCount index item =
                 , baseItemStyles config
                 , highlightedItemStyles
                 ]
+
+        itemHtml =
+            case config.itemHtml of
+                Nothing ->
+                    text (config.toLabel item)
+
+                Just fn ->
+                    Html.map (\_ -> NoOp) (fn item)
     in
         div
             [ class classes
@@ -43,7 +51,7 @@ view config state itemCount index item =
             , referenceAttr config state
             , style styles
             ]
-            [ text (config.toLabel item)
+            [ itemHtml
             ]
 
 
