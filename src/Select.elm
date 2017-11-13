@@ -73,7 +73,7 @@ module Select
 
 # Configure the items
 
-@docs withItemClass, withItemStyles, withHighlightedItemClass, withHighlightedItemStyles
+@docs withItemClass, withItemStyles, withItemHtml, withHighlightedItemClass, withHighlightedItemStyles
 
 
 # Configure the menu

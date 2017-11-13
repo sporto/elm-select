@@ -1,5 +1,10 @@
 # Changelog
 
+
+## 2.13
+
+- Add `withItemHtml`
+
 ## 2.12.1
 
 - Change the default `fuzzySearchSeparators` to `[" "]`. This makes the default search more intuitive.
