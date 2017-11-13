@@ -1,6 +1,7 @@
 module Select.Config exposing (..)
 
 import Fuzzy
+import Html exposing (Html)
 
 
 type alias Style =
@@ -26,6 +27,7 @@ type alias Config msg item =
     , inputWrapperStyles : List Style
     , itemClass : String
     , itemStyles : List Style
+    , itemHtml : Maybe (item -> Html Never)
     , menuClass : String
     , menuStyles : List Style
     , notFound : String
@@ -66,6 +68,7 @@ newConfig onSelect toLabel =
     , inputWrapperStyles = []
     , itemClass = ""
     , itemStyles = []
+    , itemHtml = Nothing
     , menuClass = ""
     , menuStyles = []
     , notFound = "No results found"

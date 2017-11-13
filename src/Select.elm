@@ -25,6 +25,7 @@ module Select
         , withInputWrapperStyles
         , withItemClass
         , withItemStyles
+        , withItemHtml
         , withMenuClass
         , withMenuStyles
         , withNotFound
@@ -330,6 +331,20 @@ withItemStyles styles config =
     let
         fn c =
             { c | itemStyles = styles }
+    in
+        mapConfig fn config
+
+
+{-| Custom item element HTML
+
+    Select.withItemHtml (\i -> Html.li [] [ text i ]) config
+
+-}
+withItemHtml : (item -> Html Never) -> Config msg item -> Config msg item
+withItemHtml html config =
+    let
+        fn c =
+            { c | itemHtml = Just html }
     in
         mapConfig fn config
 

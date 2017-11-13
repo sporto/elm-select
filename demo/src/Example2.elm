@@ -42,6 +42,14 @@ type Msg
     | OnQuery String
 
 
+itemHtml : Character -> Html Never
+itemHtml c =
+    Html.div []
+        [ Html.i [ class "fa fa-rebel" ] []
+        , text (" " ++ c)
+        ]
+
+
 selectConfig : Select.Config Msg Character
 selectConfig =
     Select.newConfig OnSelect identity
@@ -53,6 +61,7 @@ selectConfig =
         |> Select.withHighlightedItemStyles [ ( "color", "black" ) ]
         |> Select.withCutoff 12
         |> Select.withOnQuery OnQuery
+        |> Select.withItemHtml itemHtml
 
 
 fetchUrl : String -> String
