@@ -1,5 +1,5 @@
 {
-    "version": "2.12.1",
+    "version": "2.13.0",
     "summary": "A selection input with auto-completion",
     "repository": "https://github.com/sporto/elm-select.git",
     "license": "MIT",
