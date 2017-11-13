@@ -339,6 +339,8 @@ withItemStyles styles config =
 
     Select.withItemHtml (\i -> Html.li [] [ text i ]) config
 
+When this is used the original `toLabel` function in the config is ignored.
+
 -}
 withItemHtml : (item -> Html Never) -> Config msg item -> Config msg item
 withItemHtml html config =
