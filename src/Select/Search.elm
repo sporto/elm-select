@@ -39,16 +39,22 @@ matchedItems config query items =
                 NotSearched
 
             Just query ->
-                let
-                    scoreFor =
-                        scoreForItem config query
-                in
-                    items
-                        |> List.map (\item -> ( scoreFor item, item ))
-                        |> List.filter (\( score, item ) -> score < config.scoreThreshold)
-                        |> List.sortBy Tuple.first
-                        |> List.map Tuple.second
-                        |> ItemsFound
+                case config.fuzzyMatching of
+                    True ->
+                        let
+                            scoreFor =
+                                scoreForItem config query
+                                    |> Debug.log "fuzzing"
+                        in
+                            items
+                                |> List.map (\item -> ( scoreFor item, item ))
+                                |> List.filter (\( score, item ) -> score < config.scoreThreshold)
+                                |> List.sortBy Tuple.first
+                                |> List.map Tuple.second
+                                |> ItemsFound
+
+                    False ->
+                        ItemsFound items
 
 
 scoreForItem : Config msg item -> String -> item -> Int

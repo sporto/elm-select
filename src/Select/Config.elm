@@ -15,6 +15,7 @@ type alias Config msg item =
     , underlineClass : String
     , underlineStyles : List Style
     , cutoff : Maybe Int
+    , fuzzyMatching : Bool
     , fuzzySearchAddPenalty : Maybe Int
     , fuzzySearchMovePenalty : Maybe Int
     , fuzzySearchRemovePenalty : Maybe Int
@@ -55,6 +56,7 @@ newConfig onSelect toLabel =
     , clearSvgClass = ""
     , underlineClass = ""
     , cutoff = Nothing
+    , fuzzyMatching = True
     , fuzzySearchAddPenalty = Nothing
     , fuzzySearchInsertPenalty = Nothing
     , fuzzySearchMovePenalty = Nothing
