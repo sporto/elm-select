@@ -13,6 +13,7 @@ module Select
         , withUnderlineClass
         , withUnderlineStyles
         , withCutoff
+        , withFuzzyMatching
         , withFuzzySearchAddPenalty
         , withFuzzySearchMovePenalty
         , withFuzzySearchRemovePenalty
@@ -527,6 +528,20 @@ withPromptStyles styles config =
     let
         fn c =
             { c | promptStyles = styles }
+    in
+        mapConfig fn config
+
+
+{-| Disable fuzzy matching altogether
+
+    Select.withFuzzyMatching False config
+
+-}
+withFuzzyMatching : Bool -> Config msg item -> Config msg item
+withFuzzyMatching fuzzy config =
+    let
+        fn c =
+            { c | fuzzyMatching = fuzzy }
     in
         mapConfig fn config
 
