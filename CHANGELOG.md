@@ -1,5 +1,8 @@
 # Changelog
 
+## 2.14
+
+- Add `withFuzzyMatching`
 
 ## 2.13
 
