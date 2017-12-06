@@ -14,6 +14,22 @@ import Select.Utils exposing (referenceAttr)
 import Select.Search exposing (matchedItemsWithCutoff)
 
 
+onKeyPressAttribute : Maybe item -> Attribute (Msg item)
+onKeyPressAttribute maybeItem =
+    let
+        fn code =
+            case code of
+                9 ->
+                    maybeItem
+                        |> Maybe.map (Decode.succeed << OnSelect)
+                        |> Maybe.withDefault (Decode.fail "nothing selected")
+
+                _ ->
+                    Decode.fail "not TAB"
+    in
+        on "keypress" (Decode.andThen fn keyCode)
+
+
 onKeyUpAttribute : Maybe item -> Attribute (Msg item)
 onKeyUpAttribute maybeItem =
     let
@@ -170,6 +186,7 @@ view config model items selected =
                  , attribute "autocorrect" "off" -- for mobile Safari
                  , onBlurAttribute config model
                  , onKeyUpAttribute preselectedItem
+                 , onKeyPressAttribute preselectedItem
                  , onInput OnQueryChange
                  , onFocus OnFocus
                  , placeholder config.prompt
