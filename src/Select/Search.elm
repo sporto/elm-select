@@ -44,7 +44,6 @@ matchedItems config query items =
                         let
                             scoreFor =
                                 scoreForItem config query
-                                    |> Debug.log "fuzzing"
                         in
                             items
                                 |> List.map (\item -> ( scoreFor item, item ))
