@@ -20,7 +20,7 @@ view config model items =
         searchResult =
             Search.matchedItemsWithCutoff config model.query items
     in
-        if query == "" then
+        if query == "" && not config.emptySearch then
             text ""
         else
             case searchResult of
