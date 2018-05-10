@@ -62,6 +62,7 @@ selectConfig =
         |> Select.withCutoff 12
         |> Select.withOnQuery OnQuery
         |> Select.withItemHtml itemHtml
+        |> Select.withEmptySearch True
 
 
 fetchUrl : String -> String

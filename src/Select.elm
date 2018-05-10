@@ -42,6 +42,7 @@ module Select
         , withPromptStyles
         , withScoreThreshold
         , withTransformQuery
+        , withEmptySearch
         )
 
 {-| Select input with auto-complete
@@ -650,6 +651,21 @@ withTransformQuery transform config =
     let
         fn c =
             { c | transformQuery = transform }
+    in
+        mapConfig fn config
+
+
+{-| Show results if the input is focused, but the query is empty
+Default is False.
+
+    Select.withEmptySearch True config
+
+-}
+withEmptySearch : Bool -> Config msg item -> Config msg item
+withEmptySearch emptySearch config =
+    let
+        fn c =
+            { c | emptySearch = emptySearch }
     in
         mapConfig fn config
 

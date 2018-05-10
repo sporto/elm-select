@@ -46,6 +46,7 @@ type alias Config msg item =
     , scoreThreshold : Int
     , toLabel : item -> String
     , transformQuery : String -> Maybe String
+    , emptySearch : Bool
     }
 
 
@@ -88,6 +89,7 @@ newConfig onSelect toLabel =
     , scoreThreshold = 2000
     , toLabel = toLabel
     , transformQuery = transformQuery
+    , emptySearch = False
     }
 
 
