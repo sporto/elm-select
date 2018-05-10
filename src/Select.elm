@@ -55,7 +55,7 @@ module Select
 
 # Configuration
 
-@docs newConfig, withCutoff, withOnQuery
+@docs newConfig, withCutoff, withOnQuery, withEmptySearch
 
 
 # Configure the clear button
