@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.15
+
+- Add `withEmptySearch`
+
 ## 2.14
 
 - Add `withFuzzyMatching`
