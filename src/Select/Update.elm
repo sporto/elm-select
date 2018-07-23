@@ -90,7 +90,20 @@ update config msg model =
                     ( { model | query = Nothing }, cmd )
 
             OnQueryChange value ->
-                ( { model | highlightedItem = Nothing, query = Just value }, queryChangeCmd value )
+                let
+                    maybeQuery =
+                        value
+                            |> config.transformQuery
+
+                    cmd =
+                        case maybeQuery of
+                            Nothing ->
+                                Cmd.none
+
+                            Just query ->
+                                queryChangeCmd query
+                in
+                    ( { model | highlightedItem = Nothing, query = Just value }, cmd )
 
             OnSelect item ->
                 let

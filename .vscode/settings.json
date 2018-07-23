@@ -4,5 +4,6 @@
 		"**/elm-stuff": true,
 		"**/node_modules": true,
 		"**/bower_components": true
-	}
+	},
+	"elm.formatCommand": "./node_modules/.bin/elm-format"
 }

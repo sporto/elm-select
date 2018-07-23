@@ -62,7 +62,14 @@ selectConfig =
         |> Select.withCutoff 12
         |> Select.withOnQuery OnQuery
         |> Select.withItemHtml itemHtml
-        |> Select.withEmptySearch True
+        |> Select.withEmptySearch False
+        |> Select.withTransformQuery
+            (\query ->
+                if String.length query < 3 then
+                    Nothing
+                else
+                    Just query
+            )
 
 
 fetchUrl : String -> String
