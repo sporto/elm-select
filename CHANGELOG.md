@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.15.1
+
+- The `withOnQuery` callback takes in account `withTransformQuery`
+
 ## 2.15
 
 - Add `withEmptySearch`
