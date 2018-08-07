@@ -1,6 +1,5 @@
-module Example1 exposing (..)
+module Example3 exposing (..)
 
-import Debug
 import Html exposing (..)
 import Html.Attributes exposing (class)
 import Movies
@@ -25,7 +24,7 @@ type alias Movie =
 type alias Model =
     { id : String
     , movies : List Movie
-    , selectedMovieId : Maybe String
+    , selectedMovies : List Movie
     , selectState : Select.State
     }
 
@@ -43,7 +42,7 @@ initialModel : String -> Model
 initialModel id =
     { id = id
     , movies = movies
-    , selectedMovieId = Nothing
+    , selectedMovies = []
     , selectState = Select.newState id
     }
 
@@ -58,16 +57,6 @@ type Msg
     = NoOp
     | OnSelect (Maybe Movie)
     | SelectMsg (Select.Msg Movie)
-
-
-{-| A helper function for the configuration below
--}
-transformQuery : String -> Maybe String
-transformQuery query =
-    if String.length query < 4 then
-        Nothing
-    else
-        Just query
 
 
 {-| Create the configuration for the Select component
@@ -85,8 +74,9 @@ selectConfig =
     Select.newConfig OnSelect .label
         |> Select.withCutoff 12
         |> Select.withInputId "input-id"
-        |> Select.withInputClass "col-12"
-        |> Select.withInputStyles [ ( "padding", "0.5rem" ), ( "outline", "none" ) ]
+        |> Select.withInputWrapperClass "col-12"
+        |> Select.withInputWrapperStyles
+            [ ( "padding", "0.5rem" ), ( "outline", "none" ) ]
         |> Select.withItemClass "border-bottom border-silver p1 gray"
         |> Select.withItemStyles [ ( "font-size", "1rem" ) ]
         |> Select.withMenuClass "border border-gray"
@@ -98,22 +88,22 @@ selectConfig =
         |> Select.withHighlightedItemStyles [ ( "color", "black" ) ]
         |> Select.withPrompt "Select a movie"
         |> Select.withPromptClass "grey"
-        |> Select.withUnderlineClass "underline"
-        |> Select.withTransformQuery transformQuery
 
 
 {-| Your update function should route messages back to the Select component, see `SelectMsg`.
 -}
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
-    case Debug.log "msg" msg of
+    case msg of
         -- OnSelect is triggered when a selection is made on the Select component.
         OnSelect maybeMovie ->
             let
-                maybeId =
-                    Maybe.map .id maybeMovie
+                selectedMovies =
+                    maybeMovie
+                        |> Maybe.map (List.singleton >> List.append model.selectedMovies)
+                        |> Maybe.withDefault []
             in
-            ( { model | selectedMovieId = maybeId }, Cmd.none )
+            ( { model | selectedMovies = selectedMovies }, Cmd.none )
 
         -- Route message to the Select component.
         -- The returned command is important.
@@ -132,19 +122,9 @@ update msg model =
 -}
 view : Model -> Html Msg
 view model =
-    let
-        selectedMovie =
-            case model.selectedMovieId of
-                Nothing ->
-                    Nothing
-
-                Just id ->
-                    List.filter (\movie -> movie.id == id) movies
-                        |> List.head
-    in
     div [ class "bg-silver p1" ]
-        [ h3 [] [ text "Basic example" ]
-        , text (toString model.selectedMovieId)
+        [ h3 [] [ text "MultiSelect example" ]
+        , text (toString <| List.map .id model.selectedMovies)
 
         -- Render the Select view. You must pass:
         -- - The configuration
@@ -152,6 +132,11 @@ view model =
         -- - The Select internal state
         -- - A list of items
         -- - The currently selected item as Maybe
-        , h4 [] [ text "Pick a movie" ]
-        , Html.map SelectMsg (Select.view selectConfig model.selectState model.movies selectedMovie)
+        , h4 [] [ text "Pick movie(s)" ]
+        , Html.map SelectMsg
+            (Select.viewMulti selectConfig
+                model.selectState
+                model.movies
+                model.selectedMovies
+            )
         ]

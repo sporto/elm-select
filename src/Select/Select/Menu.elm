@@ -2,11 +2,11 @@ module Select.Select.Menu exposing (..)
 
 import Html exposing (..)
 import Html.Attributes exposing (class, style)
-import Select.Messages exposing (..)
 import Select.Config exposing (Config)
+import Select.Messages exposing (..)
 import Select.Models exposing (State)
-import Select.Select.Item as Item
 import Select.Search as Search
+import Select.Select.Item as Item
 
 
 view : Config msg item -> State -> List item -> Html (Msg item)
@@ -20,15 +20,15 @@ view config model items =
         searchResult =
             Search.matchedItemsWithCutoff config model.query items
     in
-        if query == "" && not config.emptySearch then
-            text ""
-        else
-            case searchResult of
-                Search.NotSearched ->
-                    text ""
+    if query == "" && not config.emptySearch then
+        text ""
+    else
+        case searchResult of
+            Search.NotSearched ->
+                text ""
 
-                Search.ItemsFound matchedItems ->
-                    menu config model matchedItems
+            Search.ItemsFound matchedItems ->
+                menu config model matchedItems
 
 
 menu : Config msg item -> State -> List item -> Html (Msg item)
@@ -56,11 +56,11 @@ menu config model matchedItems =
             matchedItems
                 |> List.indexedMap (Item.view config model itemCount)
     in
-        div
-            [ viewClassAttr config
-            , menuStyle
-            ]
-            (noResultElement :: elements)
+    div
+        [ viewClassAttr config
+        , menuStyle
+        ]
+        (noResultElement :: elements)
 
 
 viewClassAttr : Config msg item -> Attribute msg2

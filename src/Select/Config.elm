@@ -31,6 +31,8 @@ type alias Config msg item =
     , itemHtml : Maybe (item -> Html Never)
     , menuClass : String
     , menuStyles : List Style
+    , multiClass : String
+    , multiStyles : List Style
     , notFound : String
     , notFoundClass : String
     , notFoundShown : Bool
@@ -74,6 +76,8 @@ newConfig onSelect toLabel =
     , itemHtml = Nothing
     , menuClass = ""
     , menuStyles = []
+    , multiClass = ""
+    , multiStyles = []
     , notFound = "No results found"
     , notFoundClass = ""
     , notFoundShown = True

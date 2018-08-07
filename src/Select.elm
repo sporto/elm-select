@@ -1,48 +1,51 @@
 module Select
     exposing
         ( Config
-        , State
         , Msg
+        , State
         , newConfig
         , newState
         , update
         , view
+        , viewMulti
         , withClearClass
         , withClearStyles
         , withClearSvgClass
-        , withUnderlineClass
-        , withUnderlineStyles
         , withCutoff
+        , withEmptySearch
         , withFuzzyMatching
         , withFuzzySearchAddPenalty
+        , withFuzzySearchInsertPenalty
         , withFuzzySearchMovePenalty
         , withFuzzySearchRemovePenalty
-        , withFuzzySearchInsertPenalty
         , withFuzzySearchSeparators
-        , withInputId
+        , withHighlightedItemClass
+        , withHighlightedItemStyles
         , withInputClass
+        , withInputId
         , withInputStyles
         , withInputWrapperClass
         , withInputWrapperStyles
         , withItemClass
-        , withItemStyles
         , withItemHtml
+        , withItemStyles
         , withMenuClass
         , withMenuStyles
+        , withMultiClass
+        , withMultiStyles
         , withNotFound
         , withNotFoundClass
         , withNotFoundShown
         , withNotFoundStyles
-        , withHighlightedItemClass
-        , withHighlightedItemStyles
-        , withOnQuery
         , withOnFocus
+        , withOnQuery
         , withPrompt
         , withPromptClass
         , withPromptStyles
         , withScoreThreshold
         , withTransformQuery
-        , withEmptySearch
+        , withUnderlineClass
+        , withUnderlineStyles
         )
 
 {-| Select input with auto-complete
@@ -96,6 +99,11 @@ module Select
 # Configure the Fuzzy search
 
 @docs withFuzzyMatching, withTransformQuery, withScoreThreshold, withFuzzySearchAddPenalty, withFuzzySearchMovePenalty, withFuzzySearchRemovePenalty, withFuzzySearchInsertPenalty, withFuzzySearchSeparators
+
+
+# Configure selected items in multi mode
+
+@docs withMultiClass, withMultiStyles
 
 
 # State
@@ -166,7 +174,7 @@ withUnderlineClass classes config =
         fn c =
             { c | underlineClass = classes }
     in
-        mapConfig fn config
+    mapConfig fn config
 
 
 {-| Add styles to the underline div
@@ -180,7 +188,7 @@ withUnderlineStyles styles config =
         fn c =
             { c | underlineStyles = styles }
     in
-        mapConfig fn config
+    mapConfig fn config
 
 
 {-| Add classes to the clear button
@@ -194,7 +202,7 @@ withClearClass classes config =
         fn c =
             { c | clearClass = classes }
     in
-        mapConfig fn config
+    mapConfig fn config
 
 
 {-| Add styles to the clear button
@@ -208,7 +216,7 @@ withClearStyles styles config =
         fn c =
             { c | clearStyles = styles }
     in
-        mapConfig fn config
+    mapConfig fn config
 
 
 {-| Add classes to the clear SVG icon
@@ -222,7 +230,7 @@ withClearSvgClass classes config =
         fn c =
             { c | clearSvgClass = classes }
     in
-        mapConfig fn config
+    mapConfig fn config
 
 
 {-| Set the maxium number of items to show
@@ -236,7 +244,7 @@ withCutoff n config =
         fn c =
             { c | cutoff = Just n }
     in
-        mapConfig fn config
+    mapConfig fn config
 
 
 {-| Set the ID of the input
@@ -250,7 +258,7 @@ withInputId id config =
         fn c =
             { c | inputId = Just id }
     in
-        mapConfig fn config
+    mapConfig fn config
 
 
 {-| Add classes to the input
@@ -264,7 +272,7 @@ withInputClass classes config =
         fn c =
             { c | inputClass = classes }
     in
-        mapConfig fn config
+    mapConfig fn config
 
 
 {-| Add styles to the input
@@ -278,7 +286,7 @@ withInputStyles styles config =
         fn c =
             { c | inputStyles = styles }
     in
-        mapConfig fn config
+    mapConfig fn config
 
 
 {-| Add classes to the input wrapper (element that wraps the input and the clear button)
@@ -292,7 +300,7 @@ withInputWrapperClass classes config =
         fn c =
             { c | inputWrapperClass = classes }
     in
-        mapConfig fn config
+    mapConfig fn config
 
 
 {-| Add styles to the input wrapper
@@ -306,7 +314,7 @@ withInputWrapperStyles styles config =
         fn c =
             { c | inputWrapperStyles = styles }
     in
-        mapConfig fn config
+    mapConfig fn config
 
 
 {-| Add classes to the items
@@ -320,7 +328,7 @@ withItemClass classes config =
         fn c =
             { c | itemClass = classes }
     in
-        mapConfig fn config
+    mapConfig fn config
 
 
 {-| Add styles to the items
@@ -334,7 +342,7 @@ withItemStyles styles config =
         fn c =
             { c | itemStyles = styles }
     in
-        mapConfig fn config
+    mapConfig fn config
 
 
 {-| Custom item element HTML
@@ -350,7 +358,7 @@ withItemHtml html config =
         fn c =
             { c | itemHtml = Just html }
     in
-        mapConfig fn config
+    mapConfig fn config
 
 
 {-| Add classes to the menu
@@ -364,7 +372,7 @@ withMenuClass classes config =
         fn c =
             { c | menuClass = classes }
     in
-        mapConfig fn config
+    mapConfig fn config
 
 
 {-| Add styles to the menu
@@ -378,7 +386,35 @@ withMenuStyles styles config =
         fn c =
             { c | menuStyles = styles }
     in
-        mapConfig fn config
+    mapConfig fn config
+
+
+{-| Add classes to the multiple selected items container
+
+    Select.withMultiClass "bg-white" config
+
+-}
+withMultiClass : String -> Config msg item -> Config msg item
+withMultiClass classes config =
+    let
+        fn c =
+            { c | multiClass = classes }
+    in
+    mapConfig fn config
+
+
+{-| Add styles to the multiple selected items container
+
+    Select.withMultiStyles [("padding", "1rem")] config
+
+-}
+withMultiStyles : List ( String, String ) -> Config msg item -> Config msg item
+withMultiStyles styles config =
+    let
+        fn c =
+            { c | multiStyles = styles }
+    in
+    mapConfig fn config
 
 
 {-| Text that will appear when no matches are found
@@ -392,7 +428,7 @@ withNotFound text config =
         fn c =
             { c | notFound = text }
     in
-        mapConfig fn config
+    mapConfig fn config
 
 
 {-| Class for the not found message
@@ -406,7 +442,7 @@ withNotFoundClass class config =
         fn c =
             { c | notFoundClass = class }
     in
-        mapConfig fn config
+    mapConfig fn config
 
 
 {-| Hide menu when no matches found
@@ -420,7 +456,7 @@ withNotFoundShown shown config =
         fn c =
             { c | notFoundShown = shown }
     in
-        mapConfig fn config
+    mapConfig fn config
 
 
 {-| Styles for the not found message
@@ -434,7 +470,7 @@ withNotFoundStyles styles config =
         fn c =
             { c | notFoundStyles = styles }
     in
-        mapConfig fn config
+    mapConfig fn config
 
 
 {-| Class for the hightlighted tem
@@ -448,7 +484,7 @@ withHighlightedItemClass class config =
         fn c =
             { c | highlightedItemClass = class }
     in
-        mapConfig fn config
+    mapConfig fn config
 
 
 {-| Styles for the highlighted item
@@ -462,7 +498,7 @@ withHighlightedItemStyles styles config =
         fn c =
             { c | highlightedItemStyles = styles }
     in
-        mapConfig fn config
+    mapConfig fn config
 
 
 {-| Add a callback for when the query changes
@@ -476,7 +512,7 @@ withOnQuery msg config =
         fn c =
             { c | onQueryChange = Just msg }
     in
-        mapConfig fn config
+    mapConfig fn config
 
 
 {-| Add a callback for when the input field receives focus
@@ -490,7 +526,7 @@ withOnFocus msg config =
         fn c =
             { c | onFocus = Just msg }
     in
-        mapConfig fn config
+    mapConfig fn config
 
 
 {-| Add classes to the prompt text (When no item is selected)
@@ -502,7 +538,7 @@ withPromptClass classes config =
         fn c =
             { c | promptClass = classes }
     in
-        mapConfig fn config
+    mapConfig fn config
 
 
 {-| Add a prompt text to be displayed when no element is selected
@@ -516,7 +552,7 @@ withPrompt prompt config =
         fn c =
             { c | prompt = prompt }
     in
-        mapConfig fn config
+    mapConfig fn config
 
 
 {-| Add styles to prompt text
@@ -530,7 +566,7 @@ withPromptStyles styles config =
         fn c =
             { c | promptStyles = styles }
     in
-        mapConfig fn config
+    mapConfig fn config
 
 
 {-| Disable fuzzy matching altogether
@@ -544,7 +580,7 @@ withFuzzyMatching fuzzy config =
         fn c =
             { c | fuzzyMatching = fuzzy }
     in
-        mapConfig fn config
+    mapConfig fn config
 
 
 {-| Add fuzzy search add penalty
@@ -558,7 +594,7 @@ withFuzzySearchAddPenalty penalty config =
         fn c =
             { c | fuzzySearchAddPenalty = Just penalty }
     in
-        mapConfig fn config
+    mapConfig fn config
 
 
 {-| Add fuzzy search add penalty
@@ -572,7 +608,7 @@ withFuzzySearchRemovePenalty penalty config =
         fn c =
             { c | fuzzySearchRemovePenalty = Just penalty }
     in
-        mapConfig fn config
+    mapConfig fn config
 
 
 {-| Add fuzzy search move penalty
@@ -586,7 +622,7 @@ withFuzzySearchMovePenalty penalty config =
         fn c =
             { c | fuzzySearchMovePenalty = Just penalty }
     in
-        mapConfig fn config
+    mapConfig fn config
 
 
 {-| Add fuzzy search insert penalty
@@ -600,7 +636,7 @@ withFuzzySearchInsertPenalty penalty config =
         fn c =
             { c | fuzzySearchInsertPenalty = Just penalty }
     in
-        mapConfig fn config
+    mapConfig fn config
 
 
 {-| Add fuzzy search separators
@@ -614,7 +650,7 @@ withFuzzySearchSeparators separators config =
         fn c =
             { c | fuzzySearchSeparators = separators }
     in
-        mapConfig fn config
+    mapConfig fn config
 
 
 {-| Change the threshold used for filtering matches out.
@@ -630,7 +666,7 @@ withScoreThreshold score config =
         fn c =
             { c | scoreThreshold = score }
     in
-        mapConfig fn config
+    mapConfig fn config
 
 
 {-| Transform the input query before performing the search
@@ -652,7 +688,7 @@ withTransformQuery transform config =
         fn c =
             { c | transformQuery = transform }
     in
-        mapConfig fn config
+    mapConfig fn config
 
 
 {-| Show results if the input is focused, but the query is empty
@@ -667,7 +703,7 @@ withEmptySearch emptySearch config =
         fn c =
             { c | emptySearch = emptySearch }
     in
-        mapConfig fn config
+    mapConfig fn config
 
 
 {-| @priv
@@ -678,7 +714,7 @@ mapConfig fn config =
         config_ =
             unwrapConfig config
     in
-        PrivateConfig (fn config_)
+    PrivateConfig (fn config_)
 
 
 {-| Create a new state. You must pass a unique identifier for each select component.
@@ -694,13 +730,13 @@ newState id =
     PrivateState (Models.newState id)
 
 
-{-| Render the view
-
-    Html.map SelectMsg (Select.view selectConfig model.selectState model.items selectedItem)
-
--}
-view : Config msg item -> State -> List item -> Maybe item -> Html (Msg item)
-view config model items selected =
+viewBase :
+    Config msg item
+    -> State
+    -> List item
+    -> Maybe (Models.Selected item)
+    -> Html (Msg item)
+viewBase config model items selected =
     let
         config_ =
             unwrapConfig config
@@ -708,7 +744,35 @@ view config model items selected =
         model_ =
             unwrapModel model
     in
-        Html.map PrivateMsg (Select.Select.view config_ model_ items selected)
+    Html.map PrivateMsg (Select.Select.view config_ model_ items selected)
+
+
+{-| Render the view
+
+    Html.map SelectMsg (Select.view selectConfig model.selectState model.items selectedItem)
+
+-}
+view : Config msg item -> State -> List item -> Maybe item -> Html (Msg item)
+view config model items selected =
+    viewBase config model items (Maybe.map Models.Single selected)
+
+
+{-| Render the view for multiple selected items
+
+    Html.map SelectMsg
+        (Select.viewMulti selectConfig model.selectState model.items selectedItems)
+
+-}
+viewMulti : Config msg item -> State -> List item -> List item -> Html (Msg item)
+viewMulti config model items selected =
+    viewBase config
+        model
+        items
+        (if List.isEmpty selected then
+            Nothing
+         else
+            Just (Models.Many selected)
+        )
 
 
 {-| Update the component state
@@ -733,11 +797,11 @@ update config msg model =
         model_ =
             unwrapModel model
     in
-        let
-            ( mdl, cmd ) =
-                Select.Update.update config_ msg_ model_
-        in
-            ( PrivateState mdl, cmd )
+    let
+        ( mdl, cmd ) =
+            Select.Update.update config_ msg_ model_
+    in
+    ( PrivateState mdl, cmd )
 
 
 {-| @priv

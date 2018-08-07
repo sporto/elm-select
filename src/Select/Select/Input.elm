@@ -1,17 +1,17 @@
 module Select.Select.Input exposing (..)
 
-import Html exposing (..)
-import Html.Attributes exposing (attribute, class, placeholder, value, style, autocomplete, id)
-import Html.Events exposing (on, onInput, onWithOptions, keyCode, onFocus)
 import Array
+import Html exposing (..)
+import Html.Attributes exposing (attribute, autocomplete, class, id, placeholder, style, value)
+import Html.Events exposing (keyCode, on, onFocus, onInput, onWithOptions)
 import Json.Decode as Decode
 import Select.Config exposing (Config)
 import Select.Events exposing (onBlurAttribute)
 import Select.Messages exposing (..)
-import Select.Models exposing (State)
+import Select.Models exposing (Selected(..), State)
+import Select.Search exposing (matchedItemsWithCutoff)
 import Select.Select.Clear as Clear
 import Select.Utils exposing (referenceAttr)
-import Select.Search exposing (matchedItemsWithCutoff)
 
 
 onKeyPressAttribute : Maybe item -> Attribute (Msg item)
@@ -27,7 +27,7 @@ onKeyPressAttribute maybeItem =
                 _ ->
                     Decode.fail "not TAB"
     in
-        on "keypress" (Decode.andThen fn keyCode)
+    on "keypress" (Decode.andThen fn keyCode)
 
 
 onKeyUpAttribute : Maybe item -> Attribute (Msg item)
@@ -58,17 +58,21 @@ onKeyUpAttribute maybeItem =
                 _ ->
                     Decode.fail "not ENTER"
     in
-        on "keyup" (Decode.andThen fn keyCode)
+    on "keyup" (Decode.andThen fn keyCode)
 
 
-view : Config msg item -> State -> List item -> Maybe item -> Html (Msg item)
+view : Config msg item -> State -> List item -> Maybe (Selected item) -> Html (Msg item)
 view config model items selected =
     let
         rootClasses =
             "elm-select-input-wrapper " ++ config.inputWrapperClass
 
         rootStyles =
-            List.append [ ( "position", "relative" ) ] config.inputWrapperStyles
+            List.append
+                [ ( "position", "relative" )
+                , ( "background", "white" )
+                ]
+                config.inputWrapperStyles
 
         ( promptClass, promptStyles ) =
             case selected of
@@ -87,7 +91,10 @@ view config model items selected =
 
         inputStyles =
             List.concat
-                [ [ ( "width", "100%" ) ]
+                [ [ ( "width", "100%" )
+                  , ( "outline", "none" )
+                  , ( "border", "none" )
+                  ]
                 , config.inputStyles
                 , promptStyles
                 ]
@@ -107,18 +114,45 @@ view config model items selected =
                 ]
                 config.clearStyles
 
-        val =
-            case model.query of
-                Nothing ->
-                    case selected of
-                        Nothing ->
-                            ""
+        multiClasses =
+            "elm-select-multi " ++ config.multiClass
 
-                        Just item ->
-                            config.toLabel item
+        multiStyles =
+            List.append
+                []
+                config.multiStyles
 
-                Just str ->
-                    str
+        ( valueAttribute, valueHtml ) =
+            case ( selected, model.query ) of
+                ( Just selectedType, Just queryValue ) ->
+                    case selectedType of
+                        Single item ->
+                            ( [ value queryValue ], [] )
+
+                        Many items ->
+                            ( [ value queryValue ]
+                            , [ div [ class multiClasses, style multiStyles ] <|
+                                    List.map (config.toLabel >> text) items
+                              ]
+                            )
+
+                ( Just selectedType, Nothing ) ->
+                    case selectedType of
+                        Single item ->
+                            ( [ value (config.toLabel item) ], [] )
+
+                        Many items ->
+                            ( []
+                            , [ div [ class multiClasses, style multiStyles ] <|
+                                    List.map (config.toLabel >> text) items
+                              ]
+                            )
+
+                ( Nothing, Just query ) ->
+                    ( [ value query ], [] )
+
+                ( Nothing, Nothing ) ->
+                    ( [ value "" ], [] )
 
         onClickWithoutPropagation msg =
             Decode.succeed msg
@@ -179,24 +213,28 @@ view config model items selected =
                 Just inputId ->
                     [ id inputId ]
     in
-        div [ class rootClasses, style rootStyles ]
-            [ input
-                ([ class inputClasses
-                 , autocomplete False
-                 , attribute "autocorrect" "off" -- for mobile Safari
-                 , onBlurAttribute config model
-                 , onKeyUpAttribute preselectedItem
-                 , onKeyPressAttribute preselectedItem
-                 , onInput OnQueryChange
-                 , onFocus OnFocus
-                 , placeholder config.prompt
-                 , referenceAttr config model
-                 , style inputStyles
-                 , value val
-                 ]
-                    ++ idAttribute
-                )
-                []
-            , underline
-            , clear
+    div [ class rootClasses, style rootStyles ] <|
+        List.concat
+            [ valueHtml
+            , [ input
+                    (List.concat
+                        [ [ class inputClasses
+                          , autocomplete False
+                          , attribute "autocorrect" "off" -- for mobile Safari
+                          , onBlurAttribute config model
+                          , onKeyUpAttribute preselectedItem
+                          , onKeyPressAttribute preselectedItem
+                          , onInput OnQueryChange
+                          , onFocus OnFocus
+                          , placeholder config.prompt
+                          , referenceAttr config model
+                          , style inputStyles
+                          ]
+                        , valueAttribute
+                        , idAttribute
+                        ]
+                    )
+                    []
+              ]
+            , [ underline, clear ]
             ]
