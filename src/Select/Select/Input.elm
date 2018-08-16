@@ -8,10 +8,10 @@ import Json.Decode as Decode
 import Select.Config exposing (Config)
 import Select.Events exposing (onBlurAttribute)
 import Select.Messages exposing (..)
-import Select.Models exposing (Selected(..), State)
+import Select.Models as Models exposing (Selected, State)
 import Select.Search exposing (matchedItemsWithCutoff)
 import Select.Select.Clear as Clear
-import Select.Utils exposing (referenceAttr)
+import Select.Utils as Utils
 
 
 onKeyPressAttribute : Maybe item -> Attribute (Msg item)
@@ -64,9 +64,11 @@ onKeyUpAttribute maybeItem =
 view : Config msg item -> State -> List item -> Maybe (Selected item) -> Html (Msg item)
 view config model items selected =
     let
+        rootClasses : String
         rootClasses =
             "elm-select-input-wrapper " ++ config.inputWrapperClass
 
+        rootStyles : List ( String, String )
         rootStyles =
             List.append
                 [ ( "position", "relative" )
@@ -82,6 +84,7 @@ view config model items selected =
                 Just _ ->
                     ( "", [] )
 
+        inputClasses : String
         inputClasses =
             String.join " "
                 [ "elm-select-input"
@@ -89,19 +92,26 @@ view config model items selected =
                 , promptClass
                 ]
 
+        inputStyles : List ( String, String )
         inputStyles =
             List.concat
-                [ [ ( "width", "100%" )
-                  , ( "outline", "none" )
+                [ [ ( "outline", "none" )
                   , ( "border", "none" )
+                  , ( "display", "inline-block" )
                   ]
                 , config.inputStyles
                 , promptStyles
+                , Maybe.withDefault [] <|
+                    Utils.andThenSelected selected
+                        (\_ -> Just [ ( "width", "100%" ) ])
+                        (\_ -> Nothing)
                 ]
 
+        clearClasses : String
         clearClasses =
             "elm-select-clear " ++ config.clearClass
 
+        clearStyles : List ( String, String )
         clearStyles =
             List.append
                 [ ( "cursor", "pointer" )
@@ -114,50 +124,55 @@ view config model items selected =
                 ]
                 config.clearStyles
 
-        multiClasses =
-            "elm-select-multi " ++ config.multiClass
+        multiInputClasses : String
+        multiInputClasses =
+            "elm-select-multi-input " ++ config.multiInputClass
 
-        multiStyles =
+        multiInputStyles : List ( String, String )
+        multiInputStyles =
+            List.append [] config.multiInputStyles
+
+        multiInputItemContainerClasses : String
+        multiInputItemContainerClasses =
+            "elm-select-multiinput-item-container "
+                ++ config.multiInputItemContainerClass
+
+        multiInputItemContainerStyles : List ( String, String )
+        multiInputItemContainerStyles =
             List.append
-                []
-                config.multiStyles
+                [ ( "display", "inline-block" )
+                , ( "padding-left", "0.5rem" )
+                ]
+                config.multiInputItemContainerStyles
 
-        ( valueAttribute, valueHtml ) =
-            case ( selected, model.query ) of
-                ( Just selectedType, Just queryValue ) ->
-                    case selectedType of
-                        Single item ->
-                            ( [ value queryValue ], [] )
+        multiInputItemClasses : String
+        multiInputItemClasses =
+            "elm-select-multiinput-item " ++ config.multiInputClass
 
-                        Many items ->
-                            ( [ value queryValue ]
-                            , [ div [ class multiClasses, style multiStyles ] <|
-                                    List.map (config.toLabel >> text) items
-                              ]
-                            )
+        multiInputItemStyles : List ( String, String )
+        multiInputItemStyles =
+            List.append
+                [ ( "border-style", "solid" )
+                , ( "border-width", "0.1rem" )
+                , ( "border-radius", "0.1em" )
+                , ( "border-color", "#E3E5E8" )
+                , ( "background-color", "#E3E5E8" )
+                , ( "font-size", ".75rem" )
+                , ( "padding-left", ".2rem" )
+                , ( "padding-right", ".2rem" )
+                , ( "margin-right", ".2rem" )
+                ]
+                config.multiInputStyles
 
-                ( Just selectedType, Nothing ) ->
-                    case selectedType of
-                        Single item ->
-                            ( [ value (config.toLabel item) ], [] )
-
-                        Many items ->
-                            ( []
-                            , [ div [ class multiClasses, style multiStyles ] <|
-                                    List.map (config.toLabel >> text) items
-                              ]
-                            )
-
-                ( Nothing, Just query ) ->
-                    ( [ value query ], [] )
-
-                ( Nothing, Nothing ) ->
-                    ( [ value "" ], [] )
-
+        onClickWithoutPropagation : Msg item -> Attribute (Msg item)
         onClickWithoutPropagation msg =
             Decode.succeed msg
-                |> onWithOptions "click" { stopPropagation = True, preventDefault = False }
+                |> onWithOptions "click"
+                    { stopPropagation = True
+                    , preventDefault = False
+                    }
 
+        clear : Html (Msg item)
         clear =
             case selected of
                 Nothing ->
@@ -171,12 +186,15 @@ view config model items selected =
                         ]
                         [ Clear.view config ]
 
+        underlineClasses : String
         underlineClasses =
             "elm-select-underline " ++ config.underlineClass
 
+        underlineStyles : List ( String, String )
         underlineStyles =
             config.underlineStyles
 
+        underline : Html (Msg item)
         underline =
             div
                 [ class underlineClasses
@@ -184,10 +202,12 @@ view config model items selected =
                 ]
                 []
 
+        matchedItems : Select.Search.SearchResult item
         matchedItems =
             matchedItemsWithCutoff config model.query items
 
         -- item that will be selected if enter if pressed
+        preselectedItem : Maybe item
         preselectedItem =
             case matchedItems of
                 Select.Search.NotSearched ->
@@ -202,9 +222,28 @@ view config model items selected =
                             Nothing
 
                         Just n ->
-                            Array.fromList found |> Array.get (rem n (List.length found))
+                            Array.fromList found
+                                |> Array.get (rem n (List.length found))
+
+        viewMultiItems : List item -> Html (Msg item)
+        viewMultiItems items =
+            div
+                [ class multiInputItemContainerClasses
+                , style multiInputItemContainerStyles
+                ]
+                (List.map
+                    (\item ->
+                        span
+                            [ class multiInputItemClasses
+                            , style multiInputItemStyles
+                            ]
+                            [ text (config.toLabel item) ]
+                    )
+                    items
+                )
 
         -- items wrap around
+        idAttribute : List (Attribute (Msg item))
         idAttribute =
             case config.inputId of
                 Nothing ->
@@ -212,29 +251,89 @@ view config model items selected =
 
                 Just inputId ->
                     [ id inputId ]
+
+        inputAttributes =
+            [ autocomplete False
+            , attribute "autocorrect" "off" -- for mobile Safari
+            , onBlurAttribute config model
+            , onKeyUpAttribute preselectedItem
+            , onKeyPressAttribute preselectedItem
+            , onInput OnQueryChange
+            , onFocus OnFocus
+            , Utils.referenceAttr config model
+            , class inputClasses
+            , style inputStyles
+            ]
     in
-    div [ class rootClasses, style rootStyles ] <|
-        List.concat
-            [ valueHtml
-            , [ input
-                    (List.concat
-                        [ [ class inputClasses
-                          , autocomplete False
-                          , attribute "autocorrect" "off" -- for mobile Safari
-                          , onBlurAttribute config model
-                          , onKeyUpAttribute preselectedItem
-                          , onKeyPressAttribute preselectedItem
-                          , onInput OnQueryChange
-                          , onFocus OnFocus
-                          , placeholder config.prompt
-                          , referenceAttr config model
-                          , style inputStyles
-                          ]
-                        , valueAttribute
-                        , idAttribute
-                        ]
+    div [ class rootClasses, style rootStyles ]
+        [ case ( selected, model.query ) of
+            ( Just selectedType, Just queryValue ) ->
+                case selectedType of
+                    Models.Single item ->
+                        input
+                            (inputAttributes
+                                ++ idAttribute
+                                ++ [ value queryValue ]
+                            )
+                            []
+
+                    Models.Many items ->
+                        div
+                            [ class multiInputClasses
+                            , style multiInputStyles
+                            ]
+                            [ viewMultiItems items
+                            , input
+                                (inputAttributes
+                                    ++ idAttribute
+                                    ++ [ value queryValue ]
+                                )
+                                []
+                            ]
+
+            ( Just selectedType, Nothing ) ->
+                case selectedType of
+                    Models.Single item ->
+                        input
+                            (inputAttributes
+                                ++ idAttribute
+                                ++ [ value (config.toLabel item) ]
+                            )
+                            []
+
+                    Models.Many items ->
+                        div
+                            [ class multiInputClasses
+                            , style multiInputStyles
+                            ]
+                            [ viewMultiItems items
+                            , input
+                                (inputAttributes
+                                    ++ idAttribute
+                                    ++ [ value "" ]
+                                )
+                                []
+                            ]
+
+            ( Nothing, Just queryValue ) ->
+                input
+                    (inputAttributes
+                        ++ idAttribute
+                        ++ [ value queryValue
+                           , placeholder config.prompt
+                           ]
                     )
                     []
-              ]
-            , [ underline, clear ]
-            ]
+
+            ( Nothing, Nothing ) ->
+                input
+                    (inputAttributes
+                        ++ idAttribute
+                        ++ [ value ""
+                           , placeholder config.prompt
+                           ]
+                    )
+                    []
+        , underline
+        , clear
+        ]

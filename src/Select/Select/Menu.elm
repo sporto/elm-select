@@ -4,21 +4,30 @@ import Html exposing (..)
 import Html.Attributes exposing (class, style)
 import Select.Config exposing (Config)
 import Select.Messages exposing (..)
-import Select.Models exposing (State)
+import Select.Models as Models exposing (Selected, State)
 import Select.Search as Search
 import Select.Select.Item as Item
+import Select.Utils as Utils
 
 
-view : Config msg item -> State -> List item -> Html (Msg item)
-view config model items =
+view : Config msg item -> State -> List item -> Maybe (Selected item) -> Html (Msg item)
+view config model items selected =
     let
         -- Treat Nothing and "" as empty query
         query =
             model.query
                 |> Maybe.withDefault ""
 
+        filteredItems =
+            Maybe.withDefault items <|
+                Utils.andThenSelected selected
+                    (\_ -> Nothing)
+                    (\selectedItems ->
+                        Just (Utils.difference items selectedItems)
+                    )
+
         searchResult =
-            Search.matchedItemsWithCutoff config model.query items
+            Search.matchedItemsWithCutoff config model.query filteredItems
     in
     if query == "" && not config.emptySearch then
         text ""

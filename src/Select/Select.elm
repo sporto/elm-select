@@ -20,5 +20,5 @@ view config model items selected =
     in
     div [ id model.id, class classes, style styles ]
         [ Select.Select.Input.view config model items selected
-        , Select.Select.Menu.view config model items
+        , Select.Select.Menu.view config model items selected
         ]

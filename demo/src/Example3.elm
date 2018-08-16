@@ -2,38 +2,44 @@ module Example3 exposing (..)
 
 import Html exposing (..)
 import Html.Attributes exposing (class)
-import Movies
 import Select
 
 
 {-| Model to be passed to the select component. You model can be anything.
 E.g. Records, tuples or just strings.
 -}
-type alias Movie =
-    { id : String
-    , label : String
-    }
+type Color
+    = Red
+    | Orange
+    | Yellow
+    | Green
+    | Blue
+    | Indigo
+    | Violet
 
 
 {-| In your main application model you should store:
-
-  - The selected item e.g. selectedMovieId
-  - The state for the select component e.g. selectState
-
 -}
 type alias Model =
     { id : String
-    , movies : List Movie
-    , selectedMovies : List Movie
+    , colors : List Color
+    , selectedColors : List Color
     , selectState : Select.State
     }
 
 
-{-| A helper function that transforms a list of tuples into records
+{-| List of colors
 -}
-movies : List Movie
-movies =
-    List.map (\( id, name ) -> Movie id name) Movies.movies
+colors : List Color
+colors =
+    [ Red
+    , Orange
+    , Yellow
+    , Green
+    , Blue
+    , Indigo
+    , Violet
+    ]
 
 
 {-| Your model should store the selected item and the state of the Select component(s)
@@ -41,8 +47,8 @@ movies =
 initialModel : String -> Model
 initialModel id =
     { id = id
-    , movies = movies
-    , selectedMovies = []
+    , colors = colors
+    , selectedColors = []
     , selectState = Select.newState id
     }
 
@@ -55,8 +61,8 @@ initialModel id =
 -}
 type Msg
     = NoOp
-    | OnSelect (Maybe Movie)
-    | SelectMsg (Select.Msg Movie)
+    | OnSelect (Maybe Color)
+    | SelectMsg (Select.Msg Color)
 
 
 {-| Create the configuration for the Select component
@@ -69,13 +75,12 @@ type Msg
 All the functions after |> are optional configuration.
 
 -}
-selectConfig : Select.Config Msg Movie
+selectConfig : Select.Config Msg Color
 selectConfig =
-    Select.newConfig OnSelect .label
+    Select.newConfig OnSelect toString
         |> Select.withCutoff 12
         |> Select.withInputId "input-id"
-        |> Select.withInputWrapperClass "col-12"
-        |> Select.withInputWrapperStyles
+        |> Select.withInputStyles
             [ ( "padding", "0.5rem" ), ( "outline", "none" ) ]
         |> Select.withItemClass "border-bottom border-silver p1 gray"
         |> Select.withItemStyles [ ( "font-size", "1rem" ) ]
@@ -85,9 +90,10 @@ selectConfig =
         |> Select.withNotFoundClass "red"
         |> Select.withNotFoundStyles [ ( "padding", "0 2rem" ) ]
         |> Select.withHighlightedItemClass "bg-silver"
-        |> Select.withHighlightedItemStyles [ ( "color", "black" ) ]
+        |> Select.withHighlightedItemStyles []
         |> Select.withPrompt "Select a movie"
         |> Select.withPromptClass "grey"
+        |> Select.withUnderlineClass "underline"
 
 
 {-| Your update function should route messages back to the Select component, see `SelectMsg`.
@@ -96,14 +102,14 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         -- OnSelect is triggered when a selection is made on the Select component.
-        OnSelect maybeMovie ->
+        OnSelect maybeColor ->
             let
-                selectedMovies =
-                    maybeMovie
-                        |> Maybe.map (List.singleton >> List.append model.selectedMovies)
+                selectedColors =
+                    maybeColor
+                        |> Maybe.map (List.singleton >> List.append model.selectedColors)
                         |> Maybe.withDefault []
             in
-            ( { model | selectedMovies = selectedMovies }, Cmd.none )
+            ( { model | selectedColors = selectedColors }, Cmd.none )
 
         -- Route message to the Select component.
         -- The returned command is important.
@@ -124,7 +130,7 @@ view : Model -> Html Msg
 view model =
     div [ class "bg-silver p1" ]
         [ h3 [] [ text "MultiSelect example" ]
-        , text (toString <| List.map .id model.selectedMovies)
+        , text (toString <| List.map toString model.selectedColors)
 
         -- Render the Select view. You must pass:
         -- - The configuration
@@ -132,11 +138,11 @@ view model =
         -- - The Select internal state
         -- - A list of items
         -- - The currently selected item as Maybe
-        , h4 [] [ text "Pick movie(s)" ]
+        , h4 [] [ text "Pick colors" ]
         , Html.map SelectMsg
             (Select.viewMulti selectConfig
                 model.selectState
-                model.movies
-                model.selectedMovies
+                model.colors
+                model.selectedColors
             )
         ]

@@ -31,8 +31,12 @@ type alias Config msg item =
     , itemHtml : Maybe (item -> Html Never)
     , menuClass : String
     , menuStyles : List Style
-    , multiClass : String
-    , multiStyles : List Style
+    , multiInputClass : String
+    , multiInputStyles : List Style
+    , multiInputItemContainerClass : String
+    , multiInputItemContainerStyles : List Style
+    , multiInputItemClass : String
+    , multiInputItemStyles : List Style
     , notFound : String
     , notFoundClass : String
     , notFoundShown : Bool
@@ -76,8 +80,12 @@ newConfig onSelect toLabel =
     , itemHtml = Nothing
     , menuClass = ""
     , menuStyles = []
-    , multiClass = ""
-    , multiStyles = []
+    , multiInputClass = ""
+    , multiInputStyles = []
+    , multiInputItemContainerClass = ""
+    , multiInputItemContainerStyles = []
+    , multiInputItemClass = ""
+    , multiInputItemStyles = []
     , notFound = "No results found"
     , notFoundClass = ""
     , notFoundShown = True

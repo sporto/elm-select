@@ -31,8 +31,12 @@ module Select
         , withItemStyles
         , withMenuClass
         , withMenuStyles
-        , withMultiClass
-        , withMultiStyles
+        , withMultiInputClass
+        , withMultiInputItemClass
+        , withMultiInputItemContainerClass
+        , withMultiInputItemContainerStyles
+        , withMultiInputItemStyles
+        , withMultiInputStyles
         , withNotFound
         , withNotFoundClass
         , withNotFoundShown
@@ -103,7 +107,7 @@ module Select
 
 # Configure selected items in multi mode
 
-@docs withMultiClass, withMultiStyles
+@docs withMultiInputClass, withMultiInputStyles, withMultiInputItemContainerClass, withMultiInputItemContainerStyles, withMultiInputItemClass, withMultiInputItemStyles
 
 
 # State
@@ -113,7 +117,7 @@ module Select
 
 # view
 
-@docs view
+@docs view, viewMulti
 
 
 # Update
@@ -389,30 +393,86 @@ withMenuStyles styles config =
     mapConfig fn config
 
 
-{-| Add classes to the multiple selected items container
+{-| Add classes to the multi select input
 
-    Select.withMultiClass "bg-white" config
+    Select.withMultiInputClass "bg-white" config
 
 -}
-withMultiClass : String -> Config msg item -> Config msg item
-withMultiClass classes config =
+withMultiInputClass : String -> Config msg item -> Config msg item
+withMultiInputClass classes config =
     let
         fn c =
-            { c | multiClass = classes }
+            { c | multiInputClass = classes }
     in
     mapConfig fn config
 
 
-{-| Add styles to the multiple selected items container
+{-| Add styles to the multi select input
 
-    Select.withMultiStyles [("padding", "1rem")] config
+    Select.withMultiInputStyles [("padding", "1rem")] config
 
 -}
-withMultiStyles : List ( String, String ) -> Config msg item -> Config msg item
-withMultiStyles styles config =
+withMultiInputStyles : List ( String, String ) -> Config msg item -> Config msg item
+withMultiInputStyles styles config =
     let
         fn c =
-            { c | multiStyles = styles }
+            { c | multiInputStyles = styles }
+    in
+    mapConfig fn config
+
+
+{-| Add classes to the multiple selected items container
+
+    Select.withMultiInputItemContainerClass "bg-white" config
+
+-}
+withMultiInputItemContainerClass : String -> Config msg item -> Config msg item
+withMultiInputItemContainerClass classes config =
+    let
+        fn c =
+            { c | multiInputItemContainerClass = classes }
+    in
+    mapConfig fn config
+
+
+{-| Add classes to the multiple selected items container
+
+    Select.withMultiInputClass "bg-white" config
+
+-}
+withMultiInputItemContainerStyles : List ( String, String ) -> Config msg item -> Config msg item
+withMultiInputItemContainerStyles styles config =
+    let
+        fn c =
+            { c | multiInputItemContainerStyles = styles }
+    in
+    mapConfig fn config
+
+
+{-| Add classes to an individual multiple selected item
+
+    Select.withMultiInputItemClass "bg-white" config
+
+-}
+withMultiInputItemClass : String -> Config msg item -> Config msg item
+withMultiInputItemClass classes config =
+    let
+        fn c =
+            { c | multiInputClass = classes }
+    in
+    mapConfig fn config
+
+
+{-| Add styles to an individual multiple selected item
+
+    Select.withMultiInputItemStyles [("padding", "1rem")] config
+
+-}
+withMultiInputItemStyles : List ( String, String ) -> Config msg item -> Config msg item
+withMultiInputItemStyles styles config =
+    let
+        fn c =
+            { c | multiInputItemStyles = styles }
     in
     mapConfig fn config
 
@@ -757,7 +817,7 @@ view config model items selected =
     viewBase config model items (Maybe.map Models.Single selected)
 
 
-{-| Render the view for multiple selected items
+{-| Render the view for multiple selected items input
 
     Html.map SelectMsg
         (Select.viewMulti selectConfig model.selectState model.items selectedItems)
