@@ -92,9 +92,36 @@ multiInputItemStyles =
 
 
 underlineClass : String
-underlineClass ="elm-select-underline "
+underlineClass =
+    "elm-select-underline "
 
-underlineStyles : List (String, String)
-underlineStyles = []
+
+underlineStyles : List ( String, String )
+underlineStyles =
+    []
+
+
+
+-- ITEM CONSTANTS
+
+
+menuItemClass : String
+menuItemClass =
+    "elm-select-item "
+
+
+menuItemStyles : List ( String, String )
+menuItemStyles =
+    [ ( "cursor", "pointer" )
+    ]
 
 -- MENU CONSTANTS
+
+menuClass : String
+menuClass = "elm-select-menu "
+
+visibleMenuStyles : List (String, String)
+visibleMenuStyles = [ ( "position", "absolute" ), ( "z-index", "1" ) ]
+
+hiddenMenuStyles : List (String, String)
+hiddenMenuStyles = [ ( "display", "none" ) ]

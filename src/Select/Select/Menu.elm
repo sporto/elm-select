@@ -3,6 +3,7 @@ module Select.Select.Menu exposing (..)
 import Html exposing (..)
 import Html.Attributes exposing (class, style)
 import Select.Config exposing (Config)
+import Select.Constants as Constants
 import Select.Messages exposing (..)
 import Select.Models as Models exposing (Selected, State)
 import Select.Search as Search
@@ -21,9 +22,9 @@ view config model items selected =
         filteredItems =
             Maybe.withDefault items <|
                 Utils.andThenSelected selected
-                    (\_ -> Nothing)
-                    (\selectedItems ->
-                        Just (Utils.difference items selectedItems)
+                    (\oneSelectedItem -> Nothing)
+                    (\manySelectedItems ->
+                        Just (Utils.difference items manySelectedItems)
                     )
 
         searchResult =
@@ -48,7 +49,7 @@ menu config model matchedItems =
 
         menuStyle =
             if hideWhenNotFound then
-                style [ ( "display", "none" ) ]
+                style Constants.hiddenMenuStyles
             else
                 style (viewStyles config)
 
@@ -74,9 +75,9 @@ menu config model matchedItems =
 
 viewClassAttr : Config msg item -> Attribute msg2
 viewClassAttr config =
-    class ("elm-select-menu " ++ config.menuClass)
+    class (Constants.menuClass ++ config.menuClass)
 
 
 viewStyles : Config msg item -> List ( String, String )
 viewStyles config =
-    List.append [ ( "position", "absolute" ), ( "z-index", "1" ) ] config.menuStyles
+    List.append Constants.visibleMenuStyles config.menuStyles

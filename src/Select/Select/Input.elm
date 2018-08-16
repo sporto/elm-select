@@ -99,8 +99,8 @@ view config model items selected =
                 , promptStyles
                 , Maybe.withDefault [] <|
                     Utils.andThenSelected selected
-                        (\singleItem -> Just [ ( "width", "100%" ) ])
-                        (\manyItems -> Nothing)
+                        (\oneSelectedItem -> Just [ ( "width", "100%" ) ])
+                        (\manySelectedItems -> Nothing)
                 ]
 
         clearClasses : String

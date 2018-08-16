@@ -7,6 +7,7 @@ import Select.Config exposing (Config)
 import Select.Messages exposing (..)
 import Select.Models exposing (State)
 import Select.Utils exposing (referenceAttr)
+import Select.Constants as Constants
 
 
 view : Config msg item -> State -> Int -> Int -> item -> Html (Msg item)
@@ -32,7 +33,7 @@ view config state itemCount index item =
 
         styles =
             List.concat
-                [ [ ( "cursor", "pointer" ) ]
+                [ Constants.menuItemStyles
                 , baseItemStyles config
                 , highlightedItemStyles
                 ]
@@ -80,7 +81,7 @@ viewNotFound config =
 
 baseItemClasses : Config msg item -> String
 baseItemClasses config =
-    ("elm-select-item " ++ config.itemClass)
+    (Constants.menuItemClass ++ config.itemClass)
 
 
 baseItemStyles : Config msg item -> List ( String, String )
