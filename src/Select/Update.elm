@@ -1,8 +1,8 @@
 module Select.Update exposing (..)
 
 import Select.Config exposing (Config)
-import Select.Models exposing (State)
 import Select.Messages exposing (..)
+import Select.Models exposing (State)
 import Task
 
 
@@ -18,84 +18,86 @@ update config msg model =
                     Task.succeed value
                         |> Task.perform constructor
     in
-        case msg of
-            NoOp ->
-                ( model, Cmd.none )
+    case msg of
+        NoOp ->
+            ( model, Cmd.none )
 
-            OnEsc ->
-                ( { model | query = Nothing }, Cmd.none )
+        OnEsc ->
+            ( { model | query = Nothing }, Cmd.none )
 
-            OnDownArrow ->
-                let
-                    newHightlightedItem =
-                        case model.highlightedItem of
-                            Nothing ->
-                                Just 0
+        OnDownArrow ->
+            let
+                newHightlightedItem =
+                    case model.highlightedItem of
+                        Nothing ->
+                            Just 0
 
-                            Just n ->
-                                Just (n + 1)
-                in
-                    ( { model | highlightedItem = newHightlightedItem }, Cmd.none )
+                        Just n ->
+                            Just (n + 1)
+            in
+            ( { model | highlightedItem = newHightlightedItem }, Cmd.none )
 
-            OnUpArrow ->
-                let
-                    newHightlightedItem =
-                        case model.highlightedItem of
-                            Nothing ->
-                                Nothing
+        OnUpArrow ->
+            let
+                newHightlightedItem =
+                    case model.highlightedItem of
+                        Nothing ->
+                            Nothing
 
-                            Just 0 ->
-                                Nothing
+                        Just 0 ->
+                            Nothing
 
-                            Just n ->
-                                Just (n - 1)
-                in
-                    ( { model | highlightedItem = newHightlightedItem }, Cmd.none )
+                        Just n ->
+                            Just (n - 1)
+            in
+            ( { model | highlightedItem = newHightlightedItem }, Cmd.none )
 
-            OnFocus ->
-                let
-                    cmd =
-                        case config.onFocus of
-                            Nothing ->
-                                Cmd.none
+        OnFocus ->
+            let
+                cmd =
+                    case config.onFocus of
+                        Nothing ->
+                            Cmd.none
 
-                            Just focusMessage ->
-                                Task.succeed Nothing
-                                    |> Task.perform (\x -> focusMessage)
-                in
-                    case config.emptySearch of
-                        True ->
-                            ( { model | query = Just "" }
-                            , Cmd.batch
-                                [ cmd
-                                , if config.emptySearch then
-                                    queryChangeCmd ""
-                                  else
-                                    Cmd.none
-                                ]
-                            )
+                        Just focusMessage ->
+                            Task.succeed Nothing
+                                |> Task.perform (\x -> focusMessage)
+            in
+            case config.emptySearch of
+                True ->
+                    ( { model | query = Just "" }
+                    , Cmd.batch
+                        [ cmd
+                        , if config.emptySearch then
+                            queryChangeCmd ""
+                          else
+                            Cmd.none
+                        ]
+                    )
 
-                        False ->
-                            ( model, cmd )
+                False ->
+                    ( model, cmd )
 
-            OnBlur ->
-                ( { model | query = Nothing }, Cmd.none )
+        OnBlur ->
+            ( { model | query = Nothing }, Cmd.none )
 
-            OnClear ->
-                let
-                    cmd =
-                        Task.succeed Nothing
-                            |> Task.perform config.onSelect
-                in
-                    ( { model | query = Nothing }, cmd )
+        OnClear ->
+            let
+                cmd =
+                    Task.succeed Nothing
+                        |> Task.perform config.onSelect
+            in
+            ( { model | query = Nothing }, cmd )
 
-            OnQueryChange value ->
-                ( { model | highlightedItem = Nothing, query = Just value }, queryChangeCmd value )
+        OnQueryChange value ->
+            { model | highlightedItem = Nothing, query = Just value }
+                ! [ queryChangeCmd value
+                  ]
 
-            OnSelect item ->
-                let
-                    cmd =
-                        Task.succeed (Just item)
-                            |> Task.perform config.onSelect
-                in
-                    ( { model | query = Nothing }, cmd )
+        OnSelect item ->
+            let
+                cmd =
+                    Task.succeed (Just item)
+                        |> Task.perform config.onSelect
+            in
+            ( { model | query = Nothing }, cmd )

@@ -2,6 +2,7 @@ module Select.Config exposing (..)
 
 import Fuzzy
 import Html exposing (Html)
+import Select.Constants as Constants
 
 
 type alias Style =
@@ -21,7 +22,7 @@ type alias Config msg item =
     , fuzzySearchRemovePenalty : Maybe Int
     , fuzzySearchInsertPenalty : Maybe Int
     , fuzzySearchSeparators : List String
-    , inputId : Maybe String
+    , inputId : String
     , inputClass : String
     , inputStyles : List Style
     , inputWrapperClass : String
@@ -70,7 +71,7 @@ newConfig onSelect toLabel =
     , fuzzySearchRemovePenalty = Nothing
     , fuzzySearchSeparators = [ " " ]
     , underlineStyles = []
-    , inputId = Nothing
+    , inputId = Constants.inputId
     , inputClass = ""
     , inputStyles = []
     , inputWrapperClass = ""

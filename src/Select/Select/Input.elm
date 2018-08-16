@@ -6,6 +6,7 @@ import Html.Attributes exposing (attribute, autocomplete, class, id, placeholder
 import Html.Events exposing (keyCode, on, onFocus, onInput, onWithOptions)
 import Json.Decode as Decode
 import Select.Config exposing (Config)
+import Select.Constants as Constants
 import Select.Events exposing (onBlurAttribute)
 import Select.Messages exposing (..)
 import Select.Models as Models exposing (Selected, State)
@@ -66,14 +67,12 @@ view config model items selected =
     let
         rootClasses : String
         rootClasses =
-            "elm-select-input-wrapper " ++ config.inputWrapperClass
+            Constants.inputWrapperClass ++ config.inputWrapperClass
 
         rootStyles : List ( String, String )
         rootStyles =
             List.append
-                [ ( "position", "relative" )
-                , ( "background", "white" )
-                ]
+                Constants.inputWrapperStyles
                 config.inputWrapperStyles
 
         ( promptClass, promptStyles ) =
@@ -87,7 +86,7 @@ view config model items selected =
         inputClasses : String
         inputClasses =
             String.join " "
-                [ "elm-select-input"
+                [ Constants.inputClass
                 , config.inputClass
                 , promptClass
                 ]
@@ -95,73 +94,54 @@ view config model items selected =
         inputStyles : List ( String, String )
         inputStyles =
             List.concat
-                [ [ ( "outline", "none" )
-                  , ( "border", "none" )
-                  , ( "display", "inline-block" )
-                  ]
+                [ Constants.inputStyles
                 , config.inputStyles
                 , promptStyles
                 , Maybe.withDefault [] <|
                     Utils.andThenSelected selected
-                        (\_ -> Just [ ( "width", "100%" ) ])
-                        (\_ -> Nothing)
+                        (\singleItem -> Just [ ( "width", "100%" ) ])
+                        (\manyItems -> Nothing)
                 ]
 
         clearClasses : String
         clearClasses =
-            "elm-select-clear " ++ config.clearClass
+            Constants.clearClass ++ config.clearClass
 
         clearStyles : List ( String, String )
         clearStyles =
             List.append
-                [ ( "cursor", "pointer" )
-                , ( "height", "1rem" )
-                , ( "line-height", "0rem" )
-                , ( "margin-top", "-0.5rem" )
-                , ( "position", "absolute" )
-                , ( "right", "0.25rem" )
-                , ( "top", "50%" )
-                ]
+                Constants.clearStyles
                 config.clearStyles
 
         multiInputClasses : String
         multiInputClasses =
-            "elm-select-multi-input " ++ config.multiInputClass
+            Constants.multiInputClass ++ config.multiInputClass
 
         multiInputStyles : List ( String, String )
         multiInputStyles =
-            List.append [] config.multiInputStyles
+            List.append
+                Constants.multiInputStyles
+                config.multiInputStyles
 
         multiInputItemContainerClasses : String
         multiInputItemContainerClasses =
-            "elm-select-multiinput-item-container "
+            Constants.multiInputItemContainerClass
                 ++ config.multiInputItemContainerClass
 
         multiInputItemContainerStyles : List ( String, String )
         multiInputItemContainerStyles =
             List.append
-                [ ( "display", "inline-block" )
-                , ( "padding-left", "0.5rem" )
-                ]
+                Constants.multiInputItemContainerStyles
                 config.multiInputItemContainerStyles
 
         multiInputItemClasses : String
         multiInputItemClasses =
-            "elm-select-multiinput-item " ++ config.multiInputClass
+            Constants.multiInputItemClass ++ config.multiInputClass
 
         multiInputItemStyles : List ( String, String )
         multiInputItemStyles =
             List.append
-                [ ( "border-style", "solid" )
-                , ( "border-width", "0.1rem" )
-                , ( "border-radius", "0.1em" )
-                , ( "border-color", "#E3E5E8" )
-                , ( "background-color", "#E3E5E8" )
-                , ( "font-size", ".75rem" )
-                , ( "padding-left", ".2rem" )
-                , ( "padding-right", ".2rem" )
-                , ( "margin-right", ".2rem" )
-                ]
+                Constants.multiInputItemStyles
                 config.multiInputStyles
 
         onClickWithoutPropagation : Msg item -> Attribute (Msg item)
@@ -188,11 +168,13 @@ view config model items selected =
 
         underlineClasses : String
         underlineClasses =
-            "elm-select-underline " ++ config.underlineClass
+            Constants.underlineClass ++ config.underlineClass
 
         underlineStyles : List ( String, String )
         underlineStyles =
-            config.underlineStyles
+            List.append
+                Constants.underlineStyles
+                config.underlineStyles
 
         underline : Html (Msg item)
         underline =
@@ -242,19 +224,10 @@ view config model items selected =
                     items
                 )
 
-        -- items wrap around
-        idAttribute : List (Attribute (Msg item))
-        idAttribute =
-            case config.inputId of
-                Nothing ->
-                    []
-
-                Just inputId ->
-                    [ id inputId ]
-
         inputAttributes =
             [ autocomplete False
             , attribute "autocorrect" "off" -- for mobile Safari
+            , id config.inputId
             , onBlurAttribute config model
             , onKeyUpAttribute preselectedItem
             , onKeyPressAttribute preselectedItem
@@ -272,7 +245,6 @@ view config model items selected =
                     Models.Single item ->
                         input
                             (inputAttributes
-                                ++ idAttribute
                                 ++ [ value queryValue ]
                             )
                             []
@@ -285,7 +257,6 @@ view config model items selected =
                             [ viewMultiItems items
                             , input
                                 (inputAttributes
-                                    ++ idAttribute
                                     ++ [ value queryValue ]
                                 )
                                 []
@@ -296,7 +267,6 @@ view config model items selected =
                     Models.Single item ->
                         input
                             (inputAttributes
-                                ++ idAttribute
                                 ++ [ value (config.toLabel item) ]
                             )
                             []
@@ -309,7 +279,6 @@ view config model items selected =
                             [ viewMultiItems items
                             , input
                                 (inputAttributes
-                                    ++ idAttribute
                                     ++ [ value "" ]
                                 )
                                 []
@@ -318,7 +287,6 @@ view config model items selected =
             ( Nothing, Just queryValue ) ->
                 input
                     (inputAttributes
-                        ++ idAttribute
                         ++ [ value queryValue
                            , placeholder config.prompt
                            ]
@@ -328,7 +296,6 @@ view config model items selected =
             ( Nothing, Nothing ) ->
                 input
                     (inputAttributes
-                        ++ idAttribute
                         ++ [ value ""
                            , placeholder config.prompt
                            ]

@@ -260,7 +260,7 @@ withInputId : String -> Config msg item -> Config msg item
 withInputId id config =
     let
         fn c =
-            { c | inputId = Just id }
+            { c | inputId = id }
     in
     mapConfig fn config
 
