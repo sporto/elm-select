@@ -86,7 +86,8 @@ selectConfig =
         |> Select.withCutoff 12
         |> Select.withInputId "input-id"
         |> Select.withInputClass "col-12"
-        |> Select.withInputStyles [ ( "padding", "0.5rem" ), ( "outline", "none" ) ]
+        |> Select.withInputStyles
+            [ ( "padding", "0.5rem" ), ( "outline", "none" ) ]
         |> Select.withItemClass "border-bottom border-silver p1 gray"
         |> Select.withItemStyles [ ( "font-size", "1rem" ) ]
         |> Select.withMenuClass "border border-gray"
