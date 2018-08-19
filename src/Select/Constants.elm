@@ -81,12 +81,14 @@ multiInputItemStyles : List ( String, String )
 multiInputItemStyles =
     [ ( "border-style", "solid" )
     , ( "border-width", "0.1rem" )
-    , ( "border-radius", "0.1em" )
+    , ( "border-radius", "0.2em" )
     , ( "border-color", "#E3E5E8" )
     , ( "background-color", "#E3E5E8" )
     , ( "font-size", ".75rem" )
-    , ( "padding-left", ".2rem" )
-    , ( "padding-right", ".2rem" )
+    , ( "padding-left", ".3rem" )
+    , ( "padding-right", ".3rem" )
+    , ( "padding-top", ".1rem" )
+    , ( "padding-bottom", ".1rem" )
     , ( "margin-right", ".2rem" )
     ]
 
@@ -115,13 +117,41 @@ menuItemStyles =
     [ ( "cursor", "pointer" )
     ]
 
+
+
 -- MENU CONSTANTS
 
+
 menuClass : String
-menuClass = "elm-select-menu "
+menuClass =
+    "elm-select-menu "
 
-visibleMenuStyles : List (String, String)
-visibleMenuStyles = [ ( "position", "absolute" ), ( "z-index", "1" ) ]
 
-hiddenMenuStyles : List (String, String)
-hiddenMenuStyles = [ ( "display", "none" ) ]
+visibleMenuStyles : List ( String, String )
+visibleMenuStyles =
+    [ ( "position", "absolute" ), ( "z-index", "1" ) ]
+
+
+hiddenMenuStyles : List ( String, String )
+hiddenMenuStyles =
+    [ ( "display", "none" ) ]
+
+
+
+-- REMOVE ITEM CONSTANTS
+
+
+removeItemSvgClass : String
+removeItemSvgClass =
+    "elm-select-remove-item "
+
+
+removeItemSvgStyles : List ( String, String )
+removeItemSvgStyles =
+    [ ( "margin-left", ".4rem" )
+    , ( "margin-right", ".1rem" )
+    , ( "cursor", "pointer" )
+    , ( "display", "inline-block" )
+    , ( "line-height", "1" )
+    , ( "vertical-align", "sub" )
+    ]

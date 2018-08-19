@@ -1,17 +1,18 @@
 module Select.Select.Input exposing (..)
 
 import Array
-import Html exposing (..)
+import Html as Html exposing (Attribute, Html)
 import Html.Attributes exposing (attribute, autocomplete, class, id, placeholder, style, value)
 import Html.Events exposing (keyCode, on, onFocus, onInput, onWithOptions)
 import Json.Decode as Decode
 import Select.Config exposing (Config)
 import Select.Constants as Constants
 import Select.Events exposing (onBlurAttribute)
-import Select.Messages exposing (..)
+import Select.Messages as Msg exposing (Msg)
 import Select.Models as Models exposing (Selected, State)
 import Select.Search exposing (matchedItemsWithCutoff)
 import Select.Select.Clear as Clear
+import Select.Select.RemoveItem as RemoveItem
 import Select.Utils as Utils
 
 
@@ -22,11 +23,16 @@ onKeyPressAttribute maybeItem =
             case code of
                 9 ->
                     maybeItem
-                        |> Maybe.map (Decode.succeed << OnSelect)
+                        |> Maybe.map (Decode.succeed << Msg.OnSelect)
+                        |> Maybe.withDefault (Decode.fail "nothing selected")
+
+                13 ->
+                    maybeItem
+                        |> Maybe.map (Decode.succeed << Msg.OnSelect)
                         |> Maybe.withDefault (Decode.fail "nothing selected")
 
                 _ ->
-                    Decode.fail "not TAB"
+                    Decode.fail "not TAB or ENTER"
     in
     on "keypress" (Decode.andThen fn keyCode)
 
@@ -40,7 +46,7 @@ onKeyUpAttribute maybeItem =
                     Decode.fail "not Enter"
 
                 Just item ->
-                    Decode.succeed (OnSelect item)
+                    Decode.succeed (Msg.OnSelect item)
 
         fn code =
             case code of
@@ -48,13 +54,13 @@ onKeyUpAttribute maybeItem =
                     selectItem
 
                 38 ->
-                    Decode.succeed OnUpArrow
+                    Decode.succeed Msg.OnUpArrow
 
                 40 ->
-                    Decode.succeed OnDownArrow
+                    Decode.succeed Msg.OnDownArrow
 
                 27 ->
-                    Decode.succeed OnEsc
+                    Decode.succeed Msg.OnEsc
 
                 _ ->
                     Decode.fail "not ENTER"
@@ -113,16 +119,6 @@ view config model items selected =
                 Constants.clearStyles
                 config.clearStyles
 
-        multiInputClasses : String
-        multiInputClasses =
-            Constants.multiInputClass ++ config.multiInputClass
-
-        multiInputStyles : List ( String, String )
-        multiInputStyles =
-            List.append
-                Constants.multiInputStyles
-                config.multiInputStyles
-
         multiInputItemContainerClasses : String
         multiInputItemContainerClasses =
             Constants.multiInputItemContainerClass
@@ -136,13 +132,13 @@ view config model items selected =
 
         multiInputItemClasses : String
         multiInputItemClasses =
-            Constants.multiInputItemClass ++ config.multiInputClass
+            Constants.multiInputItemClass ++ config.multiInputItemClass
 
         multiInputItemStyles : List ( String, String )
         multiInputItemStyles =
             List.append
                 Constants.multiInputItemStyles
-                config.multiInputStyles
+                config.multiInputItemStyles
 
         onClickWithoutPropagation : Msg item -> Attribute (Msg item)
         onClickWithoutPropagation msg =
@@ -156,12 +152,12 @@ view config model items selected =
         clear =
             case selected of
                 Nothing ->
-                    text ""
+                    Html.text ""
 
                 Just _ ->
-                    div
+                    Html.div
                         [ class clearClasses
-                        , onClickWithoutPropagation OnClear
+                        , onClickWithoutPropagation Msg.OnClear
                         , style clearStyles
                         ]
                         [ Clear.view config ]
@@ -178,7 +174,7 @@ view config model items selected =
 
         underline : Html (Msg item)
         underline =
-            div
+            Html.div
                 [ class underlineClasses
                 , style underlineStyles
                 ]
@@ -195,13 +191,16 @@ view config model items selected =
                 Select.Search.NotSearched ->
                     Nothing
 
+                Select.Search.ItemsFound [] ->
+                    Nothing
+
                 Select.Search.ItemsFound [ singleItem ] ->
                     Just singleItem
 
-                Select.Search.ItemsFound found ->
+                Select.Search.ItemsFound ((head :: rest) as found) ->
                     case model.highlightedItem of
                         Nothing ->
-                            Nothing
+                            Just head
 
                         Just n ->
                             Array.fromList found
@@ -209,17 +208,26 @@ view config model items selected =
 
         viewMultiItems : List item -> Html (Msg item)
         viewMultiItems items =
-            div
+            Html.div
                 [ class multiInputItemContainerClasses
                 , style multiInputItemContainerStyles
                 ]
                 (List.map
                     (\item ->
-                        span
-                            [ class multiInputItemClasses
-                            , style multiInputItemStyles
+                        Html.span
+                            [ class multiInputItemClasses, style multiInputItemStyles ]
+                            [ Html.span [] [ Html.text (config.toLabel item) ]
+                            , Maybe.withDefault (Html.span [] []) <|
+                                Maybe.map
+                                    (\_ ->
+                                        Html.span
+                                            [ onClickWithoutPropagation
+                                                (Msg.OnRemoveItem item)
+                                            ]
+                                            [ RemoveItem.view config ]
+                                    )
+                                    config.onRemoveItem
                             ]
-                            [ text (config.toLabel item) ]
                     )
                     items
                 )
@@ -231,76 +239,69 @@ view config model items selected =
             , onBlurAttribute config model
             , onKeyUpAttribute preselectedItem
             , onKeyPressAttribute preselectedItem
-            , onInput OnQueryChange
-            , onFocus OnFocus
+            , onInput Msg.OnQueryChange
+            , onFocus Msg.OnFocus
             , Utils.referenceAttr config model
             , class inputClasses
             , style inputStyles
             ]
     in
-    div [ class rootClasses, style rootStyles ]
-        [ case ( selected, model.query ) of
+    Html.div [ class rootClasses, style rootStyles ] <|
+        (case ( selected, model.query ) of
             ( Just selectedType, Just queryValue ) ->
                 case selectedType of
                     Models.Single item ->
-                        input
-                            (inputAttributes
-                                ++ [ value queryValue ]
-                            )
+                        [ Html.div [] []
+                        , Html.input
+                            (inputAttributes ++ [ value queryValue ])
                             []
+                        ]
 
                     Models.Many items ->
-                        div
-                            [ class multiInputClasses
-                            , style multiInputStyles
-                            ]
-                            [ viewMultiItems items
-                            , input
-                                (inputAttributes
-                                    ++ [ value queryValue ]
-                                )
-                                []
-                            ]
+                        [ viewMultiItems items
+                        , Html.input
+                            (inputAttributes ++ [ value queryValue ])
+                            []
+                        ]
 
             ( Just selectedType, Nothing ) ->
                 case selectedType of
                     Models.Single item ->
-                        input
-                            (inputAttributes
-                                ++ [ value (config.toLabel item) ]
-                            )
+                        [ Html.div [] []
+                        , Html.input
+                            (inputAttributes ++ [ value (config.toLabel item) ])
                             []
+                        ]
 
                     Models.Many items ->
-                        div
-                            [ class multiInputClasses
-                            , style multiInputStyles
-                            ]
-                            [ viewMultiItems items
-                            , input
-                                (inputAttributes
-                                    ++ [ value "" ]
-                                )
-                                []
-                            ]
+                        [ viewMultiItems items
+                        , Html.input
+                            (inputAttributes ++ [ value "" ])
+                            []
+                        ]
 
             ( Nothing, Just queryValue ) ->
-                input
+                [ Html.div [] []
+                , Html.input
                     (inputAttributes
                         ++ [ value queryValue
                            , placeholder config.prompt
                            ]
                     )
                     []
+                ]
 
             ( Nothing, Nothing ) ->
-                input
+                [ Html.div [] []
+                , Html.input
                     (inputAttributes
                         ++ [ value ""
                            , placeholder config.prompt
                            ]
                     )
                     []
-        , underline
-        , clear
-        ]
+                ]
+        )
+            ++ [ underline
+               , clear
+               ]

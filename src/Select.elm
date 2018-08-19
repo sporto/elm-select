@@ -31,18 +31,17 @@ module Select
         , withItemStyles
         , withMenuClass
         , withMenuStyles
-        , withMultiInputClass
         , withMultiInputItemClass
         , withMultiInputItemContainerClass
         , withMultiInputItemContainerStyles
         , withMultiInputItemStyles
-        , withMultiInputStyles
         , withNotFound
         , withNotFoundClass
         , withNotFoundShown
         , withNotFoundStyles
         , withOnFocus
         , withOnQuery
+        , withOnRemoveItem
         , withPrompt
         , withPromptClass
         , withPromptStyles
@@ -105,9 +104,9 @@ module Select
 @docs withFuzzyMatching, withTransformQuery, withScoreThreshold, withFuzzySearchAddPenalty, withFuzzySearchMovePenalty, withFuzzySearchRemovePenalty, withFuzzySearchInsertPenalty, withFuzzySearchSeparators
 
 
-# Configure selected items in multi mode
+# Configure MultiSelect mode
 
-@docs withMultiInputClass, withMultiInputStyles, withMultiInputItemContainerClass, withMultiInputItemContainerStyles, withMultiInputItemClass, withMultiInputItemStyles
+@docs withOnRemoveItem, withMultiInputItemContainerClass, withMultiInputItemContainerStyles, withMultiInputItemClass, withMultiInputItemStyles
 
 
 # State
@@ -393,30 +392,17 @@ withMenuStyles styles config =
     mapConfig fn config
 
 
-{-| Add classes to the multi select input
+{-| Message to call when removing an individual item. Please note that without this option
+specified, you will not be able to remove an individual item from MultiSelect mode.
 
-    Select.withMultiInputClass "bg-white" config
-
--}
-withMultiInputClass : String -> Config msg item -> Config msg item
-withMultiInputClass classes config =
-    let
-        fn c =
-            { c | multiInputClass = classes }
-    in
-    mapConfig fn config
-
-
-{-| Add styles to the multi select input
-
-    Select.withMultiInputStyles [("padding", "1rem")] config
+    Select.withOnRemoveItem OnRemoveItem
 
 -}
-withMultiInputStyles : List ( String, String ) -> Config msg item -> Config msg item
-withMultiInputStyles styles config =
+withOnRemoveItem : (item -> msg) -> Config msg item -> Config msg item
+withOnRemoveItem onRemoveItemMsg config =
     let
         fn c =
-            { c | multiInputStyles = styles }
+            { c | onRemoveItem = Just onRemoveItemMsg }
     in
     mapConfig fn config
 
@@ -458,7 +444,7 @@ withMultiInputItemClass : String -> Config msg item -> Config msg item
 withMultiInputItemClass classes config =
     let
         fn c =
-            { c | multiInputClass = classes }
+            { c | multiInputItemClass = classes }
     in
     mapConfig fn config
 

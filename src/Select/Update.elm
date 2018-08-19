@@ -89,10 +89,23 @@ update config msg model =
             in
             ( { model | query = Nothing }, cmd )
 
+        OnRemoveItem item ->
+            let
+                cmd =
+                    case config.onRemoveItem of
+                        Just onRemoveItem ->
+                            Task.succeed item
+                                |> Task.perform onRemoveItem
+
+                        Nothing ->
+                            Cmd.none
+            in
+            ( model, cmd )
+
         OnQueryChange value ->
-            { model | highlightedItem = Nothing, query = Just value }
-                ! [ queryChangeCmd value
-                  ]
+            ( { model | highlightedItem = Nothing, query = Just value }
+            , queryChangeCmd value
+            )
 
         OnSelect item ->
             let

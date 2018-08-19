@@ -62,6 +62,7 @@ initialModel id =
 type Msg
     = NoOp
     | OnSelect (Maybe Color)
+    | OnRemoveItem Color
     | SelectMsg (Select.Msg Color)
 
 
@@ -78,10 +79,11 @@ All the functions after |> are optional configuration.
 selectConfig : Select.Config Msg Color
 selectConfig =
     Select.newConfig OnSelect toString
+        |> Select.withOnRemoveItem OnRemoveItem
         |> Select.withCutoff 12
         |> Select.withInputId "input-id"
         |> Select.withInputStyles
-            [ ( "padding", "0.5rem" ), ( "outline", "none" ) ]
+            [ ( "padding", "0.5rem" ) ]
         |> Select.withItemClass "border-bottom border-silver p1 gray"
         |> Select.withItemStyles [ ( "font-size", "1rem" ) ]
         |> Select.withMenuClass "border border-gray"
@@ -108,6 +110,14 @@ update msg model =
                     maybeColor
                         |> Maybe.map (List.singleton >> List.append model.selectedColors)
                         |> Maybe.withDefault []
+            in
+            ( { model | selectedColors = selectedColors }, Cmd.none )
+
+        OnRemoveItem colorToRemove ->
+            let
+                selectedColors =
+                    List.filter (\curColor -> curColor /= colorToRemove)
+                        model.selectedColors
             in
             ( { model | selectedColors = selectedColors }, Cmd.none )
 

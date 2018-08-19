@@ -24,7 +24,12 @@
     .underline:after {
       right:50%;
     }
-    .elm-select-input:focus ~ .underline:before, .elm-select-input:focus ~ .underline:after {
+    .elm-select-input:focus ~ .underline:before,
+    .elm-select-input:focus ~ .underline:after {
+      width:50%;
+    }
+    .underline:before ~ .elm-select-multi-input > .elm-select-input:focus,
+    .underline:after ~ .elm-select-multi-input > .elm-select-input:focus {
       width:50%;
     }
     </style>

@@ -6,6 +6,7 @@ type Msg item
     | OnFocus
     | OnBlur
     | OnClear
+    | OnRemoveItem item
     | OnEsc
     | OnDownArrow
     | OnUpArrow
