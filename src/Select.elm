@@ -22,6 +22,8 @@ module Select
         , withHighlightedItemClass
         , withHighlightedItemStyles
         , withInputClass
+        , withInputControlClass
+        , withInputControlStyles
         , withInputId
         , withInputStyles
         , withInputWrapperClass
@@ -53,6 +55,10 @@ module Select
 
 {-| Select input with auto-complete
 
+See a full example of the select input [here](https://github.com/sporto/elm-select/tree/master/demo/src/Example1.elm)
+
+See a full example of the select input in multi mode [here](https://github.com/sporto/elm-select/tree/master/demo/src/Example3.elm)
+
 
 # Types
 
@@ -64,14 +70,33 @@ module Select
 @docs newConfig, withCutoff, withOnQuery, withEmptySearch
 
 
-# Configure the clear button
+# Configure Multi Select mode
 
-@docs withClearClass, withClearStyles, withClearSvgClass
+@docs withOnRemoveItem, withMultiInputItemContainerClass, withMultiInputItemContainerStyles, withMultiInputItemClass, withMultiInputItemStyles
+
+
+# Configure the input control
+
+This is the container that wraps the entire select view
+
+@docs withInputControlClass, withInputControlStyles
+
+
+# Configure the input wapper
+
+This is the element that wraps the selected item(s) and the input
+
+@docs withInputWrapperClass, withInputWrapperStyles
 
 
 # Configure the input
 
-@docs withInputId, withInputClass, withInputStyles, withInputWrapperClass, withInputWrapperStyles, withOnFocus
+@docs withInputId, withInputClass, withInputStyles, withOnFocus
+
+
+# Configure the clear button
+
+@docs withClearClass, withClearStyles, withClearSvgClass
 
 
 # Configure an underline element under the input
@@ -104,17 +129,12 @@ module Select
 @docs withFuzzyMatching, withTransformQuery, withScoreThreshold, withFuzzySearchAddPenalty, withFuzzySearchMovePenalty, withFuzzySearchRemovePenalty, withFuzzySearchInsertPenalty, withFuzzySearchSeparators
 
 
-# Configure MultiSelect mode
-
-@docs withOnRemoveItem, withMultiInputItemContainerClass, withMultiInputItemContainerStyles, withMultiInputItemClass, withMultiInputItemStyles
-
-
 # State
 
 @docs newState
 
 
-# view
+# View
 
 @docs view, viewMulti
 
@@ -164,6 +184,34 @@ newConfig : (Maybe item -> msg) -> (item -> String) -> Config msg item
 newConfig onSelectMessage toLabel =
     Config.newConfig onSelectMessage toLabel
         |> PrivateConfig
+
+
+{-| Add classes to the input control
+
+    Select.withInputControlClass "control-class" config
+
+-}
+withInputControlClass : String -> Config msg item -> Config msg item
+withInputControlClass classes config =
+    let
+        fn c =
+            { c | inputControlClass = classes }
+    in
+    mapConfig fn config
+
+
+{-| Add styles to the input control
+
+    Select.withInputControlClass [("background-color", "red")] config
+
+-}
+withInputControlStyles : List ( String, String ) -> Config msg item -> Config msg item
+withInputControlStyles styles config =
+    let
+        fn c =
+            { c | inputControlStyles = styles }
+    in
+    mapConfig fn config
 
 
 {-| Add classes to the underline div
@@ -407,7 +455,7 @@ withOnRemoveItem onRemoveItemMsg config =
     mapConfig fn config
 
 
-{-| Add classes to the multiple selected items container
+{-| Add classes to the container of selected items
 
     Select.withMultiInputItemContainerClass "bg-white" config
 
@@ -421,7 +469,7 @@ withMultiInputItemContainerClass classes config =
     mapConfig fn config
 
 
-{-| Add classes to the multiple selected items container
+{-| Add styles to the container of selected items
 
     Select.withMultiInputClass "bg-white" config
 
@@ -435,7 +483,7 @@ withMultiInputItemContainerStyles styles config =
     mapConfig fn config
 
 
-{-| Add classes to an individual multiple selected item
+{-| Add classes to an individual selected item
 
     Select.withMultiInputItemClass "bg-white" config
 
@@ -449,7 +497,7 @@ withMultiInputItemClass classes config =
     mapConfig fn config
 
 
-{-| Add styles to an individual multiple selected item
+{-| Add styles to an individual selected item
 
     Select.withMultiInputItemStyles [("padding", "1rem")] config
 
