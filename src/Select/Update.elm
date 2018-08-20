@@ -103,14 +103,25 @@ update config msg model =
             ( model, cmd )
 
         OnQueryChange value ->
-            ( { model | highlightedItem = Nothing, query = Just value }
-            , queryChangeCmd value
-            )
+                let
+                    maybeQuery =
+                        value
+                            |> config.transformQuery
+
+                    cmd =
+                        case maybeQuery of
+                            Nothing ->
+                                Cmd.none
+
+                            Just query ->
+                                queryChangeCmd query
+                in
+                    ( { model | highlightedItem = Nothing, query = Just value }, cmd )
 
         OnSelect item ->
-            let
-                cmd =
-                    Task.succeed (Just item)
-                        |> Task.perform config.onSelect
-            in
-            ( { model | query = Nothing }, cmd )
+                let
+                    cmd =
+                        Task.succeed (Just item)
+                            |> Task.perform config.onSelect
+                in
+                    ( { model | query = Nothing }, cmd )
