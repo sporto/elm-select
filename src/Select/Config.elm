@@ -26,6 +26,8 @@ type alias Config msg item =
     , inputId : String
     , inputClass : String
     , inputStyles : List Style
+    , inputControlClass : String
+    , inputControlStyles : List Style
     , inputWrapperClass : String
     , inputWrapperStyles : List Style
     , itemClass : String
@@ -76,6 +78,8 @@ newConfig onSelect toLabel =
     , underlineStyles = []
     , inputId = Constants.inputId
     , inputClass = ""
+    , inputControlClass = ""
+    , inputControlStyles = []
     , inputStyles = []
     , inputWrapperClass = ""
     , inputWrapperStyles = []

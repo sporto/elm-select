@@ -53,9 +53,8 @@ itemHtml c =
 selectConfig : Select.Config Msg Character
 selectConfig =
     Select.newConfig OnSelect identity
-        |> Select.withInputClass "col-12"
-        |> Select.withInputStyles
-            [ ( "padding", "0.5rem" ), ( "outline", "none" ) ]
+        |> Select.withInputWrapperStyles
+            [ ( "padding", "0.4rem" ) ]
         |> Select.withMenuClass "border border-gray bg-white"
         |> Select.withItemClass "border-bottom border-silver p1"
         |> Select.withItemStyles [ ( "font-size", "1rem" ) ]
@@ -66,6 +65,7 @@ selectConfig =
         |> Select.withCutoff 12
         |> Select.withOnQuery OnQuery
         |> Select.withItemHtml itemHtml
+        |> Select.withUnderlineClass "underline"
         |> Select.withEmptySearch True
 
 

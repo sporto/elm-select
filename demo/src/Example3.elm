@@ -82,8 +82,8 @@ selectConfig =
         |> Select.withOnRemoveItem OnRemoveItem
         |> Select.withCutoff 12
         |> Select.withInputId "input-id"
-        |> Select.withInputStyles
-            [ ( "padding", "0.5rem" ) ]
+        |> Select.withInputWrapperStyles
+            [ ( "padding", "0.4rem" ) ]
         |> Select.withItemClass "border-bottom border-silver p1 gray"
         |> Select.withItemStyles [ ( "font-size", "1rem" ) ]
         |> Select.withMenuClass "border border-gray"

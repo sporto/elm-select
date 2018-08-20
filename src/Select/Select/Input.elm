@@ -71,12 +71,22 @@ onKeyUpAttribute maybeItem =
 view : Config msg item -> State -> List item -> Maybe (Selected item) -> Html (Msg item)
 view config model items selected =
     let
-        rootClasses : String
-        rootClasses =
+        inputControlClass : String
+        inputControlClass =
+            Constants.inputControlClass ++ config.inputControlClass
+
+        inputControlStyles : List ( String, String )
+        inputControlStyles =
+            List.append
+                Constants.inputControlStyles
+                config.inputControlStyles
+
+        inputWrapperClass : String
+        inputWrapperClass =
             Constants.inputWrapperClass ++ config.inputWrapperClass
 
-        rootStyles : List ( String, String )
-        rootStyles =
+        inputWrapperStyles : List ( String, String )
+        inputWrapperStyles =
             List.append
                 Constants.inputWrapperStyles
                 config.inputWrapperStyles
@@ -103,10 +113,6 @@ view config model items selected =
                 [ Constants.inputStyles
                 , config.inputStyles
                 , promptStyles
-                , Maybe.withDefault [] <|
-                    Utils.andThenSelected selected
-                        (\oneSelectedItem -> Just [ ( "width", "100%" ) ])
-                        (\manySelectedItems -> Nothing)
                 ]
 
         clearClasses : String
@@ -180,9 +186,18 @@ view config model items selected =
                 ]
                 []
 
+        filteredItems : List item
+        filteredItems =
+            Maybe.withDefault items <|
+                Utils.andThenSelected selected
+                    (\oneSelectedItem -> Nothing)
+                    (\manySelectedItems ->
+                        Just (Utils.difference items manySelectedItems)
+                    )
+
         matchedItems : Select.Search.SearchResult item
         matchedItems =
-            matchedItemsWithCutoff config model.query items
+            matchedItemsWithCutoff config model.query filteredItems
 
         -- item that will be selected if enter if pressed
         preselectedItem : Maybe item
@@ -214,15 +229,15 @@ view config model items selected =
                 ]
                 (List.map
                     (\item ->
-                        Html.span
+                        Html.div
                             [ class multiInputItemClasses, style multiInputItemStyles ]
-                            [ Html.span [] [ Html.text (config.toLabel item) ]
+                            [ Html.div [ style Constants.multiInputItemText ] [ Html.text (config.toLabel item) ]
                             , Maybe.withDefault (Html.span [] []) <|
                                 Maybe.map
                                     (\_ ->
-                                        Html.span
-                                            [ onClickWithoutPropagation
-                                                (Msg.OnRemoveItem item)
+                                        Html.div
+                                            [ onClickWithoutPropagation (Msg.OnRemoveItem item)
+                                            , style Constants.multiInputRemoveItem
                                             ]
                                             [ RemoveItem.view config ]
                                     )
@@ -246,62 +261,62 @@ view config model items selected =
             , style inputStyles
             ]
     in
-    Html.div [ class rootClasses, style rootStyles ] <|
-        (case ( selected, model.query ) of
-            ( Just selectedType, Just queryValue ) ->
-                case selectedType of
-                    Models.Single item ->
-                        [ Html.div [] []
-                        , Html.input
-                            (inputAttributes ++ [ value queryValue ])
-                            []
-                        ]
+    Html.div [ class inputControlClass, style inputControlStyles ]
+        [ Html.div [ class inputWrapperClass, style inputWrapperStyles ] <|
+            case ( selected, model.query ) of
+                ( Just selectedType, Just queryValue ) ->
+                    case selectedType of
+                        Models.Single item ->
+                            [ Html.div [] []
+                            , Html.input
+                                (inputAttributes ++ [ value queryValue ])
+                                []
+                            ]
 
-                    Models.Many items ->
-                        [ viewMultiItems items
-                        , Html.input
-                            (inputAttributes ++ [ value queryValue ])
-                            []
-                        ]
+                        Models.Many items ->
+                            [ viewMultiItems items
+                            , Html.input
+                                (inputAttributes ++ [ value queryValue ])
+                                []
+                            ]
 
-            ( Just selectedType, Nothing ) ->
-                case selectedType of
-                    Models.Single item ->
-                        [ Html.div [] []
-                        , Html.input
-                            (inputAttributes ++ [ value (config.toLabel item) ])
-                            []
-                        ]
+                ( Just selectedType, Nothing ) ->
+                    case selectedType of
+                        Models.Single item ->
+                            [ Html.div [] []
+                            , Html.input
+                                (inputAttributes ++ [ value (config.toLabel item) ])
+                                []
+                            ]
 
-                    Models.Many items ->
-                        [ viewMultiItems items
-                        , Html.input
-                            (inputAttributes ++ [ value "" ])
-                            []
-                        ]
+                        Models.Many items ->
+                            [ viewMultiItems items
+                            , Html.input
+                                (inputAttributes ++ [ value "" ])
+                                []
+                            ]
 
-            ( Nothing, Just queryValue ) ->
-                [ Html.div [] []
-                , Html.input
-                    (inputAttributes
-                        ++ [ value queryValue
-                           , placeholder config.prompt
-                           ]
-                    )
-                    []
-                ]
+                ( Nothing, Just queryValue ) ->
+                    [ Html.div [] []
+                    , Html.input
+                        (inputAttributes
+                            ++ [ value queryValue
+                               , placeholder config.prompt
+                               ]
+                        )
+                        []
+                    ]
 
-            ( Nothing, Nothing ) ->
-                [ Html.div [] []
-                , Html.input
-                    (inputAttributes
-                        ++ [ value ""
-                           , placeholder config.prompt
-                           ]
-                    )
-                    []
-                ]
-        )
-            ++ [ underline
-               , clear
-               ]
+                ( Nothing, Nothing ) ->
+                    [ Html.div [] []
+                    , Html.input
+                        (inputAttributes
+                            ++ [ value ""
+                               , placeholder config.prompt
+                               ]
+                        )
+                        []
+                    ]
+        , underline
+        , clear
+        ]

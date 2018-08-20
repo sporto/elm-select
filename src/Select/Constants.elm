@@ -8,6 +8,18 @@ inputId =
     "elm-select-input"
 
 
+inputControlClass : String
+inputControlClass =
+    "elm-select-input-control "
+
+
+inputControlStyles : List ( String, String )
+inputControlStyles =
+    [ ( "position", "relative" )
+    , ( "background", "white" )
+    ]
+
+
 inputWrapperClass : String
 inputWrapperClass =
     "elm-select-input-wrapper "
@@ -15,8 +27,11 @@ inputWrapperClass =
 
 inputWrapperStyles : List ( String, String )
 inputWrapperStyles =
-    [ ( "position", "relative" )
-    , ( "background", "white" )
+    [ ( "display", "flex" )
+    , ( "flex", "1" )
+    , ( "flex-direction", "row" )
+    , ( "flex-wrap", "wrap" )
+    , ( "overflow", "hidden" )
     ]
 
 
@@ -27,26 +42,11 @@ inputClass =
 
 inputStyles : List ( String, String )
 inputStyles =
-    [ ( "outline", "none" )
+    [ ( "flex", "1" )
     , ( "border", "none" )
-    , ( "display", "inline-block" )
-    ]
-
-
-clearClass : String
-clearClass =
-    "elm-select-clear "
-
-
-clearStyles : List ( String, String )
-clearStyles =
-    [ ( "cursor", "pointer" )
-    , ( "height", "1rem" )
-    , ( "line-height", "0rem" )
-    , ( "margin-top", "-0.5rem" )
-    , ( "position", "absolute" )
-    , ( "right", "0.25rem" )
-    , ( "top", "50%" )
+    , ( "outline", "none" )
+    , ( "min-height", "1.3rem" )
+    , ( "font-size", ".75rem" )
     ]
 
 
@@ -67,8 +67,10 @@ multiInputItemContainerClass =
 
 multiInputItemContainerStyles : List ( String, String )
 multiInputItemContainerStyles =
-    [ ( "display", "inline-block" )
-    , ( "padding-left", "0.5rem" )
+    [ ( "display", "flex" )
+    , ( "flex-direction", "row" )
+    , ( "align-items", "center" )
+    , ( "justify-content", "center" )
     ]
 
 
@@ -79,18 +81,37 @@ multiInputItemClass =
 
 multiInputItemStyles : List ( String, String )
 multiInputItemStyles =
-    [ ( "border-style", "solid" )
+    [ ( "display", "flex" )
     , ( "border-width", "0.1rem" )
     , ( "border-radius", "0.2em" )
     , ( "border-color", "#E3E5E8" )
     , ( "background-color", "#E3E5E8" )
     , ( "font-size", ".75rem" )
-    , ( "padding-left", ".3rem" )
-    , ( "padding-right", ".3rem" )
-    , ( "padding-top", ".1rem" )
-    , ( "padding-bottom", ".1rem" )
     , ( "margin-right", ".2rem" )
     ]
+
+
+multiInputItemText : List ( String, String )
+multiInputItemText =
+    [ ( "text-overflow", "elpisis" )
+    , ( "padding-left", ".5rem" )
+    , ( "padding-right", ".3rem" )
+    , ( "padding-top", ".05rem" )
+    , ( "padding-bottom", ".05rem" )
+    ]
+
+
+multiInputRemoveItem : List ( String, String )
+multiInputRemoveItem =
+    [ ( "display", "flex" )
+    , ( "alignItems", "center" )
+    , ( "justifyContent", "center" )
+    , ( "padding-right", ".1rem" )
+    ]
+
+
+
+-- UNDERLINE
 
 
 underlineClass : String
@@ -115,6 +136,27 @@ menuItemClass =
 menuItemStyles : List ( String, String )
 menuItemStyles =
     [ ( "cursor", "pointer" )
+    ]
+
+
+
+-- CLEAR CONSTANTS
+
+
+clearClass : String
+clearClass =
+    "elm-select-clear "
+
+
+clearStyles : List ( String, String )
+clearStyles =
+    [ ( "cursor", "pointer" )
+    , ( "height", "1rem" )
+    , ( "line-height", "0rem" )
+    , ( "margin-top", "-0.5rem" )
+    , ( "position", "absolute" )
+    , ( "right", "0.25rem" )
+    , ( "top", "50%" )
     ]
 
 
@@ -148,10 +190,5 @@ removeItemSvgClass =
 
 removeItemSvgStyles : List ( String, String )
 removeItemSvgStyles =
-    [ ( "margin-left", ".4rem" )
-    , ( "margin-right", ".1rem" )
-    , ( "cursor", "pointer" )
-    , ( "display", "inline-block" )
-    , ( "line-height", "1" )
-    , ( "vertical-align", "sub" )
+    [ ( "cursor", "pointer" )
     ]
