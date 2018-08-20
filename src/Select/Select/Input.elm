@@ -6,13 +6,13 @@ import Html.Attributes exposing (attribute, autocomplete, class, id, placeholder
 import Html.Events exposing (keyCode, on, onFocus, onInput, onWithOptions)
 import Json.Decode as Decode
 import Select.Config exposing (Config)
-import Select.Constants as Constants
 import Select.Events exposing (onBlurAttribute)
 import Select.Messages as Msg exposing (Msg)
 import Select.Models as Models exposing (Selected, State)
 import Select.Search exposing (matchedItemsWithCutoff)
 import Select.Select.Clear as Clear
 import Select.Select.RemoveItem as RemoveItem
+import Select.Styles as Styles
 import Select.Utils as Utils
 
 
@@ -73,22 +73,22 @@ view config model items selected =
     let
         inputControlClass : String
         inputControlClass =
-            Constants.inputControlClass ++ config.inputControlClass
+            Styles.inputControlClass ++ config.inputControlClass
 
         inputControlStyles : List ( String, String )
         inputControlStyles =
             List.append
-                Constants.inputControlStyles
+                Styles.inputControlStyles
                 config.inputControlStyles
 
         inputWrapperClass : String
         inputWrapperClass =
-            Constants.inputWrapperClass ++ config.inputWrapperClass
+            Styles.inputWrapperClass ++ config.inputWrapperClass
 
         inputWrapperStyles : List ( String, String )
         inputWrapperStyles =
             List.append
-                Constants.inputWrapperStyles
+                Styles.inputWrapperStyles
                 config.inputWrapperStyles
 
         ( promptClass, promptStyles ) =
@@ -102,7 +102,7 @@ view config model items selected =
         inputClasses : String
         inputClasses =
             String.join " "
-                [ Constants.inputClass
+                [ Styles.inputClass
                 , config.inputClass
                 , promptClass
                 ]
@@ -110,40 +110,40 @@ view config model items selected =
         inputStyles : List ( String, String )
         inputStyles =
             List.concat
-                [ Constants.inputStyles
+                [ Styles.inputStyles
                 , config.inputStyles
                 , promptStyles
                 ]
 
         clearClasses : String
         clearClasses =
-            Constants.clearClass ++ config.clearClass
+            Styles.clearClass ++ config.clearClass
 
         clearStyles : List ( String, String )
         clearStyles =
             List.append
-                Constants.clearStyles
+                Styles.clearStyles
                 config.clearStyles
 
         multiInputItemContainerClasses : String
         multiInputItemContainerClasses =
-            Constants.multiInputItemContainerClass
+            Styles.multiInputItemContainerClass
                 ++ config.multiInputItemContainerClass
 
         multiInputItemContainerStyles : List ( String, String )
         multiInputItemContainerStyles =
             List.append
-                Constants.multiInputItemContainerStyles
+                Styles.multiInputItemContainerStyles
                 config.multiInputItemContainerStyles
 
         multiInputItemClasses : String
         multiInputItemClasses =
-            Constants.multiInputItemClass ++ config.multiInputItemClass
+            Styles.multiInputItemClass ++ config.multiInputItemClass
 
         multiInputItemStyles : List ( String, String )
         multiInputItemStyles =
             List.append
-                Constants.multiInputItemStyles
+                Styles.multiInputItemStyles
                 config.multiInputItemStyles
 
         onClickWithoutPropagation : Msg item -> Attribute (Msg item)
@@ -170,12 +170,12 @@ view config model items selected =
 
         underlineClasses : String
         underlineClasses =
-            Constants.underlineClass ++ config.underlineClass
+            Styles.underlineClass ++ config.underlineClass
 
         underlineStyles : List ( String, String )
         underlineStyles =
             List.append
-                Constants.underlineStyles
+                Styles.underlineStyles
                 config.underlineStyles
 
         underline : Html (Msg item)
@@ -231,13 +231,13 @@ view config model items selected =
                     (\item ->
                         Html.div
                             [ class multiInputItemClasses, style multiInputItemStyles ]
-                            [ Html.div [ style Constants.multiInputItemText ] [ Html.text (config.toLabel item) ]
+                            [ Html.div [ style Styles.multiInputItemText ] [ Html.text (config.toLabel item) ]
                             , Maybe.withDefault (Html.span [] []) <|
                                 Maybe.map
                                     (\_ ->
                                         Html.div
                                             [ onClickWithoutPropagation (Msg.OnRemoveItem item)
-                                            , style Constants.multiInputRemoveItem
+                                            , style Styles.multiInputRemoveItem
                                             ]
                                             [ RemoveItem.view config ]
                                     )

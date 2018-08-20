@@ -2,7 +2,7 @@ module Select.Select.RemoveItem exposing (..)
 
 import Html.Attributes as HtmlAttrs
 import Select.Config exposing (Config)
-import Select.Constants as Constants
+import Select.Styles as Styles
 import Svg exposing (..)
 import Svg.Attributes as Attrs
 
@@ -10,8 +10,8 @@ import Svg.Attributes as Attrs
 view : Config userMsg item -> Svg msg
 view config =
     svg
-        [ Attrs.class (config.removeItemSvgClass ++ Constants.removeItemSvgClass)
-        , HtmlAttrs.style (config.removeItemSvgStyles ++ Constants.removeItemSvgStyles)
+        [ Attrs.class (config.removeItemSvgClass ++ Styles.removeItemSvgClass)
+        , HtmlAttrs.style (config.removeItemSvgStyles ++ Styles.removeItemSvgStyles)
         , Attrs.width "14"
         , Attrs.height "14"
         , Attrs.viewBox "0 0 20 20"

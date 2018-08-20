@@ -2,7 +2,7 @@ module Select.Config exposing (..)
 
 import Fuzzy
 import Html exposing (Html)
-import Select.Constants as Constants
+import Select.Styles as Styles
 
 
 type alias Style =
@@ -76,7 +76,7 @@ newConfig onSelect toLabel =
     , highlightedItemClass = ""
     , highlightedItemStyles = []
     , underlineStyles = []
-    , inputId = Constants.inputId
+    , inputId = Styles.inputId
     , inputClass = ""
     , inputControlClass = ""
     , inputControlStyles = []

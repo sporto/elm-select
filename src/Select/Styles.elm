@@ -1,4 +1,4 @@
-module Select.Constants exposing (..)
+module Select.Styles exposing (..)
 
 -- INPUT CONSTANTS
 

@@ -6,8 +6,8 @@ import Html.Events exposing (onMouseDown)
 import Select.Config exposing (Config)
 import Select.Messages exposing (..)
 import Select.Models exposing (State)
+import Select.Styles as Styles
 import Select.Utils exposing (referenceAttr)
-import Select.Constants as Constants
 
 
 view : Config msg item -> State -> Int -> Int -> item -> Html (Msg item)
@@ -33,7 +33,7 @@ view config state itemCount index item =
 
         styles =
             List.concat
-                [ Constants.menuItemStyles
+                [ Styles.menuItemStyles
                 , baseItemStyles config
                 , highlightedItemStyles
                 ]
@@ -46,14 +46,14 @@ view config state itemCount index item =
                 Just fn ->
                     Html.map (\_ -> NoOp) (fn item)
     in
-        div
-            [ class classes
-            , onMouseDown (OnSelect item)
-            , referenceAttr config state
-            , style styles
-            ]
-            [ itemHtml
-            ]
+    div
+        [ class classes
+        , onMouseDown (OnSelect item)
+        , referenceAttr config state
+        , style styles
+        ]
+        [ itemHtml
+        ]
 
 
 viewNotFound : Config msg item -> Html (Msg item)
@@ -68,20 +68,20 @@ viewNotFound config =
         styles =
             List.append (baseItemStyles config) config.notFoundStyles
     in
-        if config.notFound == "" then
-            text ""
-        else
-            div
-                [ class classes
-                , style styles
-                ]
-                [ text config.notFound
-                ]
+    if config.notFound == "" then
+        text ""
+    else
+        div
+            [ class classes
+            , style styles
+            ]
+            [ text config.notFound
+            ]
 
 
 baseItemClasses : Config msg item -> String
 baseItemClasses config =
-    (Constants.menuItemClass ++ config.itemClass)
+    Styles.menuItemClass ++ config.itemClass
 
 
 baseItemStyles : Config msg item -> List ( String, String )

@@ -3,11 +3,11 @@ module Select.Select.Menu exposing (..)
 import Html exposing (..)
 import Html.Attributes exposing (class, style)
 import Select.Config exposing (Config)
-import Select.Constants as Constants
 import Select.Messages exposing (..)
 import Select.Models as Models exposing (Selected, State)
 import Select.Search as Search
 import Select.Select.Item as Item
+import Select.Styles as Styles
 import Select.Utils as Utils
 
 
@@ -49,7 +49,7 @@ menu config model matchedItems =
 
         menuStyle =
             if hideWhenNotFound then
-                style Constants.hiddenMenuStyles
+                style Styles.hiddenMenuStyles
             else
                 style (viewStyles config)
 
@@ -75,9 +75,9 @@ menu config model matchedItems =
 
 viewClassAttr : Config msg item -> Attribute msg2
 viewClassAttr config =
-    class (Constants.menuClass ++ config.menuClass)
+    class (Styles.menuClass ++ config.menuClass)
 
 
 viewStyles : Config msg item -> List ( String, String )
 viewStyles config =
-    List.append Constants.visibleMenuStyles config.menuStyles
+    List.append Styles.visibleMenuStyles config.menuStyles
