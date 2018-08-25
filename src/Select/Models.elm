@@ -1,4 +1,4 @@
-module Select.Models exposing (..)
+module Select.Models exposing (Selected(..), State, newState)
 
 
 type Selected item

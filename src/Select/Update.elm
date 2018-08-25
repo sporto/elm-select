@@ -1,4 +1,4 @@
-module Select.Update exposing (..)
+module Select.Update exposing (update)
 
 import Select.Config exposing (Config)
 import Select.Messages exposing (..)
@@ -70,6 +70,7 @@ update config msg model =
                         [ cmd
                         , if config.emptySearch then
                             queryChangeCmd ""
+
                           else
                             Cmd.none
                         ]
@@ -103,25 +104,25 @@ update config msg model =
             ( model, cmd )
 
         OnQueryChange value ->
-                let
-                    maybeQuery =
-                        value
-                            |> config.transformQuery
+            let
+                maybeQuery =
+                    value
+                        |> config.transformQuery
 
-                    cmd =
-                        case maybeQuery of
-                            Nothing ->
-                                Cmd.none
+                cmd =
+                    case maybeQuery of
+                        Nothing ->
+                            Cmd.none
 
-                            Just query ->
-                                queryChangeCmd query
-                in
-                    ( { model | highlightedItem = Nothing, query = Just value }, cmd )
+                        Just query ->
+                            queryChangeCmd query
+            in
+            ( { model | highlightedItem = Nothing, query = Just value }, cmd )
 
         OnSelect item ->
-                let
-                    cmd =
-                        Task.succeed (Just item)
-                            |> Task.perform config.onSelect
-                in
-                    ( { model | query = Nothing }, cmd )
+            let
+                cmd =
+                    Task.succeed (Just item)
+                        |> Task.perform config.onSelect
+            in
+            ( { model | query = Nothing }, cmd )

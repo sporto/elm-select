@@ -1,4 +1,4 @@
-module Select.Select.Input exposing (..)
+module Select.Select.Input exposing (onKeyPressAttribute, onKeyUpAttribute, view)
 
 import Array
 import Html as Html exposing (Attribute, Html)
@@ -219,7 +219,7 @@ view config model items selected =
 
                         Just n ->
                             Array.fromList found
-                                |> Array.get (rem n (List.length found))
+                                |> Array.get (remainderBy (List.length found) n)
 
         viewMultiItems : List item -> Html (Msg item)
         viewMultiItems items =

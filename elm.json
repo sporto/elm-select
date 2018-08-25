@@ -1,0 +1,19 @@
+{
+    "type": "package",
+    "name": "sporto/elm-select",
+    "summary": "A selection input with auto-completion",
+    "license": "MIT",
+    "version": "2.15.1",
+    "exposed-modules": [
+        "Select"
+    ],
+    "elm-version": "0.19.0 <= v < 0.20.0",
+    "dependencies": {
+        "elm/core": "1.0.0 <= v < 2.0.0",
+        "elm/html": "1.0.0 <= v < 2.0.0",
+        "elm/json": "1.0.0 <= v < 2.0.0",
+        "elm/svg": "1.0.0 <= v < 2.0.0",
+        "tripokey/elm-fuzzy": "5.2.0 <= v < 6.0.0"
+    },
+    "test-dependencies": {}
+}

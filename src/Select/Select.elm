@@ -1,4 +1,4 @@
-module Select.Select exposing (..)
+module Select.Select exposing (view)
 
 import Html exposing (..)
 import Html.Attributes exposing (class, id, style)

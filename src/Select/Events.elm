@@ -1,7 +1,7 @@
-module Select.Events exposing (..)
+module Select.Events exposing (onBlurAttribute, traceDecoder)
 
 import Html exposing (..)
-import Html.Events exposing (on, keyCode)
+import Html.Events exposing (keyCode, on)
 import Json.Decode as Decode
 import Select.Config exposing (Config)
 import Select.Messages exposing (..)
@@ -20,8 +20,8 @@ traceDecoder message decoder =
                 Err err ->
                     err |> Debug.log message |> Decode.fail
     in
-        Decode.value
-            |> Decode.andThen log
+    Decode.value
+        |> Decode.andThen log
 
 
 onBlurAttribute : Config msg item -> State -> Attribute (Msg item)
@@ -33,6 +33,7 @@ onBlurAttribute config state =
         attrToMsg attr =
             if attr == state.id then
                 NoOp
+
             else
                 OnBlur
 
@@ -41,4 +42,4 @@ onBlurAttribute config state =
                 |> Decode.map (Maybe.map attrToMsg)
                 |> Decode.map (Maybe.withDefault OnBlur)
     in
-        on "focusout" blur
+    on "focusout" blur

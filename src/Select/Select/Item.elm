@@ -1,4 +1,4 @@
-module Select.Select.Item exposing (..)
+module Select.Select.Item exposing (baseItemClasses, baseItemStyles, view, viewNotFound)
 
 import Html exposing (..)
 import Html.Attributes exposing (attribute, class, style)
@@ -20,8 +20,9 @@ view config state itemCount index item =
 
                 Just highlighted ->
                     -- take remainder as item numbers wrap around
-                    if rem highlighted itemCount == index then
+                    if remainderBy itemCount highlighted == index then
                         ( config.highlightedItemClass, config.highlightedItemStyles )
+
                     else
                         ( "", [] )
 
@@ -70,6 +71,7 @@ viewNotFound config =
     in
     if config.notFound == "" then
         text ""
+
     else
         div
             [ class classes

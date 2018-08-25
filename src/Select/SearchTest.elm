@@ -1,4 +1,4 @@
-module Select.SearchTest exposing (..)
+module Select.SearchTest exposing (Msg(..), all, baseConfig, movies, testMatchedItems, testRelevantScoreForItem, testScoreForItem)
 
 import Expect exposing (Expectation)
 import Select.Config exposing (Config, newConfig)
@@ -99,9 +99,9 @@ testScoreForItem =
                 expectation =
                     Expect.equal actualScore expectedScore
             in
-                test testCase (\_ -> expectation)
+            test testCase (\_ -> expectation)
     in
-        describe "scoreForItem" (List.map run inputs)
+    describe "scoreForItem" (List.map run inputs)
 
 
 testRelevantScoreForItem =
@@ -130,9 +130,9 @@ testRelevantScoreForItem =
                 expectation =
                     Expect.equal actual expectedOrder
             in
-                test testCase (\_ -> expectation)
+            test testCase (\_ -> expectation)
     in
-        describe "scoreForItem comparison" (List.map run inputs)
+    describe "scoreForItem comparison" (List.map run inputs)
 
 
 testMatchedItems =
@@ -164,9 +164,9 @@ testMatchedItems =
                 expectation =
                     Expect.equal actual expected
             in
-                test testCase (\_ -> expectation)
+            test testCase (\_ -> expectation)
     in
-        describe "matchedItems" (List.map run inputs)
+    describe "matchedItems" (List.map run inputs)
 
 
 all =

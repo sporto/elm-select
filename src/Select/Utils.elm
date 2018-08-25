@@ -1,4 +1,4 @@
-module Select.Utils exposing (..)
+module Select.Utils exposing (andThenSelected, difference, referenceAttr, referenceDataName)
 
 import Html exposing (Attribute)
 import Html.Attributes exposing (attribute)

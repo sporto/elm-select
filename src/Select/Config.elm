@@ -1,4 +1,4 @@
-module Select.Config exposing (..)
+module Select.Config exposing (Config, Style, fuzzyAddPenalty, fuzzyInsertPenalty, fuzzyMovePenalty, fuzzyOptions, fuzzyRemovePenalty, newConfig, transformQuery)
 
 import Fuzzy
 import Html exposing (Html)

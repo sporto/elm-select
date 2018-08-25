@@ -1,4 +1,4 @@
-module Select.Select.Menu exposing (..)
+module Select.Select.Menu exposing (menu, view, viewClassAttr, viewStyles)
 
 import Html exposing (..)
 import Html.Attributes exposing (class, style)
@@ -32,6 +32,7 @@ view config model items selected =
     in
     if query == "" && not config.emptySearch then
         text ""
+
     else
         case searchResult of
             Search.NotSearched ->
@@ -50,12 +51,14 @@ menu config model matchedItems =
         menuStyle =
             if hideWhenNotFound then
                 style Styles.hiddenMenuStyles
+
             else
                 style (viewStyles config)
 
         noResultElement =
             if matchedItems == [] then
                 Item.viewNotFound config
+
             else
                 text ""
 

@@ -1,57 +1,21 @@
-module Select
-    exposing
-        ( Config
-        , Msg
-        , State
-        , newConfig
-        , newState
-        , update
-        , view
-        , viewMulti
-        , withClearClass
-        , withClearStyles
-        , withClearSvgClass
-        , withCutoff
-        , withEmptySearch
-        , withFuzzyMatching
-        , withFuzzySearchAddPenalty
-        , withFuzzySearchInsertPenalty
-        , withFuzzySearchMovePenalty
-        , withFuzzySearchRemovePenalty
-        , withFuzzySearchSeparators
-        , withHighlightedItemClass
-        , withHighlightedItemStyles
-        , withInputClass
-        , withInputControlClass
-        , withInputControlStyles
-        , withInputId
-        , withInputStyles
-        , withInputWrapperClass
-        , withInputWrapperStyles
-        , withItemClass
-        , withItemHtml
-        , withItemStyles
-        , withMenuClass
-        , withMenuStyles
-        , withMultiInputItemClass
-        , withMultiInputItemContainerClass
-        , withMultiInputItemContainerStyles
-        , withMultiInputItemStyles
-        , withNotFound
-        , withNotFoundClass
-        , withNotFoundShown
-        , withNotFoundStyles
-        , withOnFocus
-        , withOnQuery
-        , withOnRemoveItem
-        , withPrompt
-        , withPromptClass
-        , withPromptStyles
-        , withScoreThreshold
-        , withTransformQuery
-        , withUnderlineClass
-        , withUnderlineStyles
-        )
+module Select exposing
+    ( Config, State, Msg
+    , newConfig, withCutoff, withOnQuery, withEmptySearch
+    , withOnRemoveItem, withMultiInputItemContainerClass, withMultiInputItemContainerStyles, withMultiInputItemClass, withMultiInputItemStyles
+    , withInputControlClass, withInputControlStyles
+    , withInputWrapperClass, withInputWrapperStyles
+    , withInputId, withInputClass, withInputStyles, withOnFocus
+    , withClearClass, withClearStyles, withClearSvgClass
+    , withUnderlineClass, withUnderlineStyles
+    , withItemClass, withItemStyles, withItemHtml, withHighlightedItemClass, withHighlightedItemStyles
+    , withMenuClass, withMenuStyles
+    , withNotFound, withNotFoundClass, withNotFoundShown, withNotFoundStyles
+    , withPrompt, withPromptClass, withPromptStyles
+    , withFuzzyMatching, withTransformQuery, withScoreThreshold, withFuzzySearchAddPenalty, withFuzzySearchMovePenalty, withFuzzySearchRemovePenalty, withFuzzySearchInsertPenalty, withFuzzySearchSeparators
+    , newState
+    , view, viewMulti
+    , update
+    )
 
 {-| Select input with auto-complete
 
@@ -202,7 +166,7 @@ withInputControlClass classes config =
 
 {-| Add styles to the input control
 
-    Select.withInputControlClass [("background-color", "red")] config
+    Select.withInputControlClass [ ( "background-color", "red" ) ] config
 
 -}
 withInputControlStyles : List ( String, String ) -> Config msg item -> Config msg item
@@ -230,7 +194,7 @@ withUnderlineClass classes config =
 
 {-| Add styles to the underline div
 
-    Select.withUnderlineStyles [("width", "2rem")] config
+    Select.withUnderlineStyles [ ( "width", "2rem" ) ] config
 
 -}
 withUnderlineStyles : List ( String, String ) -> Config msg item -> Config msg item
@@ -258,7 +222,7 @@ withClearClass classes config =
 
 {-| Add styles to the clear button
 
-    Select.withClearStyles [("width", "2rem")] config
+    Select.withClearStyles [ ( "width", "2rem" ) ] config
 
 -}
 withClearStyles : List ( String, String ) -> Config msg item -> Config msg item
@@ -328,7 +292,7 @@ withInputClass classes config =
 
 {-| Add styles to the input
 
-    Select.withInputStyles [("color", "red")] config
+    Select.withInputStyles [ ( "color", "red" ) ] config
 
 -}
 withInputStyles : List ( String, String ) -> Config msg item -> Config msg item
@@ -356,7 +320,7 @@ withInputWrapperClass classes config =
 
 {-| Add styles to the input wrapper
 
-    Select.withInputWrapperStyles [("color", "red")] config
+    Select.withInputWrapperStyles [ ( "color", "red" ) ] config
 
 -}
 withInputWrapperStyles : List ( String, String ) -> Config msg item -> Config msg item
@@ -384,7 +348,7 @@ withItemClass classes config =
 
 {-| Add styles to the items
 
-    Select.withItemStyles [("color", "peru")] config
+    Select.withItemStyles [ ( "color", "peru" ) ] config
 
 -}
 withItemStyles : List ( String, String ) -> Config msg item -> Config msg item
@@ -428,7 +392,7 @@ withMenuClass classes config =
 
 {-| Add styles to the menu
 
-    Select.withMenuStyles [("padding", "1rem")] config
+    Select.withMenuStyles [ ( "padding", "1rem" ) ] config
 
 -}
 withMenuStyles : List ( String, String ) -> Config msg item -> Config msg item
@@ -499,7 +463,7 @@ withMultiInputItemClass classes config =
 
 {-| Add styles to an individual selected item
 
-    Select.withMultiInputItemStyles [("padding", "1rem")] config
+    Select.withMultiInputItemStyles [ ( "padding", "1rem" ) ] config
 
 -}
 withMultiInputItemStyles : List ( String, String ) -> Config msg item -> Config msg item
@@ -555,7 +519,7 @@ withNotFoundShown shown config =
 
 {-| Styles for the not found message
 
-    Select.withNotFoundStyles [("padding", "1rem")] config
+    Select.withNotFoundStyles [ ( "padding", "1rem" ) ] config
 
 -}
 withNotFoundStyles : List ( String, String ) -> Config msg item -> Config msg item
@@ -583,7 +547,7 @@ withHighlightedItemClass class config =
 
 {-| Styles for the highlighted item
 
-    Select.withHighlightedItemStyles [("padding", "1rem")] config
+    Select.withHighlightedItemStyles [ ( "padding", "1rem" ) ] config
 
 -}
 withHighlightedItemStyles : List ( String, String ) -> Config msg item -> Config msg item
@@ -651,7 +615,7 @@ withPrompt prompt config =
 
 {-| Add styles to prompt text
 
-    Select.withPromptStyles [("color", "red")] config
+    Select.withPromptStyles [ ( "color", "red" ) ] config
 
 -}
 withPromptStyles : List ( String, String ) -> Config msg item -> Config msg item
@@ -735,7 +699,7 @@ withFuzzySearchInsertPenalty penalty config =
 
 {-| Add fuzzy search separators
 
-    Select.withFuzzySearchSeparators ["|", " "] config
+    Select.withFuzzySearchSeparators [ "|", " " ] config
 
 -}
 withFuzzySearchSeparators : List String -> Config msg item -> Config msg item
@@ -864,6 +828,7 @@ viewMulti config model items selected =
         items
         (if List.isEmpty selected then
             Nothing
+
          else
             Just (Models.Many selected)
         )

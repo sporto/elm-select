@@ -1,4 +1,4 @@
-module Select.Select.Clear exposing (..)
+module Select.Select.Clear exposing (svgPath, view)
 
 import Select.Config exposing (Config)
 import Svg exposing (..)

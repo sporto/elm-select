@@ -1,4 +1,4 @@
-module Select.Search exposing (..)
+module Select.Search exposing (SearchResult(..), matchedItems, matchedItemsWithCutoff, scoreForItem)
 
 import Fuzzy
 import Select.Config exposing (Config, fuzzyOptions)
@@ -34,26 +34,26 @@ matchedItems config query items =
             query
                 |> Maybe.andThen config.transformQuery
     in
-        case maybeQuery of
-            Nothing ->
-                NotSearched
+    case maybeQuery of
+        Nothing ->
+            NotSearched
 
-            Just query ->
-                case config.fuzzyMatching of
-                    True ->
-                        let
-                            scoreFor =
-                                scoreForItem config query
-                        in
-                            items
-                                |> List.map (\item -> ( scoreFor item, item ))
-                                |> List.filter (\( score, item ) -> score < config.scoreThreshold)
-                                |> List.sortBy Tuple.first
-                                |> List.map Tuple.second
-                                |> ItemsFound
+        Just query ->
+            case config.fuzzyMatching of
+                True ->
+                    let
+                        scoreFor =
+                            scoreForItem config query
+                    in
+                    items
+                        |> List.map (\item -> ( scoreFor item, item ))
+                        |> List.filter (\( score, item ) -> score < config.scoreThreshold)
+                        |> List.sortBy Tuple.first
+                        |> List.map Tuple.second
+                        |> ItemsFound
 
-                    False ->
-                        ItemsFound items
+                False ->
+                    ItemsFound items
 
 
 scoreForItem : Config msg item -> String -> item -> Int
@@ -72,5 +72,5 @@ scoreForItem config query item =
         fuzzySeparators =
             config.fuzzySearchSeparators
     in
-        Fuzzy.match options fuzzySeparators lowerQuery lowerItem
-            |> .score
+    Fuzzy.match options fuzzySeparators lowerQuery lowerItem
+        |> .score
