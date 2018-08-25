@@ -53,15 +53,19 @@ itemHtml c =
 selectConfig : Select.Config Msg Character
 selectConfig =
     Select.newConfig OnSelect identity
-        |> Select.withInputClass "col-12"
+        |> Select.withInputWrapperStyles
+            [ ( "padding", "0.4rem" ) ]
         |> Select.withMenuClass "border border-gray bg-white"
         |> Select.withItemClass "border-bottom border-silver p1"
+        |> Select.withItemStyles [ ( "font-size", "1rem" ) ]
         |> Select.withNotFoundShown False
         |> Select.withHighlightedItemClass "bg-silver"
         |> Select.withHighlightedItemStyles [ ( "color", "black" ) ]
+        |> Select.withPrompt "Select a character"
         |> Select.withCutoff 12
         |> Select.withOnQuery OnQuery
         |> Select.withItemHtml itemHtml
+        |> Select.withUnderlineClass "underline"
         |> Select.withEmptySearch False
         |> Select.withTransformQuery
             (\query ->
@@ -120,7 +124,7 @@ update msg model =
                 ( updated, cmd ) =
                     Select.update selectConfig subMsg model.selectState
             in
-                ( { model | selectState = updated }, cmd )
+            ( { model | selectState = updated }, cmd )
 
         NoOp ->
             ( model, Cmd.none )
@@ -139,9 +143,9 @@ view model =
                         |> List.filter (\character -> character == id)
                         |> List.head
     in
-        div [ class "bg-silver p1" ]
-            [ h3 [] [ text "Async example" ]
-            , text (toString model.selectedCharacterId)
-            , h4 [] [ text "Pick an star wars character" ]
-            , Html.map SelectMsg (Select.view selectConfig model.selectState model.characters selecteCharacter)
-            ]
+    div [ class "bg-silver p1" ]
+        [ h3 [] [ text "Async example" ]
+        , text (toString model.selectedCharacterId)
+        , h4 [] [ text "Pick an star wars character" ]
+        , Html.map SelectMsg (Select.view selectConfig model.selectState model.characters selecteCharacter)
+        ]

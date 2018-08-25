@@ -2,6 +2,7 @@ module Select.Config exposing (..)
 
 import Fuzzy
 import Html exposing (Html)
+import Select.Styles as Styles
 
 
 type alias Style =
@@ -12,18 +13,21 @@ type alias Config msg item =
     { clearClass : String
     , clearStyles : List Style
     , clearSvgClass : String
-    , underlineClass : String
-    , underlineStyles : List Style
     , cutoff : Maybe Int
+    , emptySearch : Bool
     , fuzzyMatching : Bool
     , fuzzySearchAddPenalty : Maybe Int
     , fuzzySearchMovePenalty : Maybe Int
     , fuzzySearchRemovePenalty : Maybe Int
     , fuzzySearchInsertPenalty : Maybe Int
     , fuzzySearchSeparators : List String
-    , inputId : Maybe String
+    , highlightedItemClass : String
+    , highlightedItemStyles : List Style
+    , inputId : String
     , inputClass : String
     , inputStyles : List Style
+    , inputControlClass : String
+    , inputControlStyles : List Style
     , inputWrapperClass : String
     , inputWrapperStyles : List Style
     , itemClass : String
@@ -31,22 +35,28 @@ type alias Config msg item =
     , itemHtml : Maybe (item -> Html Never)
     , menuClass : String
     , menuStyles : List Style
+    , multiInputItemContainerClass : String
+    , multiInputItemContainerStyles : List Style
+    , multiInputItemClass : String
+    , multiInputItemStyles : List Style
     , notFound : String
     , notFoundClass : String
     , notFoundShown : Bool
     , notFoundStyles : List Style
-    , highlightedItemClass : String
-    , highlightedItemStyles : List Style
     , onQueryChange : Maybe (String -> msg)
     , onSelect : Maybe item -> msg
     , onFocus : Maybe msg
+    , onRemoveItem : Maybe (item -> msg)
     , prompt : String
     , promptClass : String
     , promptStyles : List Style
+    , removeItemSvgClass : String
+    , removeItemSvgStyles : List Style
     , scoreThreshold : Int
     , toLabel : item -> String
     , transformQuery : String -> Maybe String
-    , emptySearch : Bool
+    , underlineClass : String
+    , underlineStyles : List Style
     }
 
 
@@ -55,7 +65,7 @@ newConfig onSelect toLabel =
     { clearClass = ""
     , clearStyles = []
     , clearSvgClass = ""
-    , underlineClass = ""
+    , emptySearch = False
     , cutoff = Nothing
     , fuzzyMatching = True
     , fuzzySearchAddPenalty = Nothing
@@ -63,9 +73,13 @@ newConfig onSelect toLabel =
     , fuzzySearchMovePenalty = Nothing
     , fuzzySearchRemovePenalty = Nothing
     , fuzzySearchSeparators = [ " " ]
+    , highlightedItemClass = ""
+    , highlightedItemStyles = []
     , underlineStyles = []
-    , inputId = Nothing
+    , inputId = Styles.inputId
     , inputClass = ""
+    , inputControlClass = ""
+    , inputControlStyles = []
     , inputStyles = []
     , inputWrapperClass = ""
     , inputWrapperStyles = []
@@ -74,22 +88,27 @@ newConfig onSelect toLabel =
     , itemHtml = Nothing
     , menuClass = ""
     , menuStyles = []
+    , multiInputItemContainerClass = ""
+    , multiInputItemContainerStyles = []
+    , multiInputItemClass = ""
+    , multiInputItemStyles = []
     , notFound = "No results found"
     , notFoundClass = ""
     , notFoundShown = True
     , notFoundStyles = []
-    , highlightedItemClass = ""
-    , highlightedItemStyles = []
     , onQueryChange = Nothing
     , onSelect = onSelect
     , onFocus = Nothing
+    , onRemoveItem = Nothing
     , prompt = ""
     , promptClass = ""
     , promptStyles = []
+    , removeItemSvgClass = ""
+    , removeItemSvgStyles = []
     , scoreThreshold = 2000
     , toLabel = toLabel
     , transformQuery = transformQuery
-    , emptySearch = False
+    , underlineClass = ""
     }
 
 

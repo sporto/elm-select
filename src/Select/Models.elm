@@ -1,6 +1,11 @@
 module Select.Models exposing (..)
 
 
+type Selected item
+    = Single item
+    | Many (List item)
+
+
 type alias State =
     { id : String
     , query : Maybe String

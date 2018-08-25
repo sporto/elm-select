@@ -1,40 +1,45 @@
-module Example1 exposing (..)
+module Example3 exposing (..)
 
-import Debug
 import Html exposing (..)
 import Html.Attributes exposing (class)
-import Movies
 import Select
 
 
 {-| Model to be passed to the select component. You model can be anything.
 E.g. Records, tuples or just strings.
 -}
-type alias Movie =
-    { id : String
-    , label : String
-    }
+type Color
+    = Red
+    | Orange
+    | Yellow
+    | Green
+    | Blue
+    | Indigo
+    | Violet
 
 
 {-| In your main application model you should store:
-
-  - The selected item e.g. selectedMovieId
-  - The state for the select component e.g. selectState
-
 -}
 type alias Model =
     { id : String
-    , movies : List Movie
-    , selectedMovieId : Maybe String
+    , colors : List Color
+    , selectedColors : List Color
     , selectState : Select.State
     }
 
 
-{-| A helper function that transforms a list of tuples into records
+{-| List of colors
 -}
-movies : List Movie
-movies =
-    List.map (\( id, name ) -> Movie id name) Movies.movies
+colors : List Color
+colors =
+    [ Red
+    , Orange
+    , Yellow
+    , Green
+    , Blue
+    , Indigo
+    , Violet
+    ]
 
 
 {-| Your model should store the selected item and the state of the Select component(s)
@@ -42,8 +47,8 @@ movies =
 initialModel : String -> Model
 initialModel id =
     { id = id
-    , movies = movies
-    , selectedMovieId = Nothing
+    , colors = colors
+    , selectedColors = []
     , selectState = Select.newState id
     }
 
@@ -56,18 +61,9 @@ initialModel id =
 -}
 type Msg
     = NoOp
-    | OnSelect (Maybe Movie)
-    | SelectMsg (Select.Msg Movie)
-
-
-{-| A helper function for the configuration below
--}
-transformQuery : String -> Maybe String
-transformQuery query =
-    if String.length query < 4 then
-        Nothing
-    else
-        Just query
+    | OnSelect (Maybe Color)
+    | OnRemoveItem Color
+    | SelectMsg (Select.Msg Color)
 
 
 {-| Create the configuration for the Select component
@@ -80,9 +76,10 @@ transformQuery query =
 All the functions after |> are optional configuration.
 
 -}
-selectConfig : Select.Config Msg Movie
+selectConfig : Select.Config Msg Color
 selectConfig =
-    Select.newConfig OnSelect .label
+    Select.newConfig OnSelect toString
+        |> Select.withOnRemoveItem OnRemoveItem
         |> Select.withCutoff 12
         |> Select.withInputId "input-id"
         |> Select.withInputWrapperStyles
@@ -95,25 +92,34 @@ selectConfig =
         |> Select.withNotFoundClass "red"
         |> Select.withNotFoundStyles [ ( "padding", "0 2rem" ) ]
         |> Select.withHighlightedItemClass "bg-silver"
-        |> Select.withHighlightedItemStyles [ ( "color", "black" ) ]
-        |> Select.withPrompt "Select a movie"
+        |> Select.withHighlightedItemStyles []
+        |> Select.withPrompt "Select a color"
         |> Select.withPromptClass "grey"
         |> Select.withUnderlineClass "underline"
-        |> Select.withTransformQuery transformQuery
 
 
 {-| Your update function should route messages back to the Select component, see `SelectMsg`.
 -}
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
-    case Debug.log "msg" msg of
+    case msg of
         -- OnSelect is triggered when a selection is made on the Select component.
-        OnSelect maybeMovie ->
+        OnSelect maybeColor ->
             let
-                maybeId =
-                    Maybe.map .id maybeMovie
+                selectedColors =
+                    maybeColor
+                        |> Maybe.map (List.singleton >> List.append model.selectedColors)
+                        |> Maybe.withDefault []
             in
-            ( { model | selectedMovieId = maybeId }, Cmd.none )
+            ( { model | selectedColors = selectedColors }, Cmd.none )
+
+        OnRemoveItem colorToRemove ->
+            let
+                selectedColors =
+                    List.filter (\curColor -> curColor /= colorToRemove)
+                        model.selectedColors
+            in
+            ( { model | selectedColors = selectedColors }, Cmd.none )
 
         -- Route message to the Select component.
         -- The returned command is important.
@@ -132,19 +138,9 @@ update msg model =
 -}
 view : Model -> Html Msg
 view model =
-    let
-        selectedMovie =
-            case model.selectedMovieId of
-                Nothing ->
-                    Nothing
-
-                Just id ->
-                    List.filter (\movie -> movie.id == id) movies
-                        |> List.head
-    in
     div [ class "bg-silver p1" ]
-        [ h3 [] [ text "Basic example" ]
-        , text (toString model.selectedMovieId)
+        [ h3 [] [ text "MultiSelect example" ]
+        , text (toString <| List.map toString model.selectedColors)
 
         -- Render the Select view. You must pass:
         -- - The configuration
@@ -152,6 +148,11 @@ view model =
         -- - The Select internal state
         -- - A list of items
         -- - The currently selected item as Maybe
-        , h4 [] [ text "Pick a movie" ]
-        , Html.map SelectMsg (Select.view selectConfig model.selectState model.movies selectedMovie)
+        , h4 [] [ text "Pick colors" ]
+        , Html.map SelectMsg
+            (Select.viewMulti selectConfig
+                model.selectState
+                model.colors
+                model.selectedColors
+            )
         ]

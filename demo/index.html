@@ -11,7 +11,6 @@
       content:'';
       height:2px;
       width:0;
-      bottom:1px;
       position:absolute;
       background:#03a9f4;
       -webkit-transition: 0.2s ease all;
@@ -25,7 +24,8 @@
     .underline:after {
       right:50%;
     }
-    .elm-select-input:focus ~ .underline:before, .elm-select-input:focus ~ .underline:after {
+    .elm-select-input-wrapper:focus-within ~ .underline:before,
+    .elm-select-input-wrapper:focus-within ~ .underline:after {
       width:50%;
     }
     </style>
