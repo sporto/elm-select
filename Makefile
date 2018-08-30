@@ -2,7 +2,7 @@ docs:
 	elm-make --docs=documentation.json
 
 run-demo:
-	cd demo && npm i && elm-package install -y && npm start
+	cd demo && npm i && npm start
 
 # Make the github page (demo)
 build-demo:

@@ -2,7 +2,6 @@
 
 ```
 npm i
-elm-package install -y
 npm start
 ```
 

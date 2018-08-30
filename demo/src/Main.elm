@@ -1,5 +1,6 @@
-module Main exposing (..)
+module Main exposing (main)
 
+import Browser
 import Example1
 import Example2
 import Example3
@@ -42,8 +43,8 @@ type Msg
     | Example3Msg Example3.Msg
 
 
-update : Msg -> Model -> ( Model, Cmd Msg )
-update msg model =
+update : Msg -> ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
+update msg ( model, m2 ) =
     case msg of
         Example1aMsg sub ->
             let
@@ -82,8 +83,8 @@ projectUrl =
     "https://github.com/sporto/elm-select"
 
 
-view : Model -> Html Msg
-view model =
+view : ( Model, Cmd Msg ) -> Html Msg
+view ( model, msg ) =
     div [ class "p3" ]
         [ h1 [] [ text "Elm Select" ]
         , a [ class "h3", href projectUrl ] [ text projectUrl ]
@@ -106,16 +107,10 @@ view model =
         ]
 
 
-subscriptions : Model -> Sub Msg
-subscriptions model =
-    Sub.none
-
-
-main : Program Never Model Msg
+main : Program () ( Model, Cmd Msg ) Msg
 main =
-    program
+    Browser.sandbox
         { view = view
         , init = init
         , update = update
-        , subscriptions = subscriptions
         }

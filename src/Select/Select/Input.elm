@@ -2,8 +2,17 @@ module Select.Select.Input exposing (onKeyPressAttribute, onKeyUpAttribute, view
 
 import Array
 import Html as Html exposing (Attribute, Html)
-import Html.Attributes exposing (attribute, autocomplete, class, id, placeholder, style, value)
-import Html.Events exposing (keyCode, on, onFocus, onInput, onWithOptions)
+import Html.Attributes
+    exposing
+        ( attribute
+        , autocomplete
+        , class
+        , id
+        , placeholder
+        , style
+        , value
+        )
+import Html.Events exposing (keyCode, on, onFocus, onInput, stopPropagationOn)
 import Json.Decode as Decode
 import Select.Config exposing (Config)
 import Select.Events exposing (onBlurAttribute)
@@ -148,11 +157,8 @@ view config model items selected =
 
         onClickWithoutPropagation : Msg item -> Attribute (Msg item)
         onClickWithoutPropagation msg =
-            Decode.succeed msg
-                |> onWithOptions "click"
-                    { stopPropagation = True
-                    , preventDefault = False
-                    }
+            Decode.succeed ( msg, False )
+                |> stopPropagationOn "click"
 
         clear : Html (Msg item)
         clear =
@@ -162,10 +168,13 @@ view config model items selected =
 
                 Just _ ->
                     Html.div
-                        [ class clearClasses
-                        , onClickWithoutPropagation Msg.OnClear
-                        , style clearStyles
-                        ]
+                        ([ class clearClasses
+                         , onClickWithoutPropagation Msg.OnClear
+                         ]
+                            ++ (clearStyles
+                                    |> List.map (\( f, s ) -> style f s)
+                               )
+                        )
                         [ Clear.view config ]
 
         underlineClasses : String
@@ -181,9 +190,9 @@ view config model items selected =
         underline : Html (Msg item)
         underline =
             Html.div
-                [ class underlineClasses
-                , style underlineStyles
-                ]
+                (class underlineClasses
+                    :: (underlineStyles |> List.map (\( f, s ) -> style f s))
+                )
                 []
 
         filteredItems : List item
@@ -222,29 +231,33 @@ view config model items selected =
                                 |> Array.get (remainderBy (List.length found) n)
 
         viewMultiItems : List item -> Html (Msg item)
-        viewMultiItems items =
+        viewMultiItems subItems =
             Html.div
-                [ class multiInputItemContainerClasses
-                , style multiInputItemContainerStyles
-                ]
+                (class multiInputItemContainerClasses
+                    :: (multiInputItemContainerStyles
+                            |> List.map (\( f, s ) -> style f s)
+                       )
+                )
                 (List.map
                     (\item ->
                         Html.div
-                            [ class multiInputItemClasses, style multiInputItemStyles ]
-                            [ Html.div [ style Styles.multiInputItemText ] [ Html.text (config.toLabel item) ]
+                            (class multiInputItemClasses :: (multiInputItemStyles |> List.map (\( f, s ) -> style f s)))
+                            [ Html.div (Styles.multiInputItemText |> List.map (\( f, s ) -> style f s)) [ Html.text (config.toLabel item) ]
                             , Maybe.withDefault (Html.span [] []) <|
                                 Maybe.map
                                     (\_ ->
                                         Html.div
-                                            [ onClickWithoutPropagation (Msg.OnRemoveItem item)
-                                            , style Styles.multiInputRemoveItem
-                                            ]
+                                            (onClickWithoutPropagation (Msg.OnRemoveItem item)
+                                                :: (Styles.multiInputRemoveItem
+                                                        |> List.map (\( f, s ) -> style f s)
+                                                   )
+                                            )
                                             [ RemoveItem.view config ]
                                     )
                                     config.onRemoveItem
                             ]
                     )
-                    items
+                    subItems
                 )
 
         inputAttributes =
@@ -258,11 +271,11 @@ view config model items selected =
             , onFocus Msg.OnFocus
             , Utils.referenceAttr config model
             , class inputClasses
-            , style inputStyles
             ]
+                ++ (inputStyles |> List.map (\( f, s ) -> style f s))
     in
-    Html.div [ class inputControlClass, style inputControlStyles ]
-        [ Html.div [ class inputWrapperClass, style inputWrapperStyles ] <|
+    Html.div (class inputControlClass :: (inputControlStyles |> List.map (\( f, s ) -> style f s)))
+        [ Html.div (class inputWrapperClass :: (inputWrapperStyles |> List.map (\( f, s ) -> style f s))) <|
             case ( selected, model.query ) of
                 ( Just selectedType, Just queryValue ) ->
                     case selectedType of
@@ -273,8 +286,8 @@ view config model items selected =
                                 []
                             ]
 
-                        Models.Many items ->
-                            [ viewMultiItems items
+                        Models.Many subItems ->
+                            [ viewMultiItems subItems
                             , Html.input
                                 (inputAttributes ++ [ value queryValue ])
                                 []
@@ -289,8 +302,8 @@ view config model items selected =
                                 []
                             ]
 
-                        Models.Many items ->
-                            [ viewMultiItems items
+                        Models.Many subItems ->
+                            [ viewMultiItems subItems
                             , Html.input
                                 (inputAttributes ++ [ value "" ])
                                 []

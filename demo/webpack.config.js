@@ -20,25 +20,18 @@ Shared configuration for both dev and production
 var baseConfig = {
   output: {
     path: path.resolve(__dirname + '/dist'),
-    filename: '[name].js',
-    publicPath: '/', // This must be set for HMR to work
+    filename: 'index.js'
   },
 
   target: 'web',
 
   resolve: {
-    modules: ['node_modules'],
-    extensions: [".webpack.js", ".web.js", ".ts", ".js"]
+    modules: [path.join(__dirname, 'src'), 'node_modules'],
+    extensions: [".js", ".elm"]
   },
 
   module: {
-    noParse: /\.elm$/,
-
-    rules: [
-      {
-        test: /\.tsx?$/,
-        loader: "ts-loader"
-      },
+    loaders: [
       {
         test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
         loader: 'file-loader',
@@ -63,7 +56,7 @@ var devConfig = {
   },
 
   module: {
-    rules: [
+    loaders: [
       {
         test: /\.(css|scss)$/,
         use: [
@@ -74,12 +67,13 @@ var devConfig = {
       {
         test: /\.html$/,
         exclude: /node_modules/,
-        loader: 'file?name=[name].[ext]',
+        loader: 'file-loader?name=[name].[ext]'
       },
       {
         test: /\.elm$/,
         exclude: [/elm-stuff/, /node_modules/],
-        loader: 'elm-hot-loader!elm-webpack-loader?verbose=true&warn=true&debug=true',
+        loader: 'elm-webpack-loader',
+        options: {'debug': true}
       },
     ],
 
@@ -101,7 +95,7 @@ var prodConfig = {
   },
 
   module: {
-    rules: [
+    loaders: [
       {
         test: /\.elm$/,
         exclude: [/elm-stuff/, /node_modules/],

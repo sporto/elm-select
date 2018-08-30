@@ -48,11 +48,12 @@ view config state itemCount index item =
                     Html.map (\_ -> NoOp) (fn item)
     in
     div
-        [ class classes
-        , onMouseDown (OnSelect item)
-        , referenceAttr config state
-        , style styles
-        ]
+        ([ class classes
+         , onMouseDown (OnSelect item)
+         , referenceAttr config state
+         ]
+            ++ (styles |> List.map (\( f, s ) -> style f s))
+        )
         [ itemHtml
         ]
 
@@ -74,9 +75,9 @@ viewNotFound config =
 
     else
         div
-            [ class classes
-            , style styles
-            ]
+            (class classes
+                :: (styles |> List.map (\( f, s ) -> style f s))
+            )
             [ text config.notFound
             ]
 

@@ -18,7 +18,7 @@ traceDecoder message decoder =
                     decoded |> Decode.succeed
 
                 Err err ->
-                    err |> Debug.log message |> Decode.fail
+                    err |> Debug.log message |> (Decode.fail << Decode.errorToString)
     in
     Decode.value
         |> Decode.andThen log

@@ -1,6 +1,7 @@
 'use strict';
 
 require('ace-css/css/ace.css');
+require('./index.html');
+var Elm = require('./Main');
 
-var Elm = require('./Main.elm');
-var app = Elm.Main.fullscreen();
+Elm.Main.embed(document.getElementById('main'));

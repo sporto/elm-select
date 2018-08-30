@@ -1,4 +1,4 @@
-module Example1 exposing (..)
+module Example1 exposing (Model, Movie, Msg(..), initialModel, movies, selectConfig, transformQuery, update, view)
 
 import Debug
 import Html exposing (..)
@@ -66,6 +66,7 @@ transformQuery : String -> Maybe String
 transformQuery query =
     if String.length query < 4 then
         Nothing
+
     else
         Just query
 
@@ -144,7 +145,7 @@ view model =
     in
     div [ class "bg-silver p1" ]
         [ h3 [] [ text "Basic example" ]
-        , text (toString model.selectedMovieId)
+        , text (model.selectedMovieId |> Maybe.withDefault "")
 
         -- Render the Select view. You must pass:
         -- - The configuration
