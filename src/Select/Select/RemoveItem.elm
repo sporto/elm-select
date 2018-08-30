@@ -10,12 +10,15 @@ import Svg.Attributes as Attrs
 view : Config userMsg item -> Svg msg
 view config =
     svg
-        [ Attrs.class (config.removeItemSvgClass ++ Styles.removeItemSvgClass)
-        , HtmlAttrs.style (config.removeItemSvgStyles ++ Styles.removeItemSvgStyles)
-        , Attrs.width "14"
-        , Attrs.height "14"
-        , Attrs.viewBox "0 0 20 20"
-        ]
+        ([ Attrs.class (config.removeItemSvgClass ++ Styles.removeItemSvgClass)
+         , Attrs.width "14"
+         , Attrs.height "14"
+         , Attrs.viewBox "0 0 20 20"
+         ]
+            ++ ((config.removeItemSvgStyles ++ Styles.removeItemSvgStyles)
+                    |> List.map (\( f, s ) -> HtmlAttrs.style f s)
+               )
+        )
         [ path [ Attrs.d svgPath ] [] ]
 
 

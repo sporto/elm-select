@@ -50,10 +50,10 @@ menu config model matchedItems =
 
         menuStyle =
             if hideWhenNotFound then
-                style Styles.hiddenMenuStyles
+                Styles.hiddenMenuStyles |> List.map (\( f, s ) -> style f s)
 
             else
-                style (viewStyles config)
+                viewStyles config |> List.map (\( f, s ) -> style f s)
 
         noResultElement =
             if matchedItems == [] then
@@ -70,9 +70,7 @@ menu config model matchedItems =
                 |> List.indexedMap (Item.view config model itemCount)
     in
     div
-        [ viewClassAttr config
-        , menuStyle
-        ]
+        (viewClassAttr config :: menuStyle)
         (noResultElement :: elements)
 
 

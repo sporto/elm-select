@@ -14,11 +14,8 @@ view config model items selected =
     let
         classes =
             "elm-select"
-
-        styles =
-            [ ( "position", "relative" ) ]
     in
-    div [ id model.id, class classes, style styles ]
+    div [ id model.id, class classes, style "position" "relative" ]
         [ Select.Select.Input.view config model items selected
         , Select.Select.Menu.view config model items selected
         ]

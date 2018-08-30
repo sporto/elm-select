@@ -1,5 +1,6 @@
-module Main exposing (..)
+module Main exposing (main)
 
+import Browser
 import Example1
 import Example2
 import Example3
@@ -29,8 +30,8 @@ initialCmds =
     Cmd.batch [ Cmd.map Example2Msg Example2.initialCmds ]
 
 
-init : ( Model, Cmd Msg )
-init =
+init : flags -> ( Model, Cmd Msg )
+init _ =
     ( initialModel, initialCmds )
 
 
@@ -106,16 +107,11 @@ view model =
         ]
 
 
-subscriptions : Model -> Sub Msg
-subscriptions model =
-    Sub.none
-
-
-main : Program Never Model Msg
+main : Program () Model Msg
 main =
-    program
+    Browser.element
         { view = view
         , init = init
         , update = update
-        , subscriptions = subscriptions
+        , subscriptions = always Sub.none
         }

@@ -1,4 +1,4 @@
-module Movies exposing (..)
+module Movies exposing (movies)
 
 
 movies : List ( String, String )

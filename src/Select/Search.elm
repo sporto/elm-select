@@ -38,12 +38,12 @@ matchedItems config query items =
         Nothing ->
             NotSearched
 
-        Just query ->
+        Just subQ ->
             case config.fuzzyMatching of
                 True ->
                     let
                         scoreFor =
-                            scoreForItem config query
+                            scoreForItem config subQ
                     in
                     items
                         |> List.map (\item -> ( scoreFor item, item ))

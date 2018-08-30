@@ -1,4 +1,19 @@
-module Example2 exposing (..)
+module Example2 exposing
+    ( Character
+    , Model
+    , Msg(..)
+    , collectionDecoder
+    , fetch
+    , fetchUrl
+    , initialCmds
+    , initialModel
+    , itemHtml
+    , memberDecoder
+    , resultDecoder
+    , selectConfig
+    , update
+    , view
+    )
 
 import Debug
 import Html exposing (..)
@@ -71,6 +86,7 @@ selectConfig =
             (\query ->
                 if String.length query < 3 then
                     Nothing
+
                 else
                     Just query
             )
@@ -145,7 +161,7 @@ view model =
     in
     div [ class "bg-silver p1" ]
         [ h3 [] [ text "Async example" ]
-        , text (toString model.selectedCharacterId)
+        , text (model.selectedCharacterId |> Maybe.withDefault "")
         , h4 [] [ text "Pick an star wars character" ]
         , Html.map SelectMsg (Select.view selectConfig model.selectState model.characters selecteCharacter)
         ]

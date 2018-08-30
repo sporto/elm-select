@@ -1,4 +1,13 @@
-module Example3 exposing (..)
+module Example3 exposing
+    ( Color(..)
+    , Model
+    , Msg(..)
+    , colors
+    , initialModel
+    , selectConfig
+    , update
+    , view
+    )
 
 import Html exposing (..)
 import Html.Attributes exposing (class)
@@ -42,6 +51,31 @@ colors =
     ]
 
 
+colorToString : Color -> String
+colorToString c =
+    case c of
+        Red ->
+            "Red"
+
+        Orange ->
+            "Orange"
+
+        Yellow ->
+            "Yellow"
+
+        Green ->
+            "Green"
+
+        Blue ->
+            "Blue"
+
+        Indigo ->
+            "Indigo"
+
+        Violet ->
+            "Violet"
+
+
 {-| Your model should store the selected item and the state of the Select component(s)
 -}
 initialModel : String -> Model
@@ -78,7 +112,7 @@ All the functions after |> are optional configuration.
 -}
 selectConfig : Select.Config Msg Color
 selectConfig =
-    Select.newConfig OnSelect toString
+    Select.newConfig OnSelect colorToString
         |> Select.withOnRemoveItem OnRemoveItem
         |> Select.withCutoff 12
         |> Select.withInputId "input-id"
@@ -140,7 +174,7 @@ view : Model -> Html Msg
 view model =
     div [ class "bg-silver p1" ]
         [ h3 [] [ text "MultiSelect example" ]
-        , text (toString <| List.map toString model.selectedColors)
+        , text (String.join ", " <| List.map colorToString model.selectedColors)
 
         -- Render the Select view. You must pass:
         -- - The configuration

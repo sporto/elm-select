@@ -6,8 +6,10 @@
   "author": "Sebastian Porto <s@porto5.com>",
   "license": "MIT",
   "devDependencies": {
-    "elm-format": "^0.6.1-alpha",
-    "elm-test": "^0.18.9"
+    "elm": "^0.19.0",
+    "elm-format": "^0.8.0",
+    "elm-analyse": "^0.15.0",
+    "elm-test": "^0.19.0-beta4"
   },
   "scripts": {
     "test": "elm-test"
