@@ -44,7 +44,7 @@ type Msg
 
 
 update : Msg -> ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
-update msg ( model, m2 ) =
+update msg ( model, cmdMsg ) =
     case msg of
         Example1aMsg sub ->
             let

@@ -31,7 +31,7 @@ var baseConfig = {
   },
 
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
         loader: 'file-loader',
@@ -39,6 +39,11 @@ var baseConfig = {
       {
         test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
         loader: 'url-loader?limit=10000&mimetype=application/font-woff',
+      },
+      {
+        test: /\.html$/,
+        exclude: /node_modules/,
+        loader: 'file-loader?name=[name].[ext]'
       },
     ]
   },
@@ -56,18 +61,13 @@ var devConfig = {
   },
 
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.(css|scss)$/,
         use: [
           'style-loader',
           'css-loader',
         ]
-      },
-      {
-        test: /\.html$/,
-        exclude: /node_modules/,
-        loader: 'file-loader?name=[name].[ext]'
       },
       {
         test: /\.elm$/,
@@ -95,7 +95,7 @@ var prodConfig = {
   },
 
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.elm$/,
         exclude: [/elm-stuff/, /node_modules/],
@@ -137,5 +137,3 @@ if (targetEnv === DEVELOPMENT) {
   console.log('Building for production...');
   module.exports = merge(baseConfig, prodConfig);
 }
-
-

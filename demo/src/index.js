@@ -1,7 +1,7 @@
 'use strict';
 
 require('ace-css/css/ace.css');
-require('./index.html');
-var Elm = require('./Main');
+require('index.html');
+var Elm = require('./Main.elm');
 
-Elm.Main.embed(document.getElementById('main'));
+Elm.Elm.Main.init({node: document.getElementById('main')})
