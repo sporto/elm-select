@@ -1,4 +1,19 @@
-module Example2 exposing (Character, Model, Msg(..), collectionDecoder, fetch, fetchUrl, initialCmds, initialModel, itemHtml, memberDecoder, resultDecoder, selectConfig, update, view)
+module Example2 exposing
+    ( Character
+    , Model
+    , Msg(..)
+    , collectionDecoder
+    , fetch
+    , fetchUrl
+    , initialCmds
+    , initialModel
+    , itemHtml
+    , memberDecoder
+    , resultDecoder
+    , selectConfig
+    , update
+    , view
+    )
 
 import Debug
 import Html exposing (..)

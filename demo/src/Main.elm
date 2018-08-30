@@ -30,8 +30,8 @@ initialCmds =
     Cmd.batch [ Cmd.map Example2Msg Example2.initialCmds ]
 
 
-init : ( Model, Cmd Msg )
-init =
+init : flags -> ( Model, Cmd Msg )
+init _ =
     ( initialModel, initialCmds )
 
 
@@ -43,8 +43,8 @@ type Msg
     | Example3Msg Example3.Msg
 
 
-update : Msg -> ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
-update msg ( model, cmdMsg ) =
+update : Msg -> Model -> ( Model, Cmd Msg )
+update msg model =
     case msg of
         Example1aMsg sub ->
             let
@@ -83,8 +83,8 @@ projectUrl =
     "https://github.com/sporto/elm-select"
 
 
-view : ( Model, Cmd Msg ) -> Html Msg
-view ( model, msg ) =
+view : Model -> Html Msg
+view model =
     div [ class "p3" ]
         [ h1 [] [ text "Elm Select" ]
         , a [ class "h3", href projectUrl ] [ text projectUrl ]
@@ -107,10 +107,11 @@ view ( model, msg ) =
         ]
 
 
-main : Program () ( Model, Cmd Msg ) Msg
+main : Program () Model Msg
 main =
-    Browser.sandbox
+    Browser.element
         { view = view
         , init = init
         , update = update
+        , subscriptions = always Sub.none
         }

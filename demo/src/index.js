@@ -2,6 +2,5 @@
 
 require('ace-css/css/ace.css');
 require('index.html');
-var Elm = require('./Main.elm');
 
-Elm.Elm.Main.init({node: document.getElementById('main')})
+require('./Main.elm').Elm.Main.init({node: document.getElementById('main')});

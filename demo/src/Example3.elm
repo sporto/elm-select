@@ -1,4 +1,13 @@
-module Example3 exposing (Color(..), Model, Msg(..), colors, initialModel, selectConfig, update, view)
+module Example3 exposing
+    ( Color(..)
+    , Model
+    , Msg(..)
+    , colors
+    , initialModel
+    , selectConfig
+    , update
+    , view
+    )
 
 import Html exposing (..)
 import Html.Attributes exposing (class)

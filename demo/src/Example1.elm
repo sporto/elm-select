@@ -1,4 +1,14 @@
-module Example1 exposing (Model, Movie, Msg(..), initialModel, movies, selectConfig, transformQuery, update, view)
+module Example1 exposing
+    ( Model
+    , Movie
+    , Msg(..)
+    , initialModel
+    , movies
+    , selectConfig
+    , transformQuery
+    , update
+    , view
+    )
 
 import Debug
 import Html exposing (..)
