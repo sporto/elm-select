@@ -1,6 +1,6 @@
 # Changelog
 
-## 3.0.0
+## 2.16.0
 
 - Upgrade to Elm 0.19
 - Add multi selection
