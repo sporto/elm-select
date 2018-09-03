@@ -1,4 +1,4 @@
-module Select.SearchTest exposing (Msg(..), all, baseConfig, movies, testMatchedItems, testRelevantScoreForItem, testScoreForItem)
+module Select.SearchTest exposing (all)
 
 import Expect exposing (Expectation)
 import Select.Config exposing (Config, newConfig)
@@ -71,107 +71,104 @@ baseConfig =
     newConfig OnSelect identity
 
 
-testScoreForItem =
+scoreForItemTest testCase config movie query expectedScore =
+    let
+        actualScore =
+            scoreForItem config query movie
+
+        expectation =
+            Expect.equal actualScore expectedScore
+    in
+    test testCase (\_ -> expectation)
+
+
+scoreForItemTests =
     let
         movie1 =
             "Star Wars: Episode VII - The Force Awakens"
-
-        inputs =
-            [ ( "Scores the beginning"
-              , baseConfig
-              , movie1
-              , "star"
-              , 0
-              )
-            , ( "Scores at the end"
-              , baseConfig
-              , movie1
-              , "force"
-              , 0
-              )
-            ]
-
-        run ( testCase, config, movie, query, expectedScore ) =
-            let
-                actualScore =
-                    scoreForItem config query movie
-
-                expectation =
-                    Expect.equal actualScore expectedScore
-            in
-            test testCase (\_ -> expectation)
     in
-    describe "scoreForItem" (List.map run inputs)
+    describe "scoreForItem"
+        [ scoreForItemTest
+            "Scores the beginning"
+            baseConfig
+            movie1
+            "star"
+            0
+        , scoreForItemTest
+            "Scores at the end"
+            baseConfig
+            movie1
+            "force"
+            0
+        ]
 
 
-testRelevantScoreForItem =
+relevantScoreForItemTest testCase config movie1 movie2 query expectedOrder =
     let
-        inputs =
-            [ ( "Relevant scores better (lower)"
-              , baseConfig
-              , "Star Wars: Episode VII - The Force Awakens"
-              , "The Hunger Games: Catching Fire (2013)"
-              , "star"
-              , LT
-              )
-            ]
+        score1 =
+            scoreForItem config query movie1
 
-        run ( testCase, config, movie1, movie2, query, expectedOrder ) =
-            let
-                score1 =
-                    scoreForItem config query movie1
+        score2 =
+            scoreForItem config query movie2
 
-                score2 =
-                    scoreForItem config query movie2
+        actual =
+            compare score1 score2
 
-                actual =
-                    compare score1 score2
-
-                expectation =
-                    Expect.equal actual expectedOrder
-            in
-            test testCase (\_ -> expectation)
+        expectation =
+            Expect.equal actual expectedOrder
     in
-    describe "scoreForItem comparison" (List.map run inputs)
+    test testCase (\_ -> expectation)
 
 
-testMatchedItems =
+relevantScoreForItemTests =
+    describe "scoreForItem comparison"
+        [ relevantScoreForItemTest
+            "Relevant scores better (lower)"
+            baseConfig
+            "Star Wars: Episode VII - The Force Awakens"
+            "The Hunger Games: Catching Fire (2013)"
+            "star"
+            LT
+        ]
+
+
+matchedItemsTest testCase config query expected =
     let
-        inputs =
-            [ ( "Query can be at the beginning"
-              , baseConfig
-              , Just "star"
-              , ItemsFound
-                    [ "Star Wars: Episode VII - The Force Awakens (2015)"
-                    , "Star Wars: Episode I - The Phantom Menace (1999)"
-                    , "Pirates of the Caribbean: On Stranger Tides (2011)"
-                    ]
-              )
-            , ( "Query can be at the end"
-              , baseConfig
-              , Just "menace"
-              , ItemsFound
-                    [ "Star Wars: Episode I - The Phantom Menace (1999)"
-                    ]
-              )
-            ]
+        actual =
+            matchedItems config query movies
 
-        run ( testCase, config, query, expected ) =
-            let
-                actual =
-                    matchedItems config query movies
-
-                expectation =
-                    Expect.equal actual expected
-            in
-            test testCase (\_ -> expectation)
+        expectation =
+            Expect.equal actual expected
     in
-    describe "matchedItems" (List.map run inputs)
+    test testCase (\_ -> expectation)
+
+
+matchedItemsTests =
+    describe "matchedItems"
+        [ matchedItemsTest
+            "Query can be at the beginning"
+            baseConfig
+            (Just "star")
+            (ItemsFound
+                [ "Star Wars: Episode VII - The Force Awakens (2015)"
+                , "Star Wars: Episode I - The Phantom Menace (1999)"
+                , "Pirates of the Caribbean: On Stranger Tides (2011)"
+                ]
+            )
+        , matchedItemsTest
+            "Query can be at the end"
+            baseConfig
+            (Just "menace")
+            (ItemsFound
+                [ "Star Wars: Episode I - The Phantom Menace (1999)"
+                ]
+            )
+        ]
 
 
 all =
     describe "SearchTest"
-        [ testScoreForItem
-        , testRelevantScoreForItem
-        , testMatchedItems
+        [ scoreForItemTests
+        , relevantScoreForItemTests
+        , matchedItemsTests
         ]

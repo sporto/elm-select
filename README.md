@@ -2,7 +2,7 @@
 
 [ ![Codeship Status for sporto/elm-select](https://app.codeship.com/projects/dbe35340-8a15-0135-1341-166aadcd1cb7/status?branch=master)](https://app.codeship.com/projects/248929)
 
-An input component with autocompletion.
+An select component with autocomplete and optional multi-select.
 
 ## Demo
 
@@ -20,12 +20,16 @@ See commented example at `demo/src/Example1.elm`
 
 ---
 
-## Run demo
+## Run demo locally
 
-make run-demo
+  make run-demo
 
 Open `localhost:4000`
 
 ## Generate demo
 
-make build-demo
+  make build-demo
+
+## Test
+
+  yarn test

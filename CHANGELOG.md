@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.0.0
+
+- Upgrade to Elm 0.19
+- Add multi selection
+
 ## 2.15.1
 
 - The `withOnQuery` callback takes in account `withTransformQuery`
