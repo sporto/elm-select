@@ -9,21 +9,6 @@ import Select.Models exposing (State)
 import Select.Utils exposing (referenceDataName)
 
 
-traceDecoder : String -> Decode.Decoder msg -> Decode.Decoder msg
-traceDecoder message decoder =
-    let
-        log value =
-            case Decode.decodeValue decoder value of
-                Ok decoded ->
-                    decoded |> Decode.succeed
-
-                Err err ->
-                    err |> Debug.log message |> (Decode.fail << Decode.errorToString)
-    in
-    Decode.value
-        |> Decode.andThen log
-
-
 onBlurAttribute : Config msg item -> State -> Attribute (Msg item)
 onBlurAttribute config state =
     let
