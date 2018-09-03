@@ -70,11 +70,11 @@ selectConfig =
     Select.newConfig OnSelect identity
         |> Select.withInputWrapperStyles
             [ ( "padding", "0.4rem" ) ]
-        |> Select.withMenuClass "border border-gray bg-white"
-        |> Select.withItemClass "border-bottom border-silver p1"
+        |> Select.withMenuClass "border border-grey-darker bg-white"
+        |> Select.withItemClass "p-1 border-b border-grey-darker"
         |> Select.withItemStyles [ ( "font-size", "1rem" ) ]
         |> Select.withNotFoundShown False
-        |> Select.withHighlightedItemClass "bg-silver"
+        |> Select.withHighlightedItemClass "bg-grey"
         |> Select.withHighlightedItemStyles [ ( "color", "black" ) ]
         |> Select.withPrompt "Select a character"
         |> Select.withCutoff 12
@@ -159,9 +159,13 @@ view model =
                         |> List.filter (\character -> character == id)
                         |> List.head
     in
-    div [ class "bg-silver p1" ]
+    div [ class "bg-grey-lighter p-2" ]
         [ h3 [] [ text "Async example" ]
         , text (model.selectedCharacterId |> Maybe.withDefault "")
-        , h4 [] [ text "Pick an star wars character" ]
-        , Html.map SelectMsg (Select.view selectConfig model.selectState model.characters selecteCharacter)
+        , p [ class "mt-2" ]
+            [ label [] [ text "Pick an star wars character" ]
+            ]
+        , p []
+            [ Html.map SelectMsg (Select.view selectConfig model.selectState model.characters selecteCharacter)
+            ]
         ]

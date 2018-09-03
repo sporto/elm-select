@@ -85,24 +85,20 @@ projectUrl =
 
 view : Model -> Html Msg
 view model =
-    div [ class "p3" ]
+    div [ class "p-5" ]
         [ h1 [] [ text "Elm Select" ]
-        , a [ class "h3", href projectUrl ] [ text projectUrl ]
-        , div [ class "clearfix mt2" ]
-            [ div [ class "col col-6" ]
-                [ Html.map Example1aMsg (Example1.view model.example1a)
-                ]
-            , div [ class "col col-6" ]
-                [ Html.map Example1bMsg (Example1.view model.example1b)
-                ]
+        , a [ href projectUrl ] [ text projectUrl ]
+        , div [ class "mt-4" ]
+            [ Html.map Example1aMsg (Example1.view model.example1a)
             ]
-        , div [ class "clearfix mt2" ]
-            [ div [ class "col col-6" ]
-                [ Html.map Example2Msg (Example2.view model.example2)
-                ]
-            , div [ class "col col-6" ]
-                [ Html.map Example3Msg (Example3.view model.example3)
-                ]
+        , div [ class "mt-4" ]
+            [ Html.map Example1bMsg (Example1.view model.example1b)
+            ]
+        , div [ class "mt-4" ]
+            [ Html.map Example2Msg (Example2.view model.example2)
+            ]
+        , div [ class "mt-4" ]
+            [ Html.map Example3Msg (Example3.view model.example3)
             ]
         ]
 

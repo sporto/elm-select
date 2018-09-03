@@ -1,9 +1,37 @@
 <!DOCTYPE html>
-<html>
+<html lang="en-us">
   <head>
-    <meta charset="UTF-8">
-    <title>Example</title>
-  <link href="/elm-select/css/app.css" rel="stylesheet"/></head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Elm Application</title>
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico"/>
+    <style type="text/css">
+      .underline { position:relative; display:block; width:100%; }
+      .underline:before, .underline:after   {
+        content:'';
+        height:2px;
+        width:0;
+        position:absolute;
+        background:#03a9f4;
+        -webkit-transition: 0.2s ease all;
+        -moz-transition: 0.2s ease all;
+        -o-transition: 0.2s ease all;
+        transition:0.2s ease all;
+      }
+      .underline:before {
+        left:50%;
+      }
+      .underline:after {
+        right:50%;
+      }
+      .elm-select-input-wrapper:focus-within ~ .underline:before,
+      .elm-select-input-wrapper:focus-within ~ .underline:after {
+        width:50%;
+      }
+    </style>
+    <script src="https://use.fontawesome.com/7997d07114.js"></script>
+  </head>
   <body>
-  <script type="text/javascript" src="/elm-select/app-c027fc376d9d49749871.js"></script></body>
+    <div id="main">Loading...</div>
+  <script type="text/javascript" src="/elm-select/main-b34a14f974c4809d5e08.js"></script></body>
 </html>

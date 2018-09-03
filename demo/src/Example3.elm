@@ -118,17 +118,17 @@ selectConfig =
         |> Select.withInputId "input-id"
         |> Select.withInputWrapperStyles
             [ ( "padding", "0.4rem" ) ]
-        |> Select.withItemClass "border-bottom border-silver p1 gray"
+        |> Select.withItemClass "p-1 border-b border-grey text-grey-darker"
         |> Select.withItemStyles [ ( "font-size", "1rem" ) ]
-        |> Select.withMenuClass "border border-gray"
+        |> Select.withMenuClass "border border-grey-darker"
         |> Select.withMenuStyles [ ( "background", "white" ) ]
         |> Select.withNotFound "No matches"
         |> Select.withNotFoundClass "red"
         |> Select.withNotFoundStyles [ ( "padding", "0 2rem" ) ]
-        |> Select.withHighlightedItemClass "bg-silver"
+        |> Select.withHighlightedItemClass "bg-grey"
         |> Select.withHighlightedItemStyles []
         |> Select.withPrompt "Select a color"
-        |> Select.withPromptClass "grey"
+        |> Select.withPromptClass "text-grey-darker"
         |> Select.withUnderlineClass "underline"
 
 
@@ -172,7 +172,7 @@ update msg model =
 -}
 view : Model -> Html Msg
 view model =
-    div [ class "bg-silver p1" ]
+    div [ class "bg-grey-lighter p-2" ]
         [ h3 [] [ text "MultiSelect example" ]
         , text (String.join ", " <| List.map colorToString model.selectedColors)
 
@@ -182,11 +182,15 @@ view model =
         -- - The Select internal state
         -- - A list of items
         -- - The currently selected item as Maybe
-        , h4 [] [ text "Pick colors" ]
-        , Html.map SelectMsg
-            (Select.viewMulti selectConfig
-                model.selectState
-                model.colors
-                model.selectedColors
-            )
+        , p [ class "mt-2" ]
+            [ label [] [ text "Pick colors" ]
+            ]
+        , p []
+            [ Html.map SelectMsg
+                (Select.viewMulti selectConfig
+                    model.selectState
+                    model.colors
+                    model.selectedColors
+                )
+            ]
         ]

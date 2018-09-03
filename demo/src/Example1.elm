@@ -95,20 +95,21 @@ selectConfig : Select.Config Msg Movie
 selectConfig =
     Select.newConfig OnSelect .label
         |> Select.withCutoff 12
+        |> Select.withInputClass "border border-grey-darker"
         |> Select.withInputId "input-id"
         |> Select.withInputWrapperStyles
             [ ( "padding", "0.4rem" ) ]
-        |> Select.withItemClass "border-bottom border-silver p1 gray"
+        |> Select.withItemClass " p-2 border-b border-grey text-grey-darker"
         |> Select.withItemStyles [ ( "font-size", "1rem" ) ]
-        |> Select.withMenuClass "border border-gray"
+        |> Select.withMenuClass "border border-grey-dark"
         |> Select.withMenuStyles [ ( "background", "white" ) ]
         |> Select.withNotFound "No matches"
-        |> Select.withNotFoundClass "red"
+        |> Select.withNotFoundClass "text-red"
         |> Select.withNotFoundStyles [ ( "padding", "0 2rem" ) ]
-        |> Select.withHighlightedItemClass "bg-silver"
+        |> Select.withHighlightedItemClass "bg-grey-lighter"
         |> Select.withHighlightedItemStyles [ ( "color", "black" ) ]
         |> Select.withPrompt "Select a movie"
-        |> Select.withPromptClass "grey"
+        |> Select.withPromptClass "text-grey-darker"
         |> Select.withUnderlineClass "underline"
         |> Select.withTransformQuery transformQuery
 
@@ -153,7 +154,7 @@ view model =
                     List.filter (\movie -> movie.id == id) movies
                         |> List.head
     in
-    div [ class "bg-silver p1" ]
+    div [ class "bg-grey-lighter p-2" ]
         [ h3 [] [ text "Basic example" ]
         , text (model.selectedMovieId |> Maybe.withDefault "")
 
@@ -163,6 +164,10 @@ view model =
         -- - The Select internal state
         -- - A list of items
         -- - The currently selected item as Maybe
-        , h4 [] [ text "Pick a movie" ]
-        , Html.map SelectMsg (Select.view selectConfig model.selectState model.movies selectedMovie)
+        , p [ class "mt-2" ]
+            [ label [] [ text "Pick a movie" ]
+            ]
+        , p []
+            [ Html.map SelectMsg (Select.view selectConfig model.selectState model.movies selectedMovie)
+            ]
         ]

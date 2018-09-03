@@ -1,139 +1,69 @@
-var merge = require( 'webpack-merge' );
+var merge = require( "webpack-merge" );
 var path = require("path");
 var webpack = require("webpack");
+var HtmlWebpackPlugin = require("html-webpack-plugin");
 
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
-var CopyWebpackPlugin = require('copy-webpack-plugin');
-var HtmlWebpackPlugin = require('html-webpack-plugin');
-
-var DEVELOPMENT = 'development';
-var PRODUCTION = 'production';
-var ENTRY_FILE = './src/index.js';
+var DEVELOPMENT = "DEVELOPMENT";
+var PRODUCTION = "PRODUCTION";
+var ENTRY_FILE = "./src/index.js";
 
 // Detemine build env
 var target = process.env.npm_lifecycle_event;
-var targetEnv = target === 'build' ? PRODUCTION : DEVELOPMENT;
+var targetEnv = target === "build" ? PRODUCTION : DEVELOPMENT;
 
 /*
 Shared configuration for both dev and production
 */
 var baseConfig = {
   output: {
-    path: path.resolve(__dirname + '/dist'),
-    filename: 'index.js'
+    path: path.resolve(__dirname + "/dist"),
+    filename: "index.js"
   },
 
-  target: 'web',
-
   resolve: {
-    modules: [path.join(__dirname, 'src'), 'node_modules'],
+    modules: [path.join(__dirname, "src"), "node_modules"],
     extensions: [".js", ".elm"]
   },
 
   module: {
     rules: [
       {
-        test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-        loader: 'file-loader',
-      },
-      {
-        test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-        loader: 'url-loader?limit=10000&mimetype=application/font-woff',
-      },
-      {
-        test: /\.html$/,
-        exclude: /node_modules/,
-        loader: 'file-loader?name=[name].[ext]'
-      },
-    ]
-  },
-
-  plugins: [
-  ],
-
-}
-
-var devConfig = {
-  entry: {
-    index: [
-      ENTRY_FILE,
-    ]
-  },
-
-  module: {
-    rules: [
-      {
-        test: /\.(css|scss)$/,
-        use: [
-          'style-loader',
-          'css-loader',
-        ]
-      },
-      {
         test: /\.elm$/,
         exclude: [/elm-stuff/, /node_modules/],
-        loader: 'elm-webpack-loader',
-        options: {'debug': true}
+        loader: "elm-webpack-loader",
+        options: {
+          cwd:  path.resolve(__dirname, "src"),
+        }
       },
-    ],
-
-  },
-
-  plugins: [],
-};
-
-// Additional webpack settings for prod env (when invoked via 'npm run build')
-var prodConfig = {
-  entry: {
-    app: path.join(__dirname, ENTRY_FILE),
-  },
-
-  output: {
-    path: path.resolve(__dirname + '/../docs'),
-    filename: '[name]-[hash].js',
-    publicPath: '/elm-select/',
-  },
-
-  module: {
-    rules: [
-      {
-        test: /\.elm$/,
-        exclude: [/elm-stuff/, /node_modules/],
-        loader: 'elm-webpack-loader'
-      },
-      {
-        test: /\.(css|scss)$/,
-        loader: ExtractTextPlugin.extract({
-          fallback: "style-loader",
-          use: "css-loader",
-        })
-      }
     ]
   },
 
   plugins: [
     // Generate index.html with links to webpack bundles
     new HtmlWebpackPlugin({
-      title: 'Example',
+      title: "Example",
       xhtml: true,
+      template: "src/index.html",
     }),
+  ],
 
-    // extract CSS into a separate file
-    new ExtractTextPlugin({ filename: 'css/[name].css', disable: false, allChunks: true }),
+}
 
-    // minify & mangle JS/CSS
-    new webpack.optimize.UglifyJsPlugin({
-        minimize:   true,
-        compressor: { warnings: false }
-        // mangle:  true
-    })
-  ]
+var devConfig = {};
+
+// Additional webpack settings for prod env (when invoked via "npm run build")
+var prodConfig = {
+  output: {
+    path: path.resolve(__dirname + "/../docs"),
+    filename: "[name]-[hash].js",
+    publicPath: "/elm-select/",
+  },
 }
 
 if (targetEnv === DEVELOPMENT) {
-  console.log('Serving locally...');
+  console.log("Serving locally...");
   module.exports = merge(baseConfig, devConfig);
 } else {
-  console.log('Building for production...');
+  console.log("Building for production...");
   module.exports = merge(baseConfig, prodConfig);
 }
