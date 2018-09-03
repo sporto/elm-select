@@ -1,4 +1,4 @@
-module Select.Events exposing (onBlurAttribute, traceDecoder)
+module Select.Events exposing (onBlurAttribute)
 
 import Html exposing (..)
 import Html.Events exposing (keyCode, on)
