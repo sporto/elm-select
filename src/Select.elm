@@ -12,7 +12,7 @@ module Select exposing
     , withNotFound, withNotFoundClass, withNotFoundShown, withNotFoundStyles
     , withPrompt, withPromptClass, withPromptStyles
     , withFuzzyMatching, withTransformQuery, withScoreThreshold, withFuzzySearchAddPenalty, withFuzzySearchMovePenalty, withFuzzySearchRemovePenalty, withFuzzySearchInsertPenalty, withFuzzySearchSeparators
-    , newState
+    , newState, queryFromState
     , view, viewMulti
     , update
     )
@@ -95,7 +95,7 @@ This is the element that wraps the selected item(s) and the input
 
 # State
 
-@docs newState
+@docs newState, queryFromState
 
 
 # View
@@ -786,6 +786,18 @@ mapConfig fn config =
 newState : String -> State
 newState id =
     PrivateState (Models.newState id)
+
+
+{-| Return the query string from the current state model
+
+    Select.queryFromState model.selectState
+
+-}
+queryFromState : State -> Maybe String
+queryFromState model =
+    model
+        |> unwrapModel
+        |> .query
 
 
 viewBase :
