@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.17.0
+
+- Add `queryFromState`. See https://github.com/sporto/elm-select/pull/32
+
 ## 2.16.0
 
 - Upgrade to Elm 0.19
