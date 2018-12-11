@@ -8,7 +8,6 @@ module Example4Custom exposing
     , view
     )
 
-import Debug
 import Html exposing (..)
 import Html.Attributes exposing (class)
 import Movies
@@ -67,7 +66,7 @@ type Msg
 -}
 update : Select.Config Msg Movie -> Msg -> Model -> ( Model, Cmd Msg )
 update selectConfig msg model =
-    case Debug.log "msg" msg of
+    case msg of
         -- OnSelect is triggered when a selection is made on the Select component.
         OnSelect maybeMovie ->
             let

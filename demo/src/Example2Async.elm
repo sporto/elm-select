@@ -15,7 +15,6 @@ module Example2Async exposing
     , view
     )
 
-import Debug
 import Html exposing (..)
 import Html.Attributes exposing (class)
 import Http
@@ -124,7 +123,7 @@ memberDecoder =
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
-    case Debug.log "msg" msg of
+    case msg of
         OnQuery query ->
             ( model, fetch query )
 
