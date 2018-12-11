@@ -118,20 +118,19 @@ view config model availableItems selected =
 
         clear : Html (Msg item)
         clear =
-            case selected of
-                Nothing ->
-                    Html.text ""
+            if List.isEmpty selected then
+                Html.text ""
 
-                Just _ ->
-                    Html.div
-                        ([ class clearClasses
-                         , onClickWithoutPropagation Msg.OnClear
-                         ]
-                            ++ (clearStyles
-                                    |> List.map (\( f, s ) -> style f s)
-                               )
-                        )
-                        [ Clear.view config ]
+            else
+                Html.div
+                    ([ class clearClasses
+                     , onClickWithoutPropagation Msg.OnClear
+                     ]
+                        ++ (clearStyles
+                                |> List.map (\( f, s ) -> style f s)
+                           )
+                    )
+                    [ Clear.view config ]
 
         underlineClasses : String
         underlineClasses =
@@ -236,7 +235,7 @@ multiInput config model availableItems selected =
     in
     [ viewMultiItems selected
     , Html.input
-        (inputAttributes config model selected ++ [ value model.query ])
+        (inputAttributes config model availableItems selected ++ [ value model.query ])
         []
     ]
 
@@ -279,8 +278,8 @@ inputAttributes config model availableItems selectedItems =
         inputStylesAttrs =
             Utils.stylesToAttrs inputStyles
 
-        matchedItems : Maybe (List item)
-        matchedItems =
+        maybeMatchedItems : Maybe (List item)
+        maybeMatchedItems =
             Search.matchedItemsWithCutoff
                 config
                 model.query
@@ -290,21 +289,22 @@ inputAttributes config model availableItems selectedItems =
         -- item that will be selected if enter if pressed
         preselectedItem : Maybe item
         preselectedItem =
-            case matchedItems of
+            case maybeMatchedItems of
                 Nothing ->
                     Nothing
 
-                Just [ singleItem ] ->
-                    Just singleItem
+                Just matchedItems ->
+                    if config.isMultiSelect then
+                        case model.highlightedItem of
+                            Nothing ->
+                                List.head matchedItems
 
-                Just ((head :: rest) as found) ->
-                    case model.highlightedItem of
-                        Nothing ->
-                            Just head
+                            Just n ->
+                                Array.fromList matchedItems
+                                    |> Array.get (remainderBy (List.length matchedItems) n)
 
-                        Just n ->
-                            Array.fromList found
-                                |> Array.get (remainderBy (List.length found) n)
+                    else
+                        List.head matchedItems
     in
     [ autocomplete False
     , attribute "autocorrect" "off" -- for mobile Safari

@@ -23,7 +23,7 @@ update config msg model =
             ( model, Cmd.none )
 
         OnEsc ->
-            ( { model | query = Nothing }, Cmd.none )
+            ( { model | query = "" }, Cmd.none )
 
         OnDownArrow ->
             let
@@ -65,7 +65,7 @@ update config msg model =
             in
             case config.emptySearch of
                 True ->
-                    ( { model | query = Just "" }
+                    ( { model | query = "" }
                     , Cmd.batch
                         [ cmd
                         , if config.emptySearch then
@@ -80,7 +80,7 @@ update config msg model =
                     ( model, cmd )
 
         OnBlur ->
-            ( { model | query = Nothing }, Cmd.none )
+            ( { model | query = "" }, Cmd.none )
 
         OnClear ->
             let
@@ -88,7 +88,7 @@ update config msg model =
                     Task.succeed Nothing
                         |> Task.perform config.onSelect
             in
-            ( { model | query = Nothing }, cmd )
+            ( { model | query = "" }, cmd )
 
         OnRemoveItem item ->
             let
@@ -105,19 +105,18 @@ update config msg model =
 
         OnQueryChange value ->
             let
-                maybeQuery =
-                    value
-                        |> config.transformQuery
+                newQuery =
+                    value |> config.transformQuery
 
                 cmd =
-                    case maybeQuery of
-                        Nothing ->
+                    case newQuery of
+                        "" ->
                             Cmd.none
 
-                        Just query ->
-                            queryChangeCmd query
+                        _ ->
+                            queryChangeCmd newQuery
             in
-            ( { model | highlightedItem = Nothing, query = Just value }, cmd )
+            ( { model | highlightedItem = Nothing, query = value }, cmd )
 
         OnSelect item ->
             let
@@ -125,4 +124,4 @@ update config msg model =
                     Task.succeed (Just item)
                         |> Task.perform config.onSelect
             in
-            ( { model | query = Nothing }, cmd )
+            ( { model | query = "" }, cmd )

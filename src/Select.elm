@@ -1,6 +1,6 @@
 module Select exposing
     ( RequiredConfig, Config, State, Msg
-    , newConfig, withCutoff, withOnQuery, withEmptySearch
+    , newConfig, withCutoff, withOnQuery
     , withOnRemoveItem, withMultiInputItemContainerClass, withMultiInputItemContainerStyles, withMultiInputItemClass, withMultiInputItemStyles
     , withInputControlClass, withInputControlStyles
     , withInputWrapperClass, withInputWrapperStyles
@@ -11,11 +11,10 @@ module Select exposing
     , withMenuClass, withMenuStyles
     , withNotFound, withNotFoundClass, withNotFoundShown, withNotFoundStyles
     , withPrompt, withPromptClass, withPromptStyles
-    , withFuzzyMatching, withTransformQuery, withScoreThreshold, withFuzzySearchMovePenalty, withFuzzySearchRemovePenalty, withFuzzySearchInsertPenalty, withFuzzySearchSeparators
     , newState, queryFromState
-    , view, viewMulti
+    , view
     , update
-    , withFuzzySearchAddPenalty
+    , withTransformQuery
     )
 
 {-| Select input with auto-complete
@@ -32,7 +31,7 @@ See a full example of the select input in multi mode [here](https://github.com/s
 
 # Configuration
 
-@docs newConfig, withCutoff, withOnQuery, withEmptySearch
+@docs newConfig, withCutoff, withOnQuery
 
 
 # Configure Multi Select mode
@@ -87,11 +86,6 @@ This is the element that wraps the selected item(s) and the input
 # Configure the prompt
 
 @docs withPrompt, withPromptClass, withPromptStyles
-
-
-# Configure the Fuzzy search
-
-@docs withFuzzyMatching, withTransformQuery, withScoreThreshold, withFuzzySearchMovePenalty, withFuzzySearchRemovePenalty, withFuzzySearchInsertPenalty, withFuzzySearchSeparators
 
 
 # State
@@ -648,7 +642,7 @@ Return Nothing to prevent searching
     Select.withTransformQuery transform config
 
 -}
-withTransformQuery : (String -> Maybe String) -> Config msg item -> Config msg item
+withTransformQuery : (String -> String) -> Config msg item -> Config msg item
 withTransformQuery transform config =
     let
         fn c =
@@ -686,7 +680,7 @@ newState id =
     Select.queryFromState model.selectState
 
 -}
-queryFromState : State -> Maybe String
+queryFromState : State -> String
 queryFromState model =
     model
         |> unwrapModel
@@ -711,7 +705,7 @@ view :
 view config model items selected =
     Select.Select.view
         (unwrapConfig config)
-        (unwrapConfig model)
+        (unwrapModel model)
         items
         selected
         |> Html.map PrivateMsg

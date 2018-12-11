@@ -4,17 +4,22 @@ import Html exposing (..)
 import Html.Attributes exposing (class, style)
 import Select.Config exposing (Config)
 import Select.Messages exposing (..)
-import Select.Models as Models exposing (Selected, State)
+import Select.Models as Models exposing (State)
+import Select.Search as Search
 import Select.Select.Item as Item
 import Select.Styles as Styles
 import Select.Utils as Utils
 
 
-view : Config msg item -> State -> List item -> Maybe (Selected item) -> Html (Msg item)
-view config model items selected =
+view : Config msg item -> State -> List item -> List item -> Html (Msg item)
+view config model availableItems selectedItems =
     let
         searchResult =
             Search.matchedItemsWithCutoff
+                config
+                model.query
+                availableItems
+                selectedItems
     in
     case searchResult of
         Nothing ->
