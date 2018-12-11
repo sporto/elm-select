@@ -7,11 +7,16 @@ import Select.Utils as Utils
 {-| If config.filter returns Nothing,
 then no search has been done and we shouldn't show the menu.
 -}
-matchedItemsWithCutoff : Config msg item -> String -> List item -> List item -> Maybe (List item)
-matchedItemsWithCutoff config query availableItems selectedItems =
-    filterItems config availableItems selectedItems
-        |> config.filter query
-        |> Maybe.map (maybeCuttoff config)
+matchedItemsWithCutoff : Config msg item -> Maybe String -> List item -> List item -> Maybe (List item)
+matchedItemsWithCutoff config maybeQuery availableItems selectedItems =
+    case maybeQuery of
+        Nothing ->
+            Nothing
+
+        Just query ->
+            filterItems config availableItems selectedItems
+                |> config.filter query
+                |> Maybe.map (maybeCuttoff config)
 
 
 {-| If this is a multi select, then we don't want to display the selected items

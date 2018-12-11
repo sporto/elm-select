@@ -78,7 +78,7 @@ onKeyUpAttribute maybeItem =
 
 
 view : Config msg item -> State -> List item -> List item -> Html (Msg item)
-view config model availableItems selected =
+view config model availableItems selectedItems =
     let
         inputControlClass : String
         inputControlClass =
@@ -118,7 +118,7 @@ view config model availableItems selected =
 
         clear : Html (Msg item)
         clear =
-            if List.isEmpty selected then
+            if List.isEmpty selectedItems then
                 Html.text ""
 
             else
@@ -150,20 +150,30 @@ view config model availableItems selected =
                 )
                 []
 
+        maybeMatchedItems : Maybe (List item)
+        maybeMatchedItems =
+            Search.matchedItemsWithCutoff
+                config
+                model.query
+                availableItems
+                selectedItems
+
         input =
             if config.isMultiSelect then
                 multiInput
                     config
                     model
                     availableItems
-                    selected
+                    selectedItems
+                    maybeMatchedItems
 
             else
                 singleInput
                     config
                     model
                     availableItems
-                    selected
+                    selectedItems
+                    maybeMatchedItems
     in
     Html.div
         ([ class inputControlClass ] ++ inputControlStylesAttrs)
@@ -175,8 +185,8 @@ view config model availableItems selected =
         ]
 
 
-multiInput : Config msg item -> State -> List item -> List item -> List (Html (Msg item))
-multiInput config model availableItems selected =
+multiInput : Config msg item -> State -> List item -> List item -> Maybe (List item) -> List (Html (Msg item))
+multiInput config model availableItems selected maybeMatchedItems =
     let
         multiInputItemContainerClasses : String
         multiInputItemContainerClasses =
@@ -232,25 +242,40 @@ multiInput config model availableItems selected =
                     )
                     subItems
                 )
+
+        val =
+            model.query |> Maybe.withDefault ""
     in
     [ viewMultiItems selected
     , Html.input
-        (inputAttributes config model availableItems selected ++ [ value model.query ])
+        (inputAttributes config model availableItems selected maybeMatchedItems ++ [ value val ])
         []
     ]
 
 
-singleInput : Config msg item -> State -> List item -> List item -> List (Html (Msg item))
-singleInput config model availableItems selected =
+singleInput : Config msg item -> State -> List item -> List item -> Maybe (List item) -> List (Html (Msg item))
+singleInput config model availableItems selectedItems maybeMatchedItems =
+    let
+        val =
+            case model.query of
+                Nothing ->
+                    selectedItems
+                        |> List.head
+                        |> Maybe.map config.toLabel
+                        |> Maybe.withDefault ""
+
+                Just query ->
+                    query
+    in
     [ Html.div [] []
     , Html.input
-        (inputAttributes config model availableItems selected ++ [ value model.query, placeholder config.prompt ])
+        (inputAttributes config model availableItems selectedItems maybeMatchedItems ++ [ value val, placeholder config.prompt ])
         []
     ]
 
 
-inputAttributes : Config msg item -> State -> List item -> List item -> List (Html.Attribute (Msg item))
-inputAttributes config model availableItems selectedItems =
+inputAttributes : Config msg item -> State -> List item -> List item -> Maybe (List item) -> List (Html.Attribute (Msg item))
+inputAttributes config model availableItems selectedItems maybeMatchedItems =
     let
         inputClasses : String
         inputClasses =
@@ -277,14 +302,6 @@ inputAttributes config model availableItems selectedItems =
 
         inputStylesAttrs =
             Utils.stylesToAttrs inputStyles
-
-        maybeMatchedItems : Maybe (List item)
-        maybeMatchedItems =
-            Search.matchedItemsWithCutoff
-                config
-                model.query
-                availableItems
-                selectedItems
 
         -- item that will be selected if enter if pressed
         preselectedItem : Maybe item

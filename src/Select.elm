@@ -691,7 +691,7 @@ newState id =
     Select.queryFromState model.selectState
 
 -}
-queryFromState : State -> String
+queryFromState : State -> Maybe String
 queryFromState model =
     model
         |> unwrapModel

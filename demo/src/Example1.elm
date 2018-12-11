@@ -137,6 +137,26 @@ update msg model =
 view : Model -> Html Msg
 view model =
     let
+        currentSelection =
+            p [ class "mt-2" ]
+                ([ text "Current selection: "
+                 ]
+                    ++ selectedMovieList
+                )
+
+        selectedMovieList : List (Html msg)
+        selectedMovieList =
+            List.map
+                (\movie ->
+                    span []
+                        [ text movie.id
+                        , text " "
+                        , text movie.label
+                        ]
+                )
+                selectedMovies
+
+        selectedMovies : List Movie
         selectedMovies =
             case model.selectedMovieId of
                 Nothing ->
@@ -159,7 +179,7 @@ view model =
     in
     div [ class "bg-grey-lighter p-2" ]
         [ h3 [] [ text "Basic example" ]
-        , text (model.selectedMovieId |> Maybe.withDefault "")
+        , currentSelection
         , p [ class "mt-2" ]
             [ label [] [ text "Pick a movie" ]
             ]

@@ -23,7 +23,7 @@ update config msg model =
             ( model, Cmd.none )
 
         OnEsc ->
-            ( { model | query = "" }, Cmd.none )
+            ( { model | query = Nothing }, Cmd.none )
 
         OnDownArrow ->
             let
@@ -65,7 +65,7 @@ update config msg model =
             in
             case config.emptySearch of
                 True ->
-                    ( { model | query = "" }
+                    ( { model | query = Just "" }
                     , Cmd.batch
                         [ cmd
                         , if config.emptySearch then
@@ -80,7 +80,7 @@ update config msg model =
                     ( model, cmd )
 
         OnBlur ->
-            ( { model | query = "" }, Cmd.none )
+            ( { model | query = Nothing }, Cmd.none )
 
         OnClear ->
             let
@@ -88,7 +88,7 @@ update config msg model =
                     Task.succeed Nothing
                         |> Task.perform config.onSelect
             in
-            ( { model | query = "" }, cmd )
+            ( { model | query = Nothing }, cmd )
 
         OnRemoveItem item ->
             let
@@ -116,7 +116,7 @@ update config msg model =
                         _ ->
                             queryChangeCmd newQuery
             in
-            ( { model | highlightedItem = Nothing, query = value }, cmd )
+            ( { model | highlightedItem = Nothing, query = Just value }, cmd )
 
         OnSelect item ->
             let
@@ -124,4 +124,4 @@ update config msg model =
                     Task.succeed (Just item)
                         |> Task.perform config.onSelect
             in
-            ( { model | query = "" }, cmd )
+            ( { model | query = Nothing }, cmd )

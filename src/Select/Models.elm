@@ -3,7 +3,7 @@ module Select.Models exposing (State, newState)
 
 type alias State =
     { id : String
-    , query : String
+    , query : Maybe String
     , highlightedItem : Maybe Int
     }
 
@@ -11,6 +11,6 @@ type alias State =
 newState : String -> State
 newState id =
     { id = id
-    , query = ""
+    , query = Nothing
     , highlightedItem = Nothing
     }
