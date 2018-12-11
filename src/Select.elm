@@ -1,6 +1,6 @@
 module Select exposing
     ( RequiredConfig, Config, State, Msg
-    , newConfig, withCutoff, withOnQuery
+    , newConfig, withCutoff, withOnQuery, withMultiSelection
     , withOnRemoveItem, withMultiInputItemContainerClass, withMultiInputItemContainerStyles, withMultiInputItemClass, withMultiInputItemStyles
     , withInputControlClass, withInputControlStyles
     , withInputWrapperClass, withInputWrapperStyles
@@ -31,7 +31,7 @@ See a full example of the select input in multi mode [here](https://github.com/s
 
 # Configuration
 
-@docs newConfig, withCutoff, withOnQuery
+@docs newConfig, withCutoff, withOnQuery, withMultiSelection
 
 
 # Configure Multi Select mode
@@ -475,6 +475,17 @@ withMultiInputItemStyles styles config =
             { c | multiInputItemStyles = styles }
     in
     mapConfig fn config
+
+
+{-| Use a multi select instead of a single select
+-}
+withMultiSelection : Bool -> Config msg item -> Config msg item
+withMultiSelection value config =
+    config
+        |> mapConfig
+            (\c ->
+                { c | isMultiSelect = value }
+            )
 
 
 {-| Text that will appear when no matches are found

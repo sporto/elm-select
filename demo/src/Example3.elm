@@ -4,7 +4,6 @@ module Example3 exposing
     , Msg(..)
     , colors
     , initialModel
-    , selectConfig
     , update
     , view
     )
@@ -12,6 +11,7 @@ module Example3 exposing
 import Html exposing (..)
 import Html.Attributes exposing (class)
 import Select
+import Shared
 
 
 {-| Model to be passed to the select component. You model can be anything.
@@ -112,7 +112,12 @@ All the functions after |> are optional configuration.
 -}
 selectConfig : Select.Config Msg Color
 selectConfig =
-    Select.newConfig OnSelect colorToString
+    Select.newConfig
+        { onSelect = OnSelect
+        , toLabel = colorToString
+        , filter = Shared.filter
+        }
+        |> Select.withMultiSelection True
         |> Select.withOnRemoveItem OnRemoveItem
         |> Select.withCutoff 12
         |> Select.withInputId "input-id"
@@ -172,6 +177,13 @@ update msg model =
 -}
 view : Model -> Html Msg
 view model =
+    let
+        select =
+            Select.view selectConfig
+                model.selectState
+                model.colors
+                model.selectedColors
+    in
     div [ class "bg-grey-lighter p-2" ]
         [ h3 [] [ text "MultiSelect example" ]
         , text (String.join ", " <| List.map colorToString model.selectedColors)
@@ -186,11 +198,6 @@ view model =
             [ label [] [ text "Pick colors" ]
             ]
         , p []
-            [ Html.map SelectMsg
-                (Select.viewMulti selectConfig
-                    model.selectState
-                    model.colors
-                    model.selectedColors
-                )
+            [ Html.map SelectMsg select
             ]
         ]
