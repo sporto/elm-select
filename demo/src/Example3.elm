@@ -19,12 +19,14 @@ E.g. Records, tuples or just strings.
 -}
 type Color
     = Red
-    | Orange
     | Yellow
-    | Green
     | Blue
-    | Indigo
-    | Violet
+    | Orange
+    | Green
+    | Purple
+    | White
+    | Black
+    | Grey
 
 
 {-| In your main application model you should store:
@@ -42,12 +44,14 @@ type alias Model =
 colors : List Color
 colors =
     [ Red
-    , Orange
     , Yellow
-    , Green
     , Blue
-    , Indigo
-    , Violet
+    , Orange
+    , Green
+    , Purple
+    , White
+    , Black
+    , Grey
     ]
 
 
@@ -57,23 +61,29 @@ colorToString c =
         Red ->
             "Red"
 
-        Orange ->
-            "Orange"
-
         Yellow ->
             "Yellow"
-
-        Green ->
-            "Green"
 
         Blue ->
             "Blue"
 
-        Indigo ->
-            "Indigo"
+        Orange ->
+            "Orange"
 
-        Violet ->
-            "Violet"
+        Green ->
+            "Green"
+
+        Purple ->
+            "Purple"
+
+        White ->
+            "White"
+
+        Black ->
+            "Black"
+
+        Grey ->
+            "Grey"
 
 
 {-| Your model should store the selected item and the state of the Select component(s)
@@ -115,7 +125,7 @@ selectConfig =
     Select.newConfig
         { onSelect = OnSelect
         , toLabel = colorToString
-        , filter = Shared.filter colorToString
+        , filter = Shared.filter 2 colorToString
         }
         |> Select.withMultiSelection True
         |> Select.withOnRemoveItem OnRemoveItem
@@ -178,6 +188,10 @@ update msg model =
 view : Model -> Html Msg
 view model =
     let
+        currentSelection =
+            p [ class "mt-2" ]
+                [ text (String.join ", " <| List.map colorToString model.selectedColors) ]
+
         select =
             Select.view selectConfig
                 model.selectState
@@ -186,14 +200,7 @@ view model =
     in
     div [ class "bg-grey-lighter p-2" ]
         [ h3 [] [ text "MultiSelect example" ]
-        , text (String.join ", " <| List.map colorToString model.selectedColors)
-
-        -- Render the Select view. You must pass:
-        -- - The configuration
-        -- - A unique identifier for the select component
-        -- - The Select internal state
-        -- - A list of items
-        -- - The currently selected item as Maybe
+        , currentSelection
         , p [ class "mt-2" ]
             [ label [] [ text "Pick colors" ]
             ]
