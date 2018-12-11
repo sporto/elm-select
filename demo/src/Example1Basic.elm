@@ -1,4 +1,4 @@
-module Example1 exposing
+module Example1Basic exposing
     ( Model
     , Movie
     , Msg(..)

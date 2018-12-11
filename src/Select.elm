@@ -1,6 +1,6 @@
 module Select exposing
     ( RequiredConfig, Config, State, Msg
-    , newConfig, withCutoff, withOnQuery, withMultiSelection
+    , newConfig, withCutoff, withOnQuery, withMultiSelection, withEmptySearch
     , withOnRemoveItem, withMultiInputItemContainerClass, withMultiInputItemContainerStyles, withMultiInputItemClass, withMultiInputItemStyles
     , withInputControlClass, withInputControlStyles
     , withInputWrapperClass, withInputWrapperStyles
@@ -31,7 +31,7 @@ See a full example of the select input in multi mode [here](https://github.com/s
 
 # Configuration
 
-@docs newConfig, withCutoff, withOnQuery, withMultiSelection
+@docs newConfig, withCutoff, withOnQuery, withMultiSelection, withEmptySearch
 
 
 # Configure Multi Select mode
@@ -150,6 +150,19 @@ newConfig : RequiredConfig msg item -> Config msg item
 newConfig requiredConfig =
     Config.newConfig requiredConfig
         |> PrivateConfig
+
+
+{-| Show results if the input is focused, but the query is empty
+Default is False.
+Select.withEmptySearch True config
+-}
+withEmptySearch : Bool -> Config msg item -> Config msg item
+withEmptySearch emptySearch config =
+    let
+        fn c =
+            { c | emptySearch = emptySearch }
+    in
+    mapConfig fn config
 
 
 {-| Add classes to the input control

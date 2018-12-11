@@ -1,4 +1,4 @@
-module Example3 exposing
+module Example3Multi exposing
     ( Color(..)
     , Model
     , Msg(..)
