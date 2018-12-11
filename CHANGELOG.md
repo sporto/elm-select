@@ -1,5 +1,20 @@
 # Changelog
 
+## 3.0.0
+
+### Removed:
+
+- This version removes the build in fuzzy search. You need to filter items yourself using `config.filter`.
+- Remove all `fuzz...` config options.
+
+### Changed:
+
+- `newConfig` now takes a `RequiredConfig` record as first argument.
+
+### Added:
+
+- Config takes a `filter` function. This function should filter the items according to the query.
+
 ## 2.17.0
 
 - Add `queryFromState`. See https://github.com/sporto/elm-select/pull/32

@@ -1,16 +1,9 @@
 module Select.Config exposing
     ( Config
     , Style
-    , fuzzyAddPenalty
-    , fuzzyInsertPenalty
-    , fuzzyMovePenalty
-    , fuzzyOptions
-    , fuzzyRemovePenalty
     , newConfig
-    , transformQuery
     )
 
-import Fuzzy
 import Html exposing (Html)
 import Select.Styles as Styles
 
@@ -22,7 +15,7 @@ type alias Style =
 type alias RequiredConfig msg item =
     { onSelect : Maybe item -> msg
     , toLabel : item -> String
-    , filter : String -> List item -> List item
+    , filter : String -> List item -> Maybe (List item)
     }
 
 
@@ -32,12 +25,7 @@ type alias Config msg item =
     , clearSvgClass : String
     , cutoff : Maybe Int
     , emptySearch : Bool
-    , fuzzyMatching : Bool
-    , fuzzySearchAddPenalty : Maybe Int
-    , fuzzySearchMovePenalty : Maybe Int
-    , fuzzySearchRemovePenalty : Maybe Int
-    , fuzzySearchInsertPenalty : Maybe Int
-    , fuzzySearchSeparators : List String
+    , filter : String -> List item -> Maybe (List item)
     , highlightedItemClass : String
     , highlightedItemStyles : List Style
     , inputId : String
@@ -50,6 +38,7 @@ type alias Config msg item =
     , itemClass : String
     , itemStyles : List Style
     , itemHtml : Maybe (item -> Html Never)
+    , isMultiSelect : Bool
     , menuClass : String
     , menuStyles : List Style
     , multiInputItemContainerClass : String
@@ -71,7 +60,7 @@ type alias Config msg item =
     , removeItemSvgStyles : List Style
     , scoreThreshold : Int
     , toLabel : item -> String
-    , transformQuery : String -> Maybe String
+    , transformQuery : String -> String
     , underlineClass : String
     , underlineStyles : List Style
     }
@@ -83,13 +72,8 @@ newConfig requiredConfig =
     , clearStyles = []
     , clearSvgClass = ""
     , emptySearch = False
+    , filter = requiredConfig.filter
     , cutoff = Nothing
-    , fuzzyMatching = True
-    , fuzzySearchAddPenalty = Nothing
-    , fuzzySearchInsertPenalty = Nothing
-    , fuzzySearchMovePenalty = Nothing
-    , fuzzySearchRemovePenalty = Nothing
-    , fuzzySearchSeparators = [ " " ]
     , highlightedItemClass = ""
     , highlightedItemStyles = []
     , underlineStyles = []
@@ -103,6 +87,7 @@ newConfig requiredConfig =
     , itemClass = ""
     , itemStyles = []
     , itemHtml = Nothing
+    , isMultiSelect = False
     , menuClass = ""
     , menuStyles = []
     , multiInputItemContainerClass = ""
@@ -124,60 +109,6 @@ newConfig requiredConfig =
     , removeItemSvgStyles = []
     , scoreThreshold = 2000
     , toLabel = requiredConfig.toLabel
-    , transformQuery = transformQuery
+    , transformQuery = identity
     , underlineClass = ""
     }
-
-
-transformQuery : String -> Maybe String
-transformQuery query =
-    Just query
-
-
-fuzzyOptions : Config msg item -> List Fuzzy.Config
-fuzzyOptions config =
-    []
-        |> fuzzyAddPenalty config
-        |> fuzzyRemovePenalty config
-        |> fuzzyMovePenalty config
-        |> fuzzyInsertPenalty config
-
-
-fuzzyAddPenalty : Config msg item -> List Fuzzy.Config -> List Fuzzy.Config
-fuzzyAddPenalty config options =
-    case config.fuzzySearchAddPenalty of
-        Just penalty ->
-            options ++ [ Fuzzy.addPenalty penalty ]
-
-        _ ->
-            options
-
-
-fuzzyRemovePenalty : Config msg item -> List Fuzzy.Config -> List Fuzzy.Config
-fuzzyRemovePenalty config options =
-    case config.fuzzySearchRemovePenalty of
-        Just penalty ->
-            options ++ [ Fuzzy.removePenalty penalty ]
-
-        _ ->
-            options
-
-
-fuzzyMovePenalty : Config msg item -> List Fuzzy.Config -> List Fuzzy.Config
-fuzzyMovePenalty config options =
-    case config.fuzzySearchMovePenalty of
-        Just penalty ->
-            options ++ [ Fuzzy.movePenalty penalty ]
-
-        _ ->
-            options
-
-
-fuzzyInsertPenalty : Config msg item -> List Fuzzy.Config -> List Fuzzy.Config
-fuzzyInsertPenalty config options =
-    case config.fuzzySearchInsertPenalty of
-        Just penalty ->
-            options ++ [ Fuzzy.insertPenalty penalty ]
-
-        _ ->
-            options

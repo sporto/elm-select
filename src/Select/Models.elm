@@ -1,14 +1,9 @@
-module Select.Models exposing (Selected(..), State, newState)
-
-
-type Selected item
-    = Single item
-    | Many (List item)
+module Select.Models exposing (State, newState)
 
 
 type alias State =
     { id : String
-    , query : Maybe String
+    , query : String
     , highlightedItem : Maybe Int
     }
 
@@ -16,6 +11,6 @@ type alias State =
 newState : String -> State
 newState id =
     { id = id
-    , query = Nothing
+    , query = ""
     , highlightedItem = Nothing
     }

@@ -11,10 +11,11 @@ module Select exposing
     , withMenuClass, withMenuStyles
     , withNotFound, withNotFoundClass, withNotFoundShown, withNotFoundStyles
     , withPrompt, withPromptClass, withPromptStyles
-    , withFuzzyMatching, withTransformQuery, withScoreThreshold, withFuzzySearchAddPenalty, withFuzzySearchMovePenalty, withFuzzySearchRemovePenalty, withFuzzySearchInsertPenalty, withFuzzySearchSeparators
+    , withFuzzyMatching, withTransformQuery, withScoreThreshold, withFuzzySearchMovePenalty, withFuzzySearchRemovePenalty, withFuzzySearchInsertPenalty, withFuzzySearchSeparators
     , newState, queryFromState
     , view, viewMulti
     , update
+    , withFuzzySearchAddPenalty
     )
 
 {-| Select input with auto-complete
@@ -90,7 +91,7 @@ This is the element that wraps the selected item(s) and the input
 
 # Configure the Fuzzy search
 
-@docs withFuzzyMatching, withTransformQuery, withScoreThreshold, withFuzzySearchAddPenalty, withFuzzySearchMovePenalty, withFuzzySearchRemovePenalty, withFuzzySearchInsertPenalty, withFuzzySearchSeparators
+@docs withFuzzyMatching, withTransformQuery, withScoreThreshold, withFuzzySearchMovePenalty, withFuzzySearchRemovePenalty, withFuzzySearchInsertPenalty, withFuzzySearchSeparators
 
 
 # State
@@ -127,7 +128,7 @@ import Select.Update
 type alias RequiredConfig msg item =
     { onSelect : Maybe item -> msg
     , toLabel : item -> String
-    , filter : String -> List item -> List item
+    , filter : String -> List item -> Maybe (List item)
     }
 
 
@@ -634,106 +635,6 @@ withPromptStyles styles config =
     mapConfig fn config
 
 
-{-| Disable fuzzy matching altogether
-
-    Select.withFuzzyMatching False config
-
--}
-withFuzzyMatching : Bool -> Config msg item -> Config msg item
-withFuzzyMatching fuzzy config =
-    let
-        fn c =
-            { c | fuzzyMatching = fuzzy }
-    in
-    mapConfig fn config
-
-
-{-| Add fuzzy search add penalty
-
-    Select.withFuzzySearchAddPenalty 1 config
-
--}
-withFuzzySearchAddPenalty : Int -> Config msg item -> Config msg item
-withFuzzySearchAddPenalty penalty config =
-    let
-        fn c =
-            { c | fuzzySearchAddPenalty = Just penalty }
-    in
-    mapConfig fn config
-
-
-{-| Add fuzzy search add penalty
-
-    Select.withFuzzySearchRemovePenalty 100 config
-
--}
-withFuzzySearchRemovePenalty : Int -> Config msg item -> Config msg item
-withFuzzySearchRemovePenalty penalty config =
-    let
-        fn c =
-            { c | fuzzySearchRemovePenalty = Just penalty }
-    in
-    mapConfig fn config
-
-
-{-| Add fuzzy search move penalty
-
-    Select.withFuzzySearchMovePenalty 1000 config
-
--}
-withFuzzySearchMovePenalty : Int -> Config msg item -> Config msg item
-withFuzzySearchMovePenalty penalty config =
-    let
-        fn c =
-            { c | fuzzySearchMovePenalty = Just penalty }
-    in
-    mapConfig fn config
-
-
-{-| Add fuzzy search insert penalty
-
-    Select.withFuzzySearchInsertPenalty 1 config
-
--}
-withFuzzySearchInsertPenalty : Int -> Config msg item -> Config msg item
-withFuzzySearchInsertPenalty penalty config =
-    let
-        fn c =
-            { c | fuzzySearchInsertPenalty = Just penalty }
-    in
-    mapConfig fn config
-
-
-{-| Add fuzzy search separators
-
-    Select.withFuzzySearchSeparators [ "|", " " ] config
-
--}
-withFuzzySearchSeparators : List String -> Config msg item -> Config msg item
-withFuzzySearchSeparators separators config =
-    let
-        fn c =
-            { c | fuzzySearchSeparators = separators }
-    in
-    mapConfig fn config
-
-
-{-| Change the threshold used for filtering matches out.
-A higher threshold will keep more matches.
-Default is 500.
-
-    Select.withScoreThreshold 1000 config
-
--}
-withScoreThreshold : Int -> Config msg item -> Config msg item
-withScoreThreshold score config =
-    let
-        fn c =
-            { c | scoreThreshold = score }
-    in
-    mapConfig fn config
-
-
 {-| Transform the input query before performing the search
 Return Nothing to prevent searching
 
@@ -752,21 +653,6 @@ withTransformQuery transform config =
     let
         fn c =
             { c | transformQuery = transform }
-    in
-    mapConfig fn config
-
-
-{-| Show results if the input is focused, but the query is empty
-Default is False.
-
-    Select.withEmptySearch True config
-
--}
-withEmptySearch : Bool -> Config msg item -> Config msg item
-withEmptySearch emptySearch config =
-    let
-        fn c =
-            { c | emptySearch = emptySearch }
     in
     mapConfig fn config
 
@@ -807,50 +693,28 @@ queryFromState model =
         |> .query
 
 
-viewBase :
+{-| Render the view
+
+    Select.view
+        selectConfig
+        model.selectState
+        model.items
+        selectedItems
+
+-}
+view :
     Config msg item
     -> State
     -> List item
-    -> Maybe (Models.Selected item)
+    -> List item
     -> Html (Msg item)
-viewBase config model items selected =
-    let
-        config_ =
-            unwrapConfig config
-
-        model_ =
-            unwrapModel model
-    in
-    Html.map PrivateMsg (Select.Select.view config_ model_ items selected)
-
-
-{-| Render the view
-
-    Html.map SelectMsg (Select.view selectConfig model.selectState model.items selectedItem)
-
--}
-view : Config msg item -> State -> List item -> Maybe item -> Html (Msg item)
 view config model items selected =
-    viewBase config model items (Maybe.map Models.Single selected)
-
-
-{-| Render the view for multiple selected items input
-
-    Html.map SelectMsg
-        (Select.viewMulti selectConfig model.selectState model.items selectedItems)
-
--}
-viewMulti : Config msg item -> State -> List item -> List item -> Html (Msg item)
-viewMulti config model items selected =
-    viewBase config
-        model
+    Select.Select.view
+        (unwrapConfig config)
+        (unwrapConfig model)
         items
-        (if List.isEmpty selected then
-            Nothing
-
-         else
-            Just (Models.Many selected)
-        )
+        selected
+        |> Html.map PrivateMsg
 
 
 {-| Update the component state

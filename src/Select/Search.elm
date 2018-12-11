@@ -1,76 +1,41 @@
-module Select.Search exposing (SearchResult(..), matchedItems, matchedItemsWithCutoff, scoreForItem)
+module Select.Search exposing (matchedItemsWithCutoff)
 
-import Fuzzy
-import Select.Config exposing (Config, fuzzyOptions)
-import String
-import Tuple
+import Select.Config exposing (Config)
+import Select.Utils as Utils
 
 
-type SearchResult item
-    = NotSearched
-    | ItemsFound (List item)
+{-| If config.filter returns Nothing,
+then no search has been done and we shouldn't show the menu.
+-}
+matchedItemsWithCutoff : Config msg item -> String -> List item -> List item -> Maybe (List item)
+matchedItemsWithCutoff config query availableItems selectedItems =
+    filterItems config availableItems selectedItems
+        |> config.filter query
+        |> Maybe.map (maybeCuttoff config)
 
 
-matchedItemsWithCutoff : Config msg item -> Maybe String -> List item -> SearchResult item
-matchedItemsWithCutoff config query items =
-    case matchedItems config query items of
-        NotSearched ->
-            NotSearched
+{-| If this is a multi select, then we don't want to display the selected items
+in the menu.
 
-        ItemsFound matching ->
-            case config.cutoff of
-                Just n ->
-                    ItemsFound (List.take n matching)
+So filter these out.
 
-                Nothing ->
-                    ItemsFound matching
+-}
+filterItems : Config msg item -> List item -> List item -> List item
+filterItems config availableItems selectedItems =
+    if config.isMultiSelect then
+        Utils.difference
+            availableItems
+            selectedItems
+
+    else
+        availableItems
 
 
-matchedItems : Config msg item -> Maybe String -> List item -> SearchResult item
-matchedItems config query items =
-    let
-        maybeQuery : Maybe String
-        maybeQuery =
-            query
-                |> Maybe.andThen config.transformQuery
-    in
-    case maybeQuery of
+maybeCuttoff : Config msg item -> List item -> List item
+maybeCuttoff config items =
+    case config.cutoff of
+        Just cutoff ->
+            List.take cutoff items
+
         Nothing ->
-            NotSearched
-
-        Just subQ ->
-            case config.fuzzyMatching of
-                True ->
-                    let
-                        scoreFor =
-                            scoreForItem config subQ
-                    in
-                    items
-                        |> List.map (\item -> ( scoreFor item, item ))
-                        |> List.filter (\( score, item ) -> score < config.scoreThreshold)
-                        |> List.sortBy Tuple.first
-                        |> List.map Tuple.second
-                        |> ItemsFound
-
-                False ->
-                    ItemsFound items
-
-
-scoreForItem : Config msg item -> String -> item -> Int
-scoreForItem config query item =
-    let
-        lowerQuery =
-            String.toLower query
-
-        lowerItem =
-            config.toLabel item
-                |> String.toLower
-
-        options =
-            fuzzyOptions config
-
-        fuzzySeparators =
-            config.fuzzySearchSeparators
-    in
-    Fuzzy.match options fuzzySeparators lowerQuery lowerItem
-        |> .score
+            items

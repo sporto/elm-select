@@ -17,8 +17,8 @@ import Json.Decode as Decode
 import Select.Config exposing (Config)
 import Select.Events exposing (onBlurAttribute)
 import Select.Messages as Msg exposing (Msg)
-import Select.Models as Models exposing (Selected, State)
-import Select.Search exposing (matchedItemsWithCutoff)
+import Select.Models as Models exposing (State)
+import Select.Search as Search
 import Select.Select.Clear as Clear
 import Select.Select.RemoveItem as RemoveItem
 import Select.Styles as Styles
@@ -77,8 +77,8 @@ onKeyUpAttribute maybeItem =
     on "keyup" (Decode.andThen fn keyCode)
 
 
-view : Config msg item -> State -> List item -> Maybe (Selected item) -> Html (Msg item)
-view config model items selected =
+view : Config msg item -> State -> List item -> List item -> Html (Msg item)
+view config model availableItems selected =
     let
         inputControlClass : String
         inputControlClass =
@@ -90,6 +90,9 @@ view config model items selected =
                 Styles.inputControlStyles
                 config.inputControlStyles
 
+        inputControlStylesAttrs =
+            Utils.stylesToAttrs inputControlStyles
+
         inputWrapperClass : String
         inputWrapperClass =
             Styles.inputWrapperClass ++ config.inputWrapperClass
@@ -100,29 +103,8 @@ view config model items selected =
                 Styles.inputWrapperStyles
                 config.inputWrapperStyles
 
-        ( promptClass, promptStyles ) =
-            case selected of
-                Nothing ->
-                    ( config.promptClass, config.promptStyles )
-
-                Just _ ->
-                    ( "", [] )
-
-        inputClasses : String
-        inputClasses =
-            String.join " "
-                [ Styles.inputClass
-                , config.inputClass
-                , promptClass
-                ]
-
-        inputStyles : List ( String, String )
-        inputStyles =
-            List.concat
-                [ Styles.inputStyles
-                , config.inputStyles
-                , promptStyles
-                ]
+        inputWrapperStylesAttrs =
+            Utils.stylesToAttrs inputWrapperStyles
 
         clearClasses : String
         clearClasses =
@@ -133,32 +115,6 @@ view config model items selected =
             List.append
                 Styles.clearStyles
                 config.clearStyles
-
-        multiInputItemContainerClasses : String
-        multiInputItemContainerClasses =
-            Styles.multiInputItemContainerClass
-                ++ config.multiInputItemContainerClass
-
-        multiInputItemContainerStyles : List ( String, String )
-        multiInputItemContainerStyles =
-            List.append
-                Styles.multiInputItemContainerStyles
-                config.multiInputItemContainerStyles
-
-        multiInputItemClasses : String
-        multiInputItemClasses =
-            Styles.multiInputItemClass ++ config.multiInputItemClass
-
-        multiInputItemStyles : List ( String, String )
-        multiInputItemStyles =
-            List.append
-                Styles.multiInputItemStyles
-                config.multiInputItemStyles
-
-        onClickWithoutPropagation : Msg item -> Attribute (Msg item)
-        onClickWithoutPropagation msg =
-            Decode.succeed ( msg, False )
-                |> stopPropagationOn "click"
 
         clear : Html (Msg item)
         clear =
@@ -195,53 +151,71 @@ view config model items selected =
                 )
                 []
 
-        filteredItems : List item
-        filteredItems =
-            Maybe.withDefault items <|
-                Utils.andThenSelected selected
-                    (\oneSelectedItem -> Nothing)
-                    (\manySelectedItems ->
-                        Just (Utils.difference items manySelectedItems)
-                    )
+        input =
+            if config.isMultiSelect then
+                multiInput
+                    config
+                    model
+                    availableItems
+                    selected
 
-        matchedItems : Select.Search.SearchResult item
-        matchedItems =
-            matchedItemsWithCutoff config model.query filteredItems
+            else
+                singleInput
+                    config
+                    model
+                    availableItems
+                    selected
+    in
+    Html.div
+        ([ class inputControlClass ] ++ inputControlStylesAttrs)
+        [ Html.div
+            ([ class inputWrapperClass ] ++ inputWrapperStylesAttrs)
+            input
+        , underline
+        , clear
+        ]
 
-        -- item that will be selected if enter if pressed
-        preselectedItem : Maybe item
-        preselectedItem =
-            case matchedItems of
-                Select.Search.NotSearched ->
-                    Nothing
 
-                Select.Search.ItemsFound [] ->
-                    Nothing
+multiInput : Config msg item -> State -> List item -> List item -> List (Html (Msg item))
+multiInput config model availableItems selected =
+    let
+        multiInputItemContainerClasses : String
+        multiInputItemContainerClasses =
+            Styles.multiInputItemContainerClass
+                ++ config.multiInputItemContainerClass
 
-                Select.Search.ItemsFound [ singleItem ] ->
-                    Just singleItem
+        multiInputItemContainerStyles : List ( String, String )
+        multiInputItemContainerStyles =
+            List.append
+                Styles.multiInputItemContainerStyles
+                config.multiInputItemContainerStyles
 
-                Select.Search.ItemsFound ((head :: rest) as found) ->
-                    case model.highlightedItem of
-                        Nothing ->
-                            Just head
+        multiInputItemContainerStylesAttrs =
+            Utils.stylesToAttrs multiInputItemContainerStyles
 
-                        Just n ->
-                            Array.fromList found
-                                |> Array.get (remainderBy (List.length found) n)
+        multiInputItemClasses : String
+        multiInputItemClasses =
+            Styles.multiInputItemClass ++ config.multiInputItemClass
+
+        multiInputItemStyles : List ( String, String )
+        multiInputItemStyles =
+            List.append
+                Styles.multiInputItemStyles
+                config.multiInputItemStyles
+
+        multiInputItemStylesAttrs =
+            Utils.stylesToAttrs multiInputItemStyles
 
         viewMultiItems : List item -> Html (Msg item)
         viewMultiItems subItems =
             Html.div
                 (class multiInputItemContainerClasses
-                    :: (multiInputItemContainerStyles
-                            |> List.map (\( f, s ) -> style f s)
-                       )
+                    :: multiInputItemContainerStylesAttrs
                 )
                 (List.map
                     (\item ->
                         Html.div
-                            (class multiInputItemClasses :: (multiInputItemStyles |> List.map (\( f, s ) -> style f s)))
+                            (class multiInputItemClasses :: multiInputItemStylesAttrs)
                             [ Html.div (Styles.multiInputItemText |> List.map (\( f, s ) -> style f s)) [ Html.text (config.toLabel item) ]
                             , Maybe.withDefault (Html.span [] []) <|
                                 Maybe.map
@@ -259,77 +233,94 @@ view config model items selected =
                     )
                     subItems
                 )
-
-        inputAttributes =
-            [ autocomplete False
-            , attribute "autocorrect" "off" -- for mobile Safari
-            , id config.inputId
-            , onBlurAttribute config model
-            , onKeyUpAttribute preselectedItem
-            , onKeyPressAttribute preselectedItem
-            , onInput Msg.OnQueryChange
-            , onFocus Msg.OnFocus
-            , Utils.referenceAttr config model
-            , class inputClasses
-            ]
-                ++ (inputStyles |> List.map (\( f, s ) -> style f s))
     in
-    Html.div (class inputControlClass :: (inputControlStyles |> List.map (\( f, s ) -> style f s)))
-        [ Html.div (class inputWrapperClass :: (inputWrapperStyles |> List.map (\( f, s ) -> style f s))) <|
-            case ( selected, model.query ) of
-                ( Just selectedType, Just queryValue ) ->
-                    case selectedType of
-                        Models.Single item ->
-                            [ Html.div [] []
-                            , Html.input
-                                (inputAttributes ++ [ value queryValue ])
-                                []
-                            ]
+    [ viewMultiItems selected
+    , Html.input
+        (inputAttributes config model selected ++ [ value model.query ])
+        []
+    ]
 
-                        Models.Many subItems ->
-                            [ viewMultiItems subItems
-                            , Html.input
-                                (inputAttributes ++ [ value queryValue ])
-                                []
-                            ]
 
-                ( Just selectedType, Nothing ) ->
-                    case selectedType of
-                        Models.Single item ->
-                            [ Html.div [] []
-                            , Html.input
-                                (inputAttributes ++ [ value (config.toLabel item) ])
-                                []
-                            ]
+singleInput : Config msg item -> State -> List item -> List item -> List (Html (Msg item))
+singleInput config model availableItems selected =
+    [ Html.div [] []
+    , Html.input
+        (inputAttributes config model availableItems selected ++ [ value model.query, placeholder config.prompt ])
+        []
+    ]
 
-                        Models.Many subItems ->
-                            [ viewMultiItems subItems
-                            , Html.input
-                                (inputAttributes ++ [ value "" ])
-                                []
-                            ]
 
-                ( Nothing, Just queryValue ) ->
-                    [ Html.div [] []
-                    , Html.input
-                        (inputAttributes
-                            ++ [ value queryValue
-                               , placeholder config.prompt
-                               ]
-                        )
-                        []
-                    ]
+inputAttributes : Config msg item -> State -> List item -> List item -> List (Html.Attribute (Msg item))
+inputAttributes config model availableItems selectedItems =
+    let
+        inputClasses : String
+        inputClasses =
+            String.join " "
+                [ Styles.inputClass
+                , config.inputClass
+                , promptClass
+                ]
 
-                ( Nothing, Nothing ) ->
-                    [ Html.div [] []
-                    , Html.input
-                        (inputAttributes
-                            ++ [ value ""
-                               , placeholder config.prompt
-                               ]
-                        )
-                        []
-                    ]
-        , underline
-        , clear
-        ]
+        inputStyles : List ( String, String )
+        inputStyles =
+            List.concat
+                [ Styles.inputStyles
+                , config.inputStyles
+                , promptStyles
+                ]
+
+        ( promptClass, promptStyles ) =
+            if List.isEmpty selectedItems then
+                ( config.promptClass, config.promptStyles )
+
+            else
+                ( "", [] )
+
+        inputStylesAttrs =
+            Utils.stylesToAttrs inputStyles
+
+        matchedItems : Maybe (List item)
+        matchedItems =
+            Search.matchedItemsWithCutoff
+                config
+                model.query
+                availableItems
+                selectedItems
+
+        -- item that will be selected if enter if pressed
+        preselectedItem : Maybe item
+        preselectedItem =
+            case matchedItems of
+                Nothing ->
+                    Nothing
+
+                Just [ singleItem ] ->
+                    Just singleItem
+
+                Just ((head :: rest) as found) ->
+                    case model.highlightedItem of
+                        Nothing ->
+                            Just head
+
+                        Just n ->
+                            Array.fromList found
+                                |> Array.get (remainderBy (List.length found) n)
+    in
+    [ autocomplete False
+    , attribute "autocorrect" "off" -- for mobile Safari
+    , id config.inputId
+    , onBlurAttribute config model
+    , onKeyUpAttribute preselectedItem
+    , onKeyPressAttribute preselectedItem
+    , onInput Msg.OnQueryChange
+    , onFocus Msg.OnFocus
+    , Utils.referenceAttr config model
+    , class inputClasses
+    ]
+        ++ inputStylesAttrs
+
+
+onClickWithoutPropagation : Msg item -> Attribute (Msg item)
+onClickWithoutPropagation msg =
+    Decode.succeed ( msg, False )
+        |> stopPropagationOn "click"
