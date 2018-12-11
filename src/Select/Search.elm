@@ -13,6 +13,16 @@ matchedItemsWithCutoff config maybeQuery availableItems selectedItems =
         Nothing ->
             Nothing
 
+        {- When emptySearch is On, onBlur will set query to Just "" -}
+        Just "" ->
+            if config.emptySearch then
+                availableItems
+                    |> maybeCuttoff config
+                    |> Just
+
+            else
+                Nothing
+
         Just query ->
             filterItems config availableItems selectedItems
                 |> config.filter query
