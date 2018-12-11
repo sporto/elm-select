@@ -5,7 +5,7 @@
     "parcel-bundler": "^1.10.3"
   },
   "scripts": {
-    "start": "parcel -p 4000 src/index.html",
-    "build": "parcel build src/index.html --out-dir ../docs"
+    "start": "parcel -p 4000 src/app.html",
+    "build": "parcel build src/app.html --out-dir ../docs --out-file index.html"
   }
 }
