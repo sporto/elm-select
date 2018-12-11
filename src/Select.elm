@@ -1,5 +1,5 @@
 module Select exposing
-    ( Config, State, Msg
+    ( RequiredConfig, Config, State, Msg
     , newConfig, withCutoff, withOnQuery, withEmptySearch
     , withOnRemoveItem, withMultiInputItemContainerClass, withMultiInputItemContainerStyles, withMultiInputItemClass, withMultiInputItemStyles
     , withInputControlClass, withInputControlStyles
@@ -26,7 +26,7 @@ See a full example of the select input in multi mode [here](https://github.com/s
 
 # Types
 
-@docs Config, State, Msg
+@docs RequiredConfig, Config, State, Msg
 
 
 # Configuration
@@ -117,7 +117,21 @@ import Select.Select
 import Select.Update
 
 
-{-| Opaque type that holds the configuration
+{-| Required initial configuration
+
+  - onSelect: A message to trigger when an item is selected
+  - toLabel: A function to get a label to display from an item
+  - filter: A function that takes the typed query and the list of all items, and return the filtered items.
+
+-}
+type alias RequiredConfig msg item =
+    { onSelect : Maybe item -> msg
+    , toLabel : item -> String
+    , filter : String -> List item -> List item
+    }
+
+
+{-| Opaque type that holds all the configuration
 -}
 type Config msg item
     = PrivateConfig (Config.Config msg item)
@@ -135,18 +149,11 @@ type Msg item
     = PrivateMsg (Messages.Msg item)
 
 
-{-| Create a new configuration. This takes:
-
-  - A message to trigger when an item is selected
-
-  - A function to get a label to display from an item
-
-    Select.newConfig OnSelect .label
-
+{-| Create a new configuration. This takes as `RequiredConfig` record.
 -}
-newConfig : (Maybe item -> msg) -> (item -> String) -> Config msg item
-newConfig onSelectMessage toLabel =
-    Config.newConfig onSelectMessage toLabel
+newConfig : RequiredConfig msg item -> Config msg item
+newConfig requiredConfig =
+    Config.newConfig requiredConfig
         |> PrivateConfig
 
 

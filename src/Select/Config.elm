@@ -1,4 +1,14 @@
-module Select.Config exposing (Config, Style, fuzzyAddPenalty, fuzzyInsertPenalty, fuzzyMovePenalty, fuzzyOptions, fuzzyRemovePenalty, newConfig, transformQuery)
+module Select.Config exposing
+    ( Config
+    , Style
+    , fuzzyAddPenalty
+    , fuzzyInsertPenalty
+    , fuzzyMovePenalty
+    , fuzzyOptions
+    , fuzzyRemovePenalty
+    , newConfig
+    , transformQuery
+    )
 
 import Fuzzy
 import Html exposing (Html)
@@ -7,6 +17,13 @@ import Select.Styles as Styles
 
 type alias Style =
     ( String, String )
+
+
+type alias RequiredConfig msg item =
+    { onSelect : Maybe item -> msg
+    , toLabel : item -> String
+    , filter : String -> List item -> List item
+    }
 
 
 type alias Config msg item =
@@ -60,8 +77,8 @@ type alias Config msg item =
     }
 
 
-newConfig : (Maybe item -> msg) -> (item -> String) -> Config msg item
-newConfig onSelect toLabel =
+newConfig : RequiredConfig msg item -> Config msg item
+newConfig requiredConfig =
     { clearClass = ""
     , clearStyles = []
     , clearSvgClass = ""
@@ -97,7 +114,7 @@ newConfig onSelect toLabel =
     , notFoundShown = True
     , notFoundStyles = []
     , onQueryChange = Nothing
-    , onSelect = onSelect
+    , onSelect = requiredConfig.onSelect
     , onFocus = Nothing
     , onRemoveItem = Nothing
     , prompt = ""
@@ -106,7 +123,7 @@ newConfig onSelect toLabel =
     , removeItemSvgClass = ""
     , removeItemSvgStyles = []
     , scoreThreshold = 2000
-    , toLabel = toLabel
+    , toLabel = requiredConfig.toLabel
     , transformQuery = transformQuery
     , underlineClass = ""
     }

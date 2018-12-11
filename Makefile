@@ -1,3 +1,6 @@
+build:
+	elm make src/Select.elm
+
 docs:
 	elm-make --docs=documentation.json
 
