@@ -1,20 +1,19 @@
-module Example1 exposing
+module Example1Basic exposing
     ( Model
     , Movie
     , Msg(..)
     , initialModel
     , movies
     , selectConfig
-    , transformQuery
     , update
     , view
     )
 
-import Debug
 import Html exposing (..)
 import Html.Attributes exposing (class)
 import Movies
 import Select
+import Shared
 
 
 {-| Model to be passed to the select component. You model can be anything.
@@ -70,17 +69,6 @@ type Msg
     | SelectMsg (Select.Msg Movie)
 
 
-{-| A helper function for the configuration below
--}
-transformQuery : String -> Maybe String
-transformQuery query =
-    if String.length query < 4 then
-        Nothing
-
-    else
-        Just query
-
-
 {-| Create the configuration for the Select component
 
 `Select.newConfig` takes two args:
@@ -93,7 +81,11 @@ All the functions after |> are optional configuration.
 -}
 selectConfig : Select.Config Msg Movie
 selectConfig =
-    Select.newConfig OnSelect .label
+    Select.newConfig
+        { onSelect = OnSelect
+        , toLabel = .label
+        , filter = Shared.filter 4 .label
+        }
         |> Select.withCutoff 12
         |> Select.withInputClass "border border-grey-darker"
         |> Select.withInputId "input-id"
@@ -111,14 +103,13 @@ selectConfig =
         |> Select.withPrompt "Select a movie"
         |> Select.withPromptClass "text-grey-darker"
         |> Select.withUnderlineClass "underline"
-        |> Select.withTransformQuery transformQuery
 
 
 {-| Your update function should route messages back to the Select component, see `SelectMsg`.
 -}
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
-    case Debug.log "msg" msg of
+    case msg of
         -- OnSelect is triggered when a selection is made on the Select component.
         OnSelect maybeMovie ->
             let
@@ -145,29 +136,53 @@ update msg model =
 view : Model -> Html Msg
 view model =
     let
-        selectedMovie =
+        currentSelection =
+            p [ class "mt-2" ]
+                ([ text "Current selection: "
+                 ]
+                    ++ selectedMovieList
+                )
+
+        selectedMovieList : List (Html msg)
+        selectedMovieList =
+            List.map
+                (\movie ->
+                    span []
+                        [ text movie.id
+                        , text " "
+                        , text movie.label
+                        ]
+                )
+                selectedMovies
+
+        selectedMovies : List Movie
+        selectedMovies =
             case model.selectedMovieId of
                 Nothing ->
-                    Nothing
+                    []
 
                 Just id ->
                     List.filter (\movie -> movie.id == id) movies
-                        |> List.head
-    in
-    div [ class "bg-grey-lighter p-2" ]
-        [ h3 [] [ text "Basic example" ]
-        , text (model.selectedMovieId |> Maybe.withDefault "")
 
         -- Render the Select view. You must pass:
         -- - The configuration
-        -- - A unique identifier for the select component
-        -- - The Select internal state
-        -- - A list of items
-        -- - The currently selected item as Maybe
+        -- - The Select internal state (model.selectState)
+        -- - A list of available items (model.moviews)
+        -- - The currently selected items (selectedMovies)
+        select =
+            Select.view
+                selectConfig
+                model.selectState
+                model.movies
+                selectedMovies
+    in
+    div [ class "bg-grey-lighter p-2" ]
+        [ h3 [] [ text "Basic example" ]
+        , currentSelection
         , p [ class "mt-2" ]
             [ label [] [ text "Pick a movie" ]
             ]
         , p []
-            [ Html.map SelectMsg (Select.view selectConfig model.selectState model.movies selectedMovie)
+            [ Html.map SelectMsg select
             ]
         ]

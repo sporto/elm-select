@@ -1,76 +1,56 @@
-module Select.Search exposing (SearchResult(..), matchedItems, matchedItemsWithCutoff, scoreForItem)
+module Select.Search exposing (matchedItemsWithCutoff)
 
-import Fuzzy
-import Select.Config exposing (Config, fuzzyOptions)
-import String
-import Tuple
+import Select.Config exposing (Config)
+import Select.Utils as Utils
 
 
-type SearchResult item
-    = NotSearched
-    | ItemsFound (List item)
-
-
-matchedItemsWithCutoff : Config msg item -> Maybe String -> List item -> SearchResult item
-matchedItemsWithCutoff config query items =
-    case matchedItems config query items of
-        NotSearched ->
-            NotSearched
-
-        ItemsFound matching ->
-            case config.cutoff of
-                Just n ->
-                    ItemsFound (List.take n matching)
-
-                Nothing ->
-                    ItemsFound matching
-
-
-matchedItems : Config msg item -> Maybe String -> List item -> SearchResult item
-matchedItems config query items =
-    let
-        maybeQuery : Maybe String
-        maybeQuery =
-            query
-                |> Maybe.andThen config.transformQuery
-    in
+{-| If config.filter returns Nothing,
+then no search has been done and we shouldn't show the menu.
+-}
+matchedItemsWithCutoff : Config msg item -> Maybe String -> List item -> List item -> Maybe (List item)
+matchedItemsWithCutoff config maybeQuery availableItems selectedItems =
     case maybeQuery of
         Nothing ->
-            NotSearched
+            Nothing
 
-        Just subQ ->
-            case config.fuzzyMatching of
-                True ->
-                    let
-                        scoreFor =
-                            scoreForItem config subQ
-                    in
-                    items
-                        |> List.map (\item -> ( scoreFor item, item ))
-                        |> List.filter (\( score, item ) -> score < config.scoreThreshold)
-                        |> List.sortBy Tuple.first
-                        |> List.map Tuple.second
-                        |> ItemsFound
+        {- When emptySearch is On, onBlur will set query to Just "" -}
+        Just "" ->
+            if config.emptySearch then
+                availableItems
+                    |> maybeCuttoff config
+                    |> Just
 
-                False ->
-                    ItemsFound items
+            else
+                Nothing
+
+        Just query ->
+            filterItems config availableItems selectedItems
+                |> config.filter query
+                |> Maybe.map (maybeCuttoff config)
 
 
-scoreForItem : Config msg item -> String -> item -> Int
-scoreForItem config query item =
-    let
-        lowerQuery =
-            String.toLower query
+{-| If this is a multi select, then we don't want to display the selected items
+in the menu.
 
-        lowerItem =
-            config.toLabel item
-                |> String.toLower
+So filter these out.
 
-        options =
-            fuzzyOptions config
+-}
+filterItems : Config msg item -> List item -> List item -> List item
+filterItems config availableItems selectedItems =
+    if config.isMultiSelect then
+        Utils.difference
+            availableItems
+            selectedItems
 
-        fuzzySeparators =
-            config.fuzzySearchSeparators
-    in
-    Fuzzy.match options fuzzySeparators lowerQuery lowerItem
-        |> .score
+    else
+        availableItems
+
+
+maybeCuttoff : Config msg item -> List item -> List item
+maybeCuttoff config items =
+    case config.cutoff of
+        Just cutoff ->
+            List.take cutoff items
+
+        Nothing ->
+            items

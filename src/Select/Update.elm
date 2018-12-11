@@ -105,17 +105,16 @@ update config msg model =
 
         OnQueryChange value ->
             let
-                maybeQuery =
-                    value
-                        |> config.transformQuery
+                newQuery =
+                    value |> config.transformQuery
 
                 cmd =
-                    case maybeQuery of
-                        Nothing ->
+                    case newQuery of
+                        "" ->
                             Cmd.none
 
-                        Just query ->
-                            queryChangeCmd query
+                        _ ->
+                            queryChangeCmd newQuery
             in
             ( { model | highlightedItem = Nothing, query = Just value }, cmd )
 

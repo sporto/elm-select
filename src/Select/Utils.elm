@@ -1,9 +1,14 @@
-module Select.Utils exposing (andThenSelected, difference, referenceAttr, referenceDataName)
+module Select.Utils exposing
+    ( difference
+    , referenceAttr
+    , referenceDataName
+    , stylesToAttrs
+    )
 
 import Html exposing (Attribute)
-import Html.Attributes exposing (attribute)
+import Html.Attributes exposing (attribute, style)
 import Select.Config exposing (Config)
-import Select.Models as Models exposing (Selected, State)
+import Select.Models as Models exposing (State)
 
 
 referenceDataName : String
@@ -21,19 +26,6 @@ difference listA listB =
     List.filter (\x -> not <| List.any (\y -> x == y) listB) listA
 
 
-andThenSelected :
-    Maybe (Selected item)
-    -> (item -> Maybe result)
-    -> (List item -> Maybe result)
-    -> Maybe result
-andThenSelected selected fromSingle fromMulti =
-    Maybe.andThen
-        (\value ->
-            case value of
-                Models.Single item ->
-                    fromSingle item
-
-                Models.Many items ->
-                    fromMulti items
-        )
-        selected
+stylesToAttrs : List ( String, String ) -> List (Html.Attribute msg)
+stylesToAttrs styles =
+    List.map (\( k, v ) -> style k v) styles

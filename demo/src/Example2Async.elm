@@ -1,4 +1,4 @@
-module Example2 exposing
+module Example2Async exposing
     ( Character
     , Model
     , Msg(..)
@@ -15,12 +15,12 @@ module Example2 exposing
     , view
     )
 
-import Debug
 import Html exposing (..)
 import Html.Attributes exposing (class)
 import Http
 import Json.Decode as Decode
 import Select
+import Shared
 
 
 type alias Model =
@@ -67,7 +67,11 @@ itemHtml c =
 
 selectConfig : Select.Config Msg Character
 selectConfig =
-    Select.newConfig OnSelect identity
+    Select.newConfig
+        { onSelect = OnSelect
+        , toLabel = identity
+        , filter = Shared.filter 4 identity
+        }
         |> Select.withInputWrapperStyles
             [ ( "padding", "0.4rem" ) ]
         |> Select.withMenuClass "border border-grey-darker bg-white"
@@ -81,14 +85,13 @@ selectConfig =
         |> Select.withOnQuery OnQuery
         |> Select.withItemHtml itemHtml
         |> Select.withUnderlineClass "underline"
-        |> Select.withEmptySearch False
         |> Select.withTransformQuery
             (\query ->
                 if String.length query < 3 then
-                    Nothing
+                    ""
 
                 else
-                    Just query
+                    query
             )
 
 
@@ -120,7 +123,7 @@ memberDecoder =
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
-    case Debug.log "msg" msg of
+    case msg of
         OnQuery query ->
             ( model, fetch query )
 
@@ -149,15 +152,21 @@ update msg model =
 view : Model -> Html Msg
 view model =
     let
-        selecteCharacter =
+        selectedCharacters =
             case model.selectedCharacterId of
                 Nothing ->
-                    Nothing
+                    []
 
                 Just id ->
                     model.characters
                         |> List.filter (\character -> character == id)
-                        |> List.head
+
+        select =
+            Select.view
+                selectConfig
+                model.selectState
+                model.characters
+                selectedCharacters
     in
     div [ class "bg-grey-lighter p-2" ]
         [ h3 [] [ text "Async example" ]
@@ -166,6 +175,6 @@ view model =
             [ label [] [ text "Pick an star wars character" ]
             ]
         , p []
-            [ Html.map SelectMsg (Select.view selectConfig model.selectState model.characters selecteCharacter)
+            [ Html.map SelectMsg select
             ]
         ]

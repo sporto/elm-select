@@ -1,3 +1,5 @@
-'use strict';
+import { Elm } from "./Main.elm";
 
-require('./Main.elm').Elm.Main.init({node: document.getElementById('main')});
+Elm.Main.init({
+  node: document.getElementById('main')
+});

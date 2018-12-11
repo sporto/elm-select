@@ -1,6 +1,6 @@
 module Select exposing
-    ( Config, State, Msg
-    , newConfig, withCutoff, withOnQuery, withEmptySearch
+    ( RequiredConfig, Config, State, Msg
+    , newConfig, withCutoff, withOnQuery, withMultiSelection, withEmptySearch
     , withOnRemoveItem, withMultiInputItemContainerClass, withMultiInputItemContainerStyles, withMultiInputItemClass, withMultiInputItemStyles
     , withInputControlClass, withInputControlStyles
     , withInputWrapperClass, withInputWrapperStyles
@@ -11,10 +11,10 @@ module Select exposing
     , withMenuClass, withMenuStyles
     , withNotFound, withNotFoundClass, withNotFoundShown, withNotFoundStyles
     , withPrompt, withPromptClass, withPromptStyles
-    , withFuzzyMatching, withTransformQuery, withScoreThreshold, withFuzzySearchAddPenalty, withFuzzySearchMovePenalty, withFuzzySearchRemovePenalty, withFuzzySearchInsertPenalty, withFuzzySearchSeparators
     , newState, queryFromState
-    , view, viewMulti
+    , view
     , update
+    , withTransformQuery
     )
 
 {-| Select input with auto-complete
@@ -26,12 +26,12 @@ See a full example of the select input in multi mode [here](https://github.com/s
 
 # Types
 
-@docs Config, State, Msg
+@docs RequiredConfig, Config, State, Msg
 
 
 # Configuration
 
-@docs newConfig, withCutoff, withOnQuery, withEmptySearch
+@docs newConfig, withCutoff, withOnQuery, withMultiSelection, withEmptySearch
 
 
 # Configure Multi Select mode
@@ -88,11 +88,6 @@ This is the element that wraps the selected item(s) and the input
 @docs withPrompt, withPromptClass, withPromptStyles
 
 
-# Configure the Fuzzy search
-
-@docs withFuzzyMatching, withTransformQuery, withScoreThreshold, withFuzzySearchAddPenalty, withFuzzySearchMovePenalty, withFuzzySearchRemovePenalty, withFuzzySearchInsertPenalty, withFuzzySearchSeparators
-
-
 # State
 
 @docs newState, queryFromState
@@ -117,7 +112,21 @@ import Select.Select
 import Select.Update
 
 
-{-| Opaque type that holds the configuration
+{-| Required initial configuration
+
+  - onSelect: A message to trigger when an item is selected
+  - toLabel: A function to get a label to display from an item
+  - filter: A function that takes the typed query and the list of all items, and return the filtered items.
+
+-}
+type alias RequiredConfig msg item =
+    { onSelect : Maybe item -> msg
+    , toLabel : item -> String
+    , filter : String -> List item -> Maybe (List item)
+    }
+
+
+{-| Opaque type that holds all the configuration
 -}
 type Config msg item
     = PrivateConfig (Config.Config msg item)
@@ -135,19 +144,25 @@ type Msg item
     = PrivateMsg (Messages.Msg item)
 
 
-{-| Create a new configuration. This takes:
-
-  - A message to trigger when an item is selected
-
-  - A function to get a label to display from an item
-
-    Select.newConfig OnSelect .label
-
+{-| Create a new configuration. This takes as `RequiredConfig` record.
 -}
-newConfig : (Maybe item -> msg) -> (item -> String) -> Config msg item
-newConfig onSelectMessage toLabel =
-    Config.newConfig onSelectMessage toLabel
+newConfig : RequiredConfig msg item -> Config msg item
+newConfig requiredConfig =
+    Config.newConfig requiredConfig
         |> PrivateConfig
+
+
+{-| Show results if the input is focused, but the query is empty
+Default is False.
+Select.withEmptySearch True config
+-}
+withEmptySearch : Bool -> Config msg item -> Config msg item
+withEmptySearch emptySearch config =
+    let
+        fn c =
+            { c | emptySearch = emptySearch }
+    in
+    mapConfig fn config
 
 
 {-| Add classes to the input control
@@ -475,6 +490,17 @@ withMultiInputItemStyles styles config =
     mapConfig fn config
 
 
+{-| Use a multi select instead of a single select
+-}
+withMultiSelection : Bool -> Config msg item -> Config msg item
+withMultiSelection value config =
+    config
+        |> mapConfig
+            (\c ->
+                { c | isMultiSelect = value }
+            )
+
+
 {-| Text that will appear when no matches are found
 
     Select.withNotFound "No matches" config
@@ -627,106 +653,6 @@ withPromptStyles styles config =
     mapConfig fn config
 
 
-{-| Disable fuzzy matching altogether
-
-    Select.withFuzzyMatching False config
-
--}
-withFuzzyMatching : Bool -> Config msg item -> Config msg item
-withFuzzyMatching fuzzy config =
-    let
-        fn c =
-            { c | fuzzyMatching = fuzzy }
-    in
-    mapConfig fn config
-
-
-{-| Add fuzzy search add penalty
-
-    Select.withFuzzySearchAddPenalty 1 config
-
--}
-withFuzzySearchAddPenalty : Int -> Config msg item -> Config msg item
-withFuzzySearchAddPenalty penalty config =
-    let
-        fn c =
-            { c | fuzzySearchAddPenalty = Just penalty }
-    in
-    mapConfig fn config
-
-
-{-| Add fuzzy search add penalty
-
-    Select.withFuzzySearchRemovePenalty 100 config
-
--}
-withFuzzySearchRemovePenalty : Int -> Config msg item -> Config msg item
-withFuzzySearchRemovePenalty penalty config =
-    let
-        fn c =
-            { c | fuzzySearchRemovePenalty = Just penalty }
-    in
-    mapConfig fn config
-
-
-{-| Add fuzzy search move penalty
-
-    Select.withFuzzySearchMovePenalty 1000 config
-
--}
-withFuzzySearchMovePenalty : Int -> Config msg item -> Config msg item
-withFuzzySearchMovePenalty penalty config =
-    let
-        fn c =
-            { c | fuzzySearchMovePenalty = Just penalty }
-    in
-    mapConfig fn config
-
-
-{-| Add fuzzy search insert penalty
-
-    Select.withFuzzySearchInsertPenalty 1 config
-
--}
-withFuzzySearchInsertPenalty : Int -> Config msg item -> Config msg item
-withFuzzySearchInsertPenalty penalty config =
-    let
-        fn c =
-            { c | fuzzySearchInsertPenalty = Just penalty }
-    in
-    mapConfig fn config
-
-
-{-| Add fuzzy search separators
-
-    Select.withFuzzySearchSeparators [ "|", " " ] config
-
--}
-withFuzzySearchSeparators : List String -> Config msg item -> Config msg item
-withFuzzySearchSeparators separators config =
-    let
-        fn c =
-            { c | fuzzySearchSeparators = separators }
-    in
-    mapConfig fn config
-
-
-{-| Change the threshold used for filtering matches out.
-A higher threshold will keep more matches.
-Default is 500.
-
-    Select.withScoreThreshold 1000 config
-
--}
-withScoreThreshold : Int -> Config msg item -> Config msg item
-withScoreThreshold score config =
-    let
-        fn c =
-            { c | scoreThreshold = score }
-    in
-    mapConfig fn config
-
-
 {-| Transform the input query before performing the search
 Return Nothing to prevent searching
 
@@ -740,26 +666,11 @@ Return Nothing to prevent searching
     Select.withTransformQuery transform config
 
 -}
-withTransformQuery : (String -> Maybe String) -> Config msg item -> Config msg item
+withTransformQuery : (String -> String) -> Config msg item -> Config msg item
 withTransformQuery transform config =
     let
         fn c =
             { c | transformQuery = transform }
-    in
-    mapConfig fn config
-
-
-{-| Show results if the input is focused, but the query is empty
-Default is False.
-
-    Select.withEmptySearch True config
-
--}
-withEmptySearch : Bool -> Config msg item -> Config msg item
-withEmptySearch emptySearch config =
-    let
-        fn c =
-            { c | emptySearch = emptySearch }
     in
     mapConfig fn config
 
@@ -800,50 +711,28 @@ queryFromState model =
         |> .query
 
 
-viewBase :
+{-| Render the view
+
+    Select.view
+        selectConfig
+        model.selectState
+        model.items
+        selectedItems
+
+-}
+view :
     Config msg item
     -> State
     -> List item
-    -> Maybe (Models.Selected item)
+    -> List item
     -> Html (Msg item)
-viewBase config model items selected =
-    let
-        config_ =
-            unwrapConfig config
-
-        model_ =
-            unwrapModel model
-    in
-    Html.map PrivateMsg (Select.Select.view config_ model_ items selected)
-
-
-{-| Render the view
-
-    Html.map SelectMsg (Select.view selectConfig model.selectState model.items selectedItem)
-
--}
-view : Config msg item -> State -> List item -> Maybe item -> Html (Msg item)
 view config model items selected =
-    viewBase config model items (Maybe.map Models.Single selected)
-
-
-{-| Render the view for multiple selected items input
-
-    Html.map SelectMsg
-        (Select.viewMulti selectConfig model.selectState model.items selectedItems)
-
--}
-viewMulti : Config msg item -> State -> List item -> List item -> Html (Msg item)
-viewMulti config model items selected =
-    viewBase config
-        model
+    Select.Select.view
+        (unwrapConfig config)
+        (unwrapModel model)
         items
-        (if List.isEmpty selected then
-            Nothing
-
-         else
-            Just (Models.Many selected)
-        )
+        selected
+        |> Html.map PrivateMsg
 
 
 {-| Update the component state
