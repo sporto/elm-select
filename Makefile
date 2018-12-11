@@ -1,5 +1,5 @@
 build:
-	elm make src/Select.elm
+	elm make src/Select.elm > /dev/null
 
 test:
 	yarn elm-test
