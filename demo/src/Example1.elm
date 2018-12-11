@@ -85,7 +85,7 @@ selectConfig =
     Select.newConfig
         { onSelect = OnSelect
         , toLabel = .label
-        , filter = Shared.filter
+        , filter = Shared.filter .label
         }
         |> Select.withCutoff 12
         |> Select.withInputClass "border border-grey-darker"

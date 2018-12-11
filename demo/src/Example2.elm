@@ -71,7 +71,7 @@ selectConfig =
     Select.newConfig
         { onSelect = OnSelect
         , toLabel = identity
-        , filter = Shared.filter
+        , filter = Shared.filter identity
         }
         |> Select.withInputWrapperStyles
             [ ( "padding", "0.4rem" ) ]

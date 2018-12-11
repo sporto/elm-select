@@ -115,7 +115,7 @@ selectConfig =
     Select.newConfig
         { onSelect = OnSelect
         , toLabel = colorToString
-        , filter = Shared.filter
+        , filter = Shared.filter colorToString
         }
         |> Select.withMultiSelection True
         |> Select.withOnRemoveItem OnRemoveItem
