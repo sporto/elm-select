@@ -1,6 +1,6 @@
 module Select exposing
     ( RequiredConfig, Config, State, Msg
-    , newConfig, withCutoff, withOnQuery, withMultiSelection, withEmptySearch
+    , newConfig, withCutoff, withOnQuery, withMultiSelection, withEmptySearch, withTransformQuery
     , withOnRemoveItem, withMultiInputItemContainerClass, withMultiInputItemContainerStyles, withMultiInputItemClass, withMultiInputItemStyles
     , withInputControlClass, withInputControlStyles
     , withInputWrapperClass, withInputWrapperStyles
@@ -14,7 +14,6 @@ module Select exposing
     , newState, queryFromState
     , view
     , update
-    , withTransformQuery
     )
 
 {-| Select input with auto-complete
@@ -31,7 +30,7 @@ See a full example of the select input in multi mode [here](https://github.com/s
 
 # Configuration
 
-@docs newConfig, withCutoff, withOnQuery, withMultiSelection, withEmptySearch
+@docs newConfig, withCutoff, withOnQuery, withMultiSelection, withEmptySearch, withTransformQuery
 
 
 # Configure Multi Select mode
@@ -95,7 +94,7 @@ This is the element that wraps the selected item(s) and the input
 
 # View
 
-@docs view, viewMulti
+@docs view
 
 
 # Update
