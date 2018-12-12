@@ -1,11 +1,11 @@
 module Select exposing
     ( RequiredConfig, Config, State, Msg
-    , newConfig, withCutoff, withOnQuery, withMultiSelection, withEmptySearch, withTransformQuery
-    , withOnRemoveItem, withMultiInputItemContainerClass, withMultiInputItemContainerStyles, withMultiInputItemClass, withMultiInputItemStyles
+    , newConfig, withCutoff, withOnQuery, withEmptySearch, withTransformQuery
+    , withMultiSelection, withOnRemoveItem, withMultiInputItemContainerClass, withMultiInputItemContainerStyles, withMultiInputItemClass, withMultiInputItemStyles
     , withInputControlClass, withInputControlStyles
     , withInputWrapperClass, withInputWrapperStyles
     , withInputId, withInputClass, withInputStyles, withOnFocus
-    , withClearClass, withClearStyles, withClearSvgClass
+    , withClear, withClearClass, withClearStyles, withClearSvgClass
     , withUnderlineClass, withUnderlineStyles
     , withItemClass, withItemStyles, withItemHtml, withHighlightedItemClass, withHighlightedItemStyles
     , withMenuClass, withMenuStyles
@@ -30,12 +30,12 @@ See a full example of the select input in multi mode [here](https://github.com/s
 
 # Configuration
 
-@docs newConfig, withCutoff, withOnQuery, withMultiSelection, withEmptySearch, withTransformQuery
+@docs newConfig, withCutoff, withOnQuery, withEmptySearch, withTransformQuery
 
 
 # Configure Multi Select mode
 
-@docs withOnRemoveItem, withMultiInputItemContainerClass, withMultiInputItemContainerStyles, withMultiInputItemClass, withMultiInputItemStyles
+@docs withMultiSelection, withOnRemoveItem, withMultiInputItemContainerClass, withMultiInputItemContainerStyles, withMultiInputItemClass, withMultiInputItemStyles
 
 
 # Configure the input control
@@ -59,7 +59,7 @@ This is the element that wraps the selected item(s) and the input
 
 # Configure the clear button
 
-@docs withClearClass, withClearStyles, withClearSvgClass
+@docs withClear, withClearClass, withClearStyles, withClearSvgClass
 
 
 # Configure an underline element under the input
@@ -216,6 +216,20 @@ withUnderlineStyles styles config =
     let
         fn c =
             { c | underlineStyles = styles }
+    in
+    mapConfig fn config
+
+
+{-| Remove the clear button entirely
+
+    Select.withClear False
+
+-}
+withClear : Bool -> Config msg item -> Config msg item
+withClear value config =
+    let
+        fn c =
+            { c | hasClear = value }
     in
     mapConfig fn config
 

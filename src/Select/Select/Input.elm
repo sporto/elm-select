@@ -118,7 +118,7 @@ view config model availableItems selectedItems =
 
         clear : Html (Msg item)
         clear =
-            if List.isEmpty selectedItems then
+            if List.isEmpty selectedItems || config.hasClear == False then
                 Html.text ""
 
             else

@@ -26,6 +26,7 @@ type alias Config msg item =
     , cutoff : Maybe Int
     , emptySearch : Bool
     , filter : String -> List item -> Maybe (List item)
+    , hasClear : Bool
     , highlightedItemClass : String
     , highlightedItemStyles : List Style
     , inputId : String
@@ -74,6 +75,7 @@ newConfig requiredConfig =
     , emptySearch = False
     , filter = requiredConfig.filter
     , cutoff = Nothing
+    , hasClear = True
     , highlightedItemClass = ""
     , highlightedItemStyles = []
     , underlineStyles = []
