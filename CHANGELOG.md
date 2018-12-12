@@ -2,6 +2,8 @@
 
 ## 3.0.0
 
+Until this package has been using `tripokey/elm-fuzzy` for filtering results. Although this is a powerful package, it is quite finicky and difficult to configure. It is also a heavy dependecy. In many cases you can filter items with something simpler like `String.contains` or an alternative package. This version removes `elm-fuzzy` completly in favour of the host application providing its own search.
+
 ### Removed:
 
 - This version removes the build in fuzzy search. You need to filter items yourself using `config.filter`.
