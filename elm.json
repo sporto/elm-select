@@ -3,7 +3,7 @@
     "name": "sporto/elm-select",
     "summary": "A selection input with auto-completion",
     "license": "MIT",
-    "version": "3.0.0",
+    "version": "3.1.0",
     "exposed-modules": [
         "Select"
     ],
