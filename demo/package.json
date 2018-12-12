@@ -6,6 +6,6 @@
   },
   "scripts": {
     "start": "parcel -p 4000 src/app.html",
-    "build": "parcel build src/app.html --out-dir ../docs --out-file index.html"
+    "build": "parcel build --out-dir ../docs --out-file index.html --no-cache --public-url ./ src/app.html"
   }
 }
