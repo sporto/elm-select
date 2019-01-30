@@ -93,7 +93,7 @@ multiInputItemStyles =
 
 multiInputItemText : List ( String, String )
 multiInputItemText =
-    [ ( "text-overflow", "elpisis" )
+    [ ( "text-overflow", "ellipsis" )
     , ( "padding-left", ".5rem" )
     , ( "padding-right", ".3rem" )
     , ( "padding-top", ".05rem" )
