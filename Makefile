@@ -2,7 +2,7 @@ build:
 	elm make src/Select.elm > /dev/null
 
 test:
-	yarn elm-test
+	npm run elm-test
 
 docs:
 	elm-make --docs=documentation.json

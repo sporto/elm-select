@@ -32,4 +32,4 @@ Open `localhost:4000`
 
 ## Test
 
-  yarn test
+  make test
