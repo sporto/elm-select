@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.1.1
+
+- Add Placeholder to multi-select
+
 ## 3.1.0
 
 - Added `withClear`
