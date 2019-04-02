@@ -248,7 +248,15 @@ multiInput config model availableItems selected maybeMatchedItems =
     in
     [ viewMultiItems selected
     , Html.input
-        (inputAttributes config model availableItems selected maybeMatchedItems ++ [ value val ])
+        (inputAttributes config model availableItems selected maybeMatchedItems
+            ++ [ value val ]
+            ++ (if List.isEmpty selected then
+                    [ placeholder config.prompt ]
+
+                else
+                    []
+               )
+        )
         []
     ]
 
