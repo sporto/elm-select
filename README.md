@@ -10,7 +10,7 @@ See https://sporto.github.io/elm-select/
 
 ## Example and Getting started
 
-See commented example at `demo/src/Example1.elm`
+See commented example at [`demo/src/Example1Basic.elm`](demo/src/Example1Basic.elm)
 
 ## API
 
