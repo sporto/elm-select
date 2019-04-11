@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.1.2
+
+- Fix https://github.com/sporto/elm-select/issues/40
+
 ## 3.1.1
 
 - Add Placeholder to multi-select
