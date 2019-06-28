@@ -128,7 +128,7 @@ view selectConfig model title =
                 model.movies
                 selectedMovies
     in
-    div [ class "bg-grey-lighter p-2" ]
+    div [ class "bg-gray-300 p-2" ]
         [ h3 [] [ text title ]
         , currentSelection
         , p [ class "mt-2" ]

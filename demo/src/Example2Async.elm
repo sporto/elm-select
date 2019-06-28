@@ -74,11 +74,11 @@ selectConfig =
         }
         |> Select.withInputWrapperStyles
             [ ( "padding", "0.4rem" ) ]
-        |> Select.withMenuClass "border border-grey-darker bg-white"
-        |> Select.withItemClass "p-1 border-b border-grey-darker"
+        |> Select.withMenuClass "border border-gray-800 bg-white"
+        |> Select.withItemClass "p-1 border-b border-gray-800"
         |> Select.withItemStyles [ ( "font-size", "1rem" ) ]
         |> Select.withNotFoundShown False
-        |> Select.withHighlightedItemClass "bg-grey"
+        |> Select.withHighlightedItemClass "bg-gray"
         |> Select.withHighlightedItemStyles [ ( "color", "black" ) ]
         |> Select.withPrompt "Select a character"
         |> Select.withCutoff 12
@@ -168,7 +168,7 @@ view model =
                 model.characters
                 selectedCharacters
     in
-    div [ class "bg-grey-lighter p-2" ]
+    div [ class "bg-gray-300 p-2" ]
         [ h3 [] [ text "Async example" ]
         , text (model.selectedCharacterId |> Maybe.withDefault "")
         , p [ class "mt-2" ]

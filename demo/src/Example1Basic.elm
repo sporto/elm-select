@@ -87,21 +87,21 @@ selectConfig =
         , filter = Shared.filter 4 .label
         }
         |> Select.withCutoff 12
-        |> Select.withInputClass "border border-grey-darker"
+        |> Select.withInputClass "border border-gray-800"
         |> Select.withInputId "input-id"
         |> Select.withInputWrapperStyles
             [ ( "padding", "0.4rem" ) ]
-        |> Select.withItemClass " p-2 border-b border-grey text-grey-darker"
+        |> Select.withItemClass " p-2 border-b border-gray-500 text-gray-800"
         |> Select.withItemStyles [ ( "font-size", "1rem" ) ]
-        |> Select.withMenuClass "border border-grey-dark"
+        |> Select.withMenuClass "border border-gray-800"
         |> Select.withMenuStyles [ ( "background", "white" ) ]
         |> Select.withNotFound "No matches"
         |> Select.withNotFoundClass "text-red"
         |> Select.withNotFoundStyles [ ( "padding", "0 2rem" ) ]
-        |> Select.withHighlightedItemClass "bg-grey-lighter"
+        |> Select.withHighlightedItemClass "bg-gray-300"
         |> Select.withHighlightedItemStyles [ ( "color", "black" ) ]
         |> Select.withPrompt "Select a movie"
-        |> Select.withPromptClass "text-grey-darker"
+        |> Select.withPromptClass "text-gray-800"
         |> Select.withUnderlineClass "underline"
 
 
@@ -176,7 +176,7 @@ view model =
                 model.movies
                 selectedMovies
     in
-    div [ class "bg-grey-lighter p-2" ]
+    div [ class "bg-gray-300 p-2" ]
         [ h3 [] [ text "Basic example" ]
         , currentSelection
         , p [ class "mt-2" ]

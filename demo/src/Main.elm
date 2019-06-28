@@ -174,12 +174,12 @@ selectConfig4b =
         }
         |> Select.withCutoff 12
         |> Select.withEmptySearch True
-        |> Select.withInputClass "border border-grey-darker p-2"
-        |> Select.withItemClass " p-2 border-b border-grey text-grey-darker"
-        |> Select.withMenuClass "border border-grey-dark bg-white"
+        |> Select.withInputClass "border border-gray-800 p-2"
+        |> Select.withItemClass " p-2 border-b border-gray-500 text-gray-800"
+        |> Select.withMenuClass "border border-gray-800 bg-white"
         |> Select.withNotFound "No matches"
         |> Select.withNotFoundClass "text-red"
-        |> Select.withHighlightedItemClass "bg-grey-lighter"
+        |> Select.withHighlightedItemClass "bg-gray-300"
         |> Select.withPrompt "Select a movie"
-        |> Select.withPromptClass "text-grey-darker"
+        |> Select.withPromptClass "text-gray-800"
         |> Select.withUnderlineClass "underline"

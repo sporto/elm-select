@@ -133,17 +133,17 @@ selectConfig =
         |> Select.withInputId "input-id"
         |> Select.withInputWrapperStyles
             [ ( "padding", "0.4rem" ) ]
-        |> Select.withItemClass "p-1 border-b border-grey text-grey-darker"
+        |> Select.withItemClass "p-1 border-b border-gray-500 text-gray-800"
         |> Select.withItemStyles [ ( "font-size", "1rem" ) ]
-        |> Select.withMenuClass "border border-grey-darker"
+        |> Select.withMenuClass "border border-gray-800"
         |> Select.withMenuStyles [ ( "background", "white" ) ]
         |> Select.withNotFound "No matches"
         |> Select.withNotFoundClass "red"
         |> Select.withNotFoundStyles [ ( "padding", "0 2rem" ) ]
-        |> Select.withHighlightedItemClass "bg-grey"
+        |> Select.withHighlightedItemClass "bg-gray"
         |> Select.withHighlightedItemStyles []
         |> Select.withPrompt "Select a color"
-        |> Select.withPromptClass "text-grey-darker"
+        |> Select.withPromptClass "text-gray-800"
         |> Select.withUnderlineClass "underline"
 
 
@@ -198,7 +198,7 @@ view model =
                 model.colors
                 model.selectedColors
     in
-    div [ class "bg-grey-lighter p-2" ]
+    div [ class "bg-gray-300 p-2" ]
         [ h3 [] [ text "MultiSelect example" ]
         , currentSelection
         , p [ class "mt-2" ]
