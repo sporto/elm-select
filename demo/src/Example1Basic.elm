@@ -87,10 +87,10 @@ selectConfig =
         , filter = Shared.filter 4 .label
         }
         |> Select.withCutoff 12
-        |> Select.withInputClass "border border-gray-800"
-        |> Select.withInputId "input-id"
+        |> Select.withInputWrapperClass "border border-gray-600"
         |> Select.withInputWrapperStyles
             [ ( "padding", "0.4rem" ) ]
+        |> Select.withInputId "input-id"
         |> Select.withItemClass " p-2 border-b border-gray-500 text-gray-800"
         |> Select.withItemStyles [ ( "font-size", "1rem" ) ]
         |> Select.withMenuClass "border border-gray-800"
