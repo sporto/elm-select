@@ -18,6 +18,16 @@ See commented example at [`demo/src/Example1Basic.elm`](demo/src/Example1Basic.e
 
 ### [Changelog](./CHANGELOG.md)
 
+## Styling
+
+You can style elements using:
+
+- Using global classes e.g. `.elm-select-input`
+- Pass classes via configuration e.g. `withInputClass`
+- Passing styles via configuration e.g. `withInputStyles`
+
+To add borders and padding to the input use `InputWrapper` instead of `Input`.
+
 ---
 
 ## Run demo locally
