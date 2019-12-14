@@ -12,7 +12,7 @@ import Html.Attributes
         , style
         , value
         )
-import Html.Events exposing (keyCode, preventDefaultOn, onFocus, onInput, stopPropagationOn)
+import Html.Events exposing (keyCode, onFocus, onInput, preventDefaultOn, stopPropagationOn)
 import Json.Decode as Decode
 import Select.Config exposing (Config)
 import Select.Events exposing (onBlurAttribute)
@@ -45,10 +45,7 @@ onKeyPressAttribute maybeItem =
     in
     preventDefaultOn "keypress"
         (Decode.andThen fn keyCode
-            |> Decode.andThen
-                (\msg ->
-                    Decode.succeed ( msg, True )
-                )
+            |> Decode.map (\msg -> ( msg, True ))
         )
 
 
@@ -82,10 +79,7 @@ onKeyUpAttribute maybeItem =
     in
     preventDefaultOn "keyup"
         (Decode.andThen fn keyCode
-            |> Decode.andThen
-                (\msg ->
-                    Decode.succeed ( msg, True )
-                )
+            |> Decode.map (\msg -> ( msg, True ))
         )
 
 
