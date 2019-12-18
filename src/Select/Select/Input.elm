@@ -12,12 +12,12 @@ import Html.Attributes
         , style
         , value
         )
-import Html.Events exposing (keyCode, on, onFocus, onInput, stopPropagationOn)
+import Html.Events exposing (keyCode, onFocus, onInput, preventDefaultOn, stopPropagationOn)
 import Json.Decode as Decode
 import Select.Config exposing (Config)
 import Select.Events exposing (onBlurAttribute)
 import Select.Messages as Msg exposing (Msg)
-import Select.Models as Models exposing (State)
+import Select.Models exposing (State)
 import Select.Search as Search
 import Select.Select.Clear as Clear
 import Select.Select.RemoveItem as RemoveItem
@@ -43,7 +43,10 @@ onKeyPressAttribute maybeItem =
                 _ ->
                     Decode.fail "not TAB or ENTER"
     in
-    on "keypress" (Decode.andThen fn keyCode)
+    preventDefaultOn "keypress"
+        (Decode.andThen fn keyCode
+            |> Decode.map (\msg -> ( msg, True ))
+        )
 
 
 onKeyUpAttribute : Maybe item -> Attribute (Msg item)
@@ -74,7 +77,10 @@ onKeyUpAttribute maybeItem =
                 _ ->
                     Decode.fail "not ENTER"
     in
-    on "keyup" (Decode.andThen fn keyCode)
+    preventDefaultOn "keyup"
+        (Decode.andThen fn keyCode
+            |> Decode.map (\msg -> ( msg, True ))
+        )
 
 
 view : Config msg item -> State -> List item -> List item -> Html (Msg item)
