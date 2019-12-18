@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.1.3
+
+- Selecting an element in the list with Enter doesn't trigger a submit event on a form. See https://github.com/sporto/elm-select/issues/42
+
 ## 3.1.2
 
 - Fix https://github.com/sporto/elm-select/issues/40
