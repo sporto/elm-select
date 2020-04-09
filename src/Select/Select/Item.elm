@@ -74,12 +74,26 @@ viewNotFound config =
         text ""
 
     else
-        div
-            (class classes
-                :: (styles |> List.map (\( f, s ) -> style f s))
-            )
-            [ text config.notFound
-            ]
+        case config.customInput of
+            Nothing ->
+                div
+                    (class classes
+                        :: (styles |> List.map (\( f, s ) -> style f s))
+                    )
+                    [ text config.notFound ]
+
+            Just fn ->
+                let
+                    item =
+                        fn config.notFound
+                in
+                div
+                    ([ class classes
+                     , onMouseDown (OnSelect item)
+                     ]
+                        ++ (styles |> List.map (\( f, s ) -> style f s))
+                    )
+                    [ text config.notFound ]
 
 
 baseItemClasses : Config msg item -> String

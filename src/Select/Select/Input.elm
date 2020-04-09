@@ -32,13 +32,11 @@ onKeyPressAttribute maybeItem =
             case code of
                 9 ->
                     maybeItem
-                        |> Debug.log "Tab Pressed with: "
                         |> Maybe.map (Decode.succeed << Msg.OnSelect)
                         |> Maybe.withDefault (Decode.fail "nothing selected")
 
                 13 ->
                     maybeItem
-                        |> Debug.log "Enter pressed with:"
                         |> Maybe.map (Decode.succeed << Msg.OnSelect)
                         |> Maybe.withDefault (Decode.fail "nothing selected")
 
@@ -60,9 +58,6 @@ onKeyUpAttribute maybeItem =
                     Decode.fail "not Enter"
 
                 Just item ->
-                    let
-                        _ = Debug.log "item now" item 
-                    in 
                     Decode.succeed (Msg.OnSelect item)
 
         fn code =
