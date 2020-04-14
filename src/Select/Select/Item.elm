@@ -7,7 +7,7 @@ import Select.Config exposing (Config)
 import Select.Messages exposing (..)
 import Select.Models exposing (State)
 import Select.Styles as Styles
-import Select.Utils exposing (referenceAttr)
+import Select.Utils exposing (referenceAttr, stylesToAttrs)
 
 
 view : Config msg item -> State -> Int -> Int -> item -> Html (Msg item)
@@ -77,9 +77,7 @@ viewNotFound config =
         case config.customInput of
             Nothing ->
                 div
-                    (class classes
-                        :: (styles |> List.map (\( f, s ) -> style f s))
-                    )
+                    (class classes :: stylesToAttrs styles)
                     [ text config.notFound ]
 
             Just fn ->
@@ -91,7 +89,7 @@ viewNotFound config =
                     ([ class classes
                      , onMouseDown (OnSelect item)
                      ]
-                        ++ (styles |> List.map (\( f, s ) -> style f s))
+                        ++ stylesToAttrs styles
                     )
                     [ text config.notFound ]
 
