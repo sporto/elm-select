@@ -12,12 +12,12 @@ import Select.Utils as Utils
 
 
 view : Config msg item -> State -> List item -> List item -> Html (Msg item)
-view config model availableItems selectedItems =
+view config state availableItems selectedItems =
     let
         searchResult =
             Search.matchedItemsWithCutoff
                 config
-                model.query
+                state.query
                 availableItems
                 selectedItems
     in
@@ -26,11 +26,11 @@ view config model availableItems selectedItems =
             text ""
 
         Just matchedItems ->
-            menu config model matchedItems
+            menu config state matchedItems
 
 
 menu : Config msg item -> State -> List item -> Html (Msg item)
-menu config model matchedItems =
+menu config state matchedItems =
     let
         hideWhenNotFound =
             config.notFoundShown == False && matchedItems == []
@@ -44,7 +44,7 @@ menu config model matchedItems =
 
         noResultElement =
             if matchedItems == [] then
-                Item.viewNotFound config
+                Item.viewNotFound config state
 
             else
                 text ""
@@ -54,7 +54,7 @@ menu config model matchedItems =
 
         elements =
             matchedItems
-                |> List.indexedMap (Item.view config model itemCount)
+                |> List.indexedMap (Item.view config state itemCount)
     in
     div
         (viewClassAttr config :: menuStyle)

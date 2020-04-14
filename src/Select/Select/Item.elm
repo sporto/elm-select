@@ -1,4 +1,9 @@
-module Select.Select.Item exposing (baseItemClasses, baseItemStyles, view, viewNotFound)
+module Select.Select.Item exposing
+    ( baseItemClasses
+    , baseItemStyles
+    , view
+    , viewNotFound
+    )
 
 import Html exposing (..)
 import Html.Attributes exposing (attribute, class, style)
@@ -52,14 +57,14 @@ view config state itemCount index item =
          , onMouseDown (OnSelect item)
          , referenceAttr config state
          ]
-            ++ (styles |> List.map (\( f, s ) -> style f s))
+            ++ stylesToAttrs styles
         )
         [ itemHtml
         ]
 
 
-viewNotFound : Config msg item -> Html (Msg item)
-viewNotFound config =
+viewNotFound : Config msg item -> State -> Html (Msg item)
+viewNotFound config state =
     let
         classes =
             String.join " "
@@ -70,28 +75,33 @@ viewNotFound config =
         styles =
             List.append (baseItemStyles config) config.notFoundStyles
     in
-    if config.notFound == "" then
-        text ""
+    case config.customInput of
+        Nothing ->
+            if config.notFound == "" then
+                text ""
 
-    else
-        case config.customInput of
-            Nothing ->
+            else
                 div
                     (class classes :: stylesToAttrs styles)
                     [ text config.notFound ]
 
-            Just fn ->
-                let
-                    item =
-                        fn config.notFound
-                in
-                div
-                    ([ class classes
-                     , onMouseDown (OnSelect item)
-                     ]
-                        ++ stylesToAttrs styles
-                    )
-                    [ text config.notFound ]
+        Just fn ->
+            case state.query of
+                Nothing ->
+                    text ""
+
+                Just query ->
+                    let
+                        item =
+                            fn query
+                    in
+                    div
+                        ([ class classes
+                         , onMouseDown (OnSelect item)
+                         ]
+                            ++ stylesToAttrs styles
+                        )
+                        [ text query ]
 
 
 baseItemClasses : Config msg item -> String

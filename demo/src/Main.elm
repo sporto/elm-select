@@ -18,6 +18,7 @@ type alias Model =
     , example3 : Example3Multi.Model
     , example4a : Example4Custom.Model
     , example4b : Example4Custom.Model
+    , example4c : Example4Custom.Model
     }
 
 
@@ -29,6 +30,7 @@ initialModel =
     , example3 = Example3Multi.initialModel "3"
     , example4a = Example4Custom.initialModel "4a"
     , example4b = Example4Custom.initialModel "4b"
+    , example4c = Example4Custom.initialModel "4c"
     }
 
 
@@ -50,6 +52,7 @@ type Msg
     | Example3MultiMsg Example3Multi.Msg
     | Example4CustomAMsg Example4Custom.Msg
     | Example4CustomBMsg Example4Custom.Msg
+    | Example4CustomCMsg Example4Custom.Msg
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -103,6 +106,16 @@ update msg model =
             in
             ( { model | example4b = subModel }, Cmd.map Example4CustomBMsg subCmd )
 
+        Example4CustomCMsg sub ->
+            let
+                ( subModel, subCmd ) =
+                    Example4Custom.update
+                        selectConfig4c
+                        sub
+                        model.example4c
+            in
+            ( { model | example4b = subModel }, Cmd.map Example4CustomCMsg subCmd )
+
         NoOp ->
             ( model, Cmd.none )
 
@@ -114,34 +127,41 @@ projectUrl =
 
 view : Model -> Html Msg
 view model =
-    div [ class "p-5" ]
+    div [ class "p-5 pb-20" ]
         [ h1 [] [ text "Elm Select" ]
         , a [ href projectUrl ] [ text projectUrl ]
-        , div [ class "mt-4" ]
+        , div [ class "my-8" ]
             [ Html.map Example1BasicAMsg (Example1Basic.view model.example1a)
             ]
-        , div [ class "mt-4" ]
+        , div [ class "my-8" ]
             [ Html.map Example1BasicBMsg (Example1Basic.view model.example1b)
             ]
-        , div [ class "mt-4" ]
+        , div [ class "my-8" ]
             [ Html.map Example2AsyncMsg (Example2Async.view model.example2)
             ]
-        , div [ class "mt-4" ]
+        , div [ class "my-8" ]
             [ Html.map Example3MultiMsg (Example3Multi.view model.example3)
             ]
-        , div [ class "mt-4" ]
-            [ Example4Custom.view
-                selectConfig4b
-                model.example4b
-                "With empty search"
-                |> Html.map Example4CustomBMsg
-            ]
-        , div [ class "mt-4" ]
+        , div [ class "my-8" ]
             [ Example4Custom.view
                 selectConfig4a
                 model.example4a
-                "Just the defaults"
+                "With empty search"
                 |> Html.map Example4CustomAMsg
+            ]
+        , div [ class "my-8" ]
+            [ Example4Custom.view
+                selectConfig4b
+                model.example4b
+                "With custom input"
+                |> Html.map Example4CustomBMsg
+            ]
+        , div [ class "my-8" ]
+            [ Example4Custom.view
+                selectConfig4c
+                model.example4c
+                "Just the defaults"
+                |> Html.map Example4CustomCMsg
             ]
         ]
 
@@ -163,15 +183,6 @@ selectConfig4a =
         , toLabel = .label
         , filter = Shared.filter 4 .label
         }
-
-
-selectConfig4b : Select.Config Example4Custom.Msg Example4Custom.Movie
-selectConfig4b =
-    Select.newConfig
-        { onSelect = Example4Custom.OnSelect
-        , toLabel = .label
-        , filter = Shared.filter 4 .label
-        }
         |> Select.withCutoff 12
         |> Select.withEmptySearch True
         |> Select.withInputClass "border border-gray-800 p-2"
@@ -183,3 +194,22 @@ selectConfig4b =
         |> Select.withPrompt "Select a movie"
         |> Select.withPromptClass "text-gray-800"
         |> Select.withUnderlineClass "underline"
+
+
+selectConfig4b =
+    selectConfig4a
+        |> Select.withCustomInput
+            (\input ->
+                { id = input
+                , label = input
+                }
+            )
+
+
+selectConfig4c : Select.Config Example4Custom.Msg Example4Custom.Movie
+selectConfig4c =
+    Select.newConfig
+        { onSelect = Example4Custom.OnSelect
+        , toLabel = .label
+        , filter = Shared.filter 4 .label
+        }
