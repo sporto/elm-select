@@ -23,6 +23,7 @@ type alias Config msg item =
     { clearClass : String
     , clearStyles : List Style
     , clearSvgClass : String
+    , customInput : Maybe (String -> item)
     , cutoff : Maybe Int
     , emptySearch : Bool
     , filter : String -> List item -> Maybe (List item)
@@ -72,6 +73,7 @@ newConfig requiredConfig =
     { clearClass = ""
     , clearStyles = []
     , clearSvgClass = ""
+    , customInput = Nothing
     , emptySearch = False
     , filter = requiredConfig.filter
     , cutoff = Nothing

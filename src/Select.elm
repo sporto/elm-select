@@ -1,6 +1,6 @@
 module Select exposing
     ( RequiredConfig, Config, State, Msg
-    , newConfig, withCutoff, withOnQuery, withEmptySearch, withTransformQuery
+    , newConfig, withCustomInput, withCutoff, withOnQuery, withEmptySearch, withTransformQuery
     , withMultiSelection, withOnRemoveItem, withMultiInputItemContainerClass, withMultiInputItemContainerStyles, withMultiInputItemClass, withMultiInputItemStyles
     , withInputControlClass, withInputControlStyles
     , withInputWrapperClass, withInputWrapperStyles
@@ -275,6 +275,19 @@ withClearSvgClass classes config =
     in
     mapConfig fn config
 
+{-| Enable user to add custom values 
+    
+    Select.withCustomInput (\string -> item) config 
+
+-}
+withCustomInput : (String -> item) -> Config msg item -> Config msg item 
+withCustomInput toItem config =
+    let
+        fn c =
+            { c | customInput = Just toItem }
+    in
+    mapConfig fn config
+    
 
 {-| Set the maxium number of items to show
 
