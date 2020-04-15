@@ -30,11 +30,13 @@ onKeyPressAttribute maybeItem =
     let
         fn code =
             case code of
+                -- Tab
                 9 ->
                     maybeItem
                         |> Maybe.map (Decode.succeed << Msg.OnSelect)
                         |> Maybe.withDefault (Decode.fail "nothing selected")
 
+                -- Enter
                 13 ->
                     maybeItem
                         |> Maybe.map (Decode.succeed << Msg.OnSelect)
@@ -83,8 +85,8 @@ onKeyUpAttribute maybeItem =
         )
 
 
-view : Config msg item -> State -> List item -> List item -> Html (Msg item)
-view config model availableItems selectedItems =
+view : Config msg item -> State -> List item -> List item -> Maybe (List item) -> Html (Msg item)
+view config model availableItems selectedItems maybeMatchedItems =
     let
         inputControlClass : String
         inputControlClass =
@@ -155,14 +157,6 @@ view config model availableItems selectedItems =
                     :: (underlineStyles |> List.map (\( f, s ) -> style f s))
                 )
                 []
-
-        maybeMatchedItems : Maybe (List item)
-        maybeMatchedItems =
-            Search.matchedItemsWithCutoff
-                config
-                model.query
-                availableItems
-                selectedItems
 
         input =
             if config.isMultiSelect then

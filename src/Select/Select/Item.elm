@@ -75,33 +75,13 @@ viewNotFound config state =
         styles =
             List.append (baseItemStyles config) config.notFoundStyles
     in
-    case config.customInput of
-        Nothing ->
-            if config.notFound == "" then
-                text ""
+    if config.notFound == "" then
+        text ""
 
-            else
-                div
-                    (class classes :: stylesToAttrs styles)
-                    [ text config.notFound ]
-
-        Just fn ->
-            case state.query of
-                Nothing ->
-                    text ""
-
-                Just query ->
-                    let
-                        item =
-                            fn query
-                    in
-                    div
-                        ([ class classes
-                         , onMouseDown (OnSelect item)
-                         ]
-                            ++ stylesToAttrs styles
-                        )
-                        [ text query ]
+    else
+        div
+            (class classes :: stylesToAttrs styles)
+            [ text config.notFound ]
 
 
 baseItemClasses : Config msg item -> String

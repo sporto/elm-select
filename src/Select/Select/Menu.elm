@@ -1,4 +1,4 @@
-module Select.Select.Menu exposing (menu, view, viewClassAttr, viewStyles)
+module Select.Select.Menu exposing (view)
 
 import Html exposing (..)
 import Html.Attributes exposing (class, style)
@@ -11,17 +11,9 @@ import Select.Styles as Styles
 import Select.Utils as Utils
 
 
-view : Config msg item -> State -> List item -> List item -> Html (Msg item)
-view config state availableItems selectedItems =
-    let
-        searchResult =
-            Search.matchedItemsWithCutoff
-                config
-                state.query
-                availableItems
-                selectedItems
-    in
-    case searchResult of
+view : Config msg item -> State -> Maybe (List item) -> Html (Msg item)
+view config state maybeMatchedItems =
+    case maybeMatchedItems of
         Nothing ->
             text ""
 
