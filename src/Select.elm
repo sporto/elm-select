@@ -30,7 +30,7 @@ See a full example of the select input in multi mode [here](https://github.com/s
 
 # Configuration
 
-@docs newConfig, withCutoff, withOnQuery, withEmptySearch, withTransformQuery
+@docs newConfig, withCustomInput, withCutoff, withOnQuery, withEmptySearch, withTransformQuery
 
 
 # Configure Multi Select mode
@@ -275,19 +275,20 @@ withClearSvgClass classes config =
     in
     mapConfig fn config
 
-{-| Enable user to add custom values 
-    
-    Select.withCustomInput (\string -> item) config 
+
+{-| Enable user to add custom values
+
+    Select.withCustomInput (\string -> item) config
 
 -}
-withCustomInput : (String -> item) -> Config msg item -> Config msg item 
+withCustomInput : (String -> item) -> Config msg item -> Config msg item
 withCustomInput toItem config =
     let
         fn c =
             { c | customInput = Just toItem }
     in
     mapConfig fn config
-    
+
 
 {-| Set the maxium number of items to show
 

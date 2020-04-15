@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.2.0
+
+- Added `withCustomInput`
+
 ## 3.1.3
 
 - Selecting an element in the list with Enter doesn't trigger a submit event on a form. See https://github.com/sporto/elm-select/issues/42
