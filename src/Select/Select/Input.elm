@@ -319,17 +319,13 @@ inputAttributes config model availableItems selectedItems maybeMatchedItems =
                     Nothing
 
                 Just matchedItems ->
-                    if config.isMultiSelect then
-                        case model.highlightedItem of
-                            Nothing ->
-                                List.head matchedItems
+                    case model.highlightedItem of
+                        Nothing ->
+                            List.head matchedItems
 
-                            Just n ->
-                                Array.fromList matchedItems
-                                    |> Array.get (remainderBy (List.length matchedItems) n)
-
-                    else
-                        List.head matchedItems
+                        Just n ->
+                            Array.fromList matchedItems
+                                |> Array.get (remainderBy (List.length matchedItems) n)
     in
     [ autocomplete False
     , attribute "autocorrect" "off" -- for mobile Safari
