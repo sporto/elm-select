@@ -18,9 +18,11 @@ module Select exposing
 
 {-| Select input with auto-complete
 
-See a full example of the select input [here](https://github.com/sporto/elm-select/tree/master/demo/src/Example1.elm)
+See a full example of the select input [here](https://github.com/sporto/elm-select/blob/master/demo/src/Example1Basic.elm)
 
-See a full example of the select input in multi mode [here](https://github.com/sporto/elm-select/tree/master/demo/src/Example3.elm)
+See a full example of the select input in multi mode [here](https://github.com/sporto/elm-select/blob/master/demo/src/Example3Multi.elm)
+
+See live demo [here](https://sporto.github.io/elm-select)
 
 
 # Types
