@@ -114,7 +114,7 @@ update msg model =
                         sub
                         model.example4c
             in
-            ( { model | example4b = subModel }, Cmd.map Example4CustomCMsg subCmd )
+            ( { model | example4c = subModel }, Cmd.map Example4CustomCMsg subCmd )
 
         NoOp ->
             ( model, Cmd.none )
