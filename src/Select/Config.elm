@@ -4,7 +4,8 @@ module Select.Config exposing
     , newConfig
     )
 
-import Html exposing (Html)
+import Html exposing (Attribute, Html)
+import Select.Messages exposing (Msg)
 import Select.Styles as Styles
 
 
@@ -16,103 +17,80 @@ type alias RequiredConfig msg item =
     { onSelect : Maybe item -> msg
     , toLabel : item -> String
     , filter : String -> List item -> Maybe (List item)
+    , toMsg : Msg item -> msg
     }
 
 
 type alias Config msg item =
-    { clearClass : String
-    , clearStyles : List Style
-    , clearSvgClass : String
+    { clearAttrs : List (Attribute msg)
+    , clearSvgAttrs : List (Attribute msg)
     , customInput : Maybe (String -> item)
     , cutoff : Maybe Int
     , emptySearch : Bool
     , filter : String -> List item -> Maybe (List item)
     , hasClear : Bool
-    , highlightedItemClass : String
-    , highlightedItemStyles : List Style
+    , highlightedItemAttrs : List (Attribute msg)
     , inputId : String
-    , inputClass : String
-    , inputStyles : List Style
-    , inputControlClass : String
-    , inputControlStyles : List Style
-    , inputWrapperClass : String
-    , inputWrapperStyles : List Style
-    , itemClass : String
-    , itemStyles : List Style
-    , itemHtml : Maybe (item -> Html Never)
+    , inputAttrs : List (Attribute msg)
+    , inputControlAttrs : List (Attribute msg)
+    , inputWrapperAttrs : List (Attribute msg)
+    , itemAttrs : List (Attribute msg)
+    , itemHtml : Maybe (item -> Html msg)
     , isMultiSelect : Bool
-    , menuClass : String
-    , menuStyles : List Style
-    , multiInputItemContainerClass : String
-    , multiInputItemContainerStyles : List Style
-    , multiInputItemClass : String
-    , multiInputItemStyles : List Style
+    , menuAttrs : List (Attribute msg)
+    , multiInputItemContainerAttrs : List (Attribute msg)
+    , multiInputItemAttrs : List (Attribute msg)
     , notFound : String
-    , notFoundClass : String
+    , notFoundAttrs : List (Attribute msg)
     , notFoundShown : Bool
-    , notFoundStyles : List Style
     , onQueryChange : Maybe (String -> msg)
     , onSelect : Maybe item -> msg
     , onFocus : Maybe msg
     , onRemoveItem : Maybe (item -> msg)
     , prompt : String
-    , promptClass : String
-    , promptStyles : List Style
-    , removeItemSvgClass : String
-    , removeItemSvgStyles : List Style
+    , promptAttrs : List (Attribute msg)
+    , removeItemSvgAttrs : List (Attribute msg)
     , scoreThreshold : Int
     , toLabel : item -> String
     , transformQuery : String -> String
-    , underlineClass : String
-    , underlineStyles : List Style
+    , underlineAttrs : List (Attribute msg)
+    , toMsg : Msg item -> msg
     }
 
 
 newConfig : RequiredConfig msg item -> Config msg item
 newConfig requiredConfig =
-    { clearClass = ""
-    , clearStyles = []
-    , clearSvgClass = ""
+    { clearAttrs = []
+    , clearSvgAttrs = []
     , customInput = Nothing
     , emptySearch = False
     , filter = requiredConfig.filter
     , cutoff = Nothing
     , hasClear = True
-    , highlightedItemClass = ""
-    , highlightedItemStyles = []
-    , underlineStyles = []
+    , highlightedItemAttrs = []
     , inputId = Styles.inputId
-    , inputClass = ""
-    , inputControlClass = ""
-    , inputControlStyles = []
-    , inputStyles = []
-    , inputWrapperClass = ""
-    , inputWrapperStyles = []
-    , itemClass = ""
-    , itemStyles = []
+    , inputAttrs = []
+    , inputControlAttrs = []
+    , inputWrapperAttrs = []
+    , itemAttrs = []
     , itemHtml = Nothing
     , isMultiSelect = False
-    , menuClass = ""
-    , menuStyles = []
-    , multiInputItemContainerClass = ""
-    , multiInputItemContainerStyles = []
-    , multiInputItemClass = ""
-    , multiInputItemStyles = []
+    , menuAttrs = []
+    , multiInputItemContainerAttrs = []
+    , multiInputItemAttrs = []
     , notFound = "No results found"
-    , notFoundClass = ""
+    , notFoundAttrs = []
     , notFoundShown = True
-    , notFoundStyles = []
     , onQueryChange = Nothing
     , onSelect = requiredConfig.onSelect
     , onFocus = Nothing
     , onRemoveItem = Nothing
     , prompt = ""
-    , promptClass = ""
-    , promptStyles = []
-    , removeItemSvgClass = ""
-    , removeItemSvgStyles = []
+    , promptAttrs = []
+    , removeItemSvgAttrs = []
     , scoreThreshold = 2000
     , toLabel = requiredConfig.toLabel
     , transformQuery = identity
-    , underlineClass = ""
+    , underlineAttrs = []
+    , toMsg = requiredConfig.toMsg
     }

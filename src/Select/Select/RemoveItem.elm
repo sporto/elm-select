@@ -7,17 +7,15 @@ import Svg exposing (..)
 import Svg.Attributes as Attrs
 
 
-view : Config userMsg item -> Svg msg
+view : Config msg item -> Svg msg
 view config =
     svg
-        ([ Attrs.class (config.removeItemSvgClass ++ Styles.removeItemSvgClass)
-         , Attrs.width "14"
+        ([ Attrs.width "14"
          , Attrs.height "14"
          , Attrs.viewBox "0 0 20 20"
          ]
-            ++ ((config.removeItemSvgStyles ++ Styles.removeItemSvgStyles)
-                    |> List.map (\( f, s ) -> HtmlAttrs.style f s)
-               )
+            ++ Styles.removeItemSvgAttrs
+            ++ config.removeItemSvgAttrs
         )
         [ path [ Attrs.d svgPath ] [] ]
 

@@ -10,7 +10,7 @@ import Select.Select.Input
 import Select.Select.Menu
 
 
-view : Config msg item -> State -> List item -> List item -> Html (Msg item)
+view : Config msg item -> State -> List item -> List item -> Html msg
 view config state availableItems selectedItems =
     let
         classes =

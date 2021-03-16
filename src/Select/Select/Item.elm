@@ -1,7 +1,5 @@
 module Select.Select.Item exposing
-    ( baseItemClasses
-    , baseItemStyles
-    , view
+    ( view
     , viewNotFound
     )
 
@@ -12,37 +10,24 @@ import Select.Config exposing (Config)
 import Select.Messages exposing (..)
 import Select.Models exposing (State)
 import Select.Styles as Styles
-import Select.Utils exposing (referenceAttr, stylesToAttrs)
+import Select.Utils exposing (referenceAttr)
 
 
-view : Config msg item -> State -> Int -> Int -> item -> Html (Msg item)
+view : Config msg item -> State -> Int -> Int -> item -> Html msg
 view config state itemCount index item =
     let
-        ( highlightedItemClass, highlightedItemStyles ) =
+        highlightedItemAttrs =
             case state.highlightedItem of
                 Nothing ->
-                    ( "", [] )
+                    []
 
                 Just highlighted ->
                     -- take remainder as item numbers wrap around
                     if remainderBy itemCount highlighted == index then
-                        ( config.highlightedItemClass, config.highlightedItemStyles )
+                        config.highlightedItemAttrs
 
                     else
-                        ( "", [] )
-
-        classes =
-            String.join " "
-                [ baseItemClasses config
-                , highlightedItemClass
-                ]
-
-        styles =
-            List.concat
-                [ Styles.menuItemStyles
-                , baseItemStyles config
-                , highlightedItemStyles
-                ]
+                        []
 
         itemHtml =
             case config.itemHtml of
@@ -50,45 +35,24 @@ view config state itemCount index item =
                     text (config.toLabel item)
 
                 Just fn ->
-                    Html.map (\_ -> NoOp) (fn item)
+                    fn item
     in
     div
-        ([ class classes
-         , onMouseDown (OnSelect item)
+        ([ onMouseDown (config.toMsg (OnSelect item))
          , referenceAttr config state
          ]
-            ++ stylesToAttrs styles
+            ++ highlightedItemAttrs
         )
         [ itemHtml
         ]
 
 
-viewNotFound : Config msg item -> State -> Html (Msg item)
-viewNotFound config state =
-    let
-        classes =
-            String.join " "
-                [ baseItemClasses config
-                , config.notFoundClass
-                ]
-
-        styles =
-            List.append (baseItemStyles config) config.notFoundStyles
-    in
+viewNotFound : Config msg item -> Html msg
+viewNotFound config =
     if config.notFound == "" then
         text ""
 
     else
         div
-            (class classes :: stylesToAttrs styles)
+            config.notFoundAttrs
             [ text config.notFound ]
-
-
-baseItemClasses : Config msg item -> String
-baseItemClasses config =
-    Styles.menuItemClass ++ config.itemClass
-
-
-baseItemStyles : Config msg item -> List ( String, String )
-baseItemStyles config =
-    config.itemStyles

@@ -11,7 +11,7 @@ import Select.Styles as Styles
 import Select.Utils as Utils
 
 
-view : Config msg item -> State -> Maybe (List item) -> Html (Msg item)
+view : Config msg item -> State -> Maybe (List item) -> Html msg
 view config state maybeMatchedItems =
     case maybeMatchedItems of
         Nothing ->
@@ -21,22 +21,23 @@ view config state maybeMatchedItems =
             menu config state matchedItems
 
 
-menu : Config msg item -> State -> List item -> Html (Msg item)
+menu : Config msg item -> State -> List item -> Html msg
 menu config state matchedItems =
     let
         hideWhenNotFound =
             config.notFoundShown == False && matchedItems == []
 
-        menuStyle =
+        menuStyles =
             if hideWhenNotFound then
-                Styles.hiddenMenuStyles |> List.map (\( f, s ) -> style f s)
+                Styles.hiddenMenuStyles
+                    |> List.map (\( f, s ) -> style f s)
 
             else
-                viewStyles config |> List.map (\( f, s ) -> style f s)
+                []
 
         noResultElement =
             if matchedItems == [] then
-                Item.viewNotFound config state
+                Item.viewNotFound config
 
             else
                 text ""
@@ -49,15 +50,8 @@ menu config state matchedItems =
                 |> List.indexedMap (Item.view config state itemCount)
     in
     div
-        (viewClassAttr config :: menuStyle)
+        ([ class Styles.menuClass ]
+            ++ menuStyles
+            ++ config.menuAttrs
+        )
         (noResultElement :: elements)
-
-
-viewClassAttr : Config msg item -> Attribute msg2
-viewClassAttr config =
-    class (Styles.menuClass ++ config.menuClass)
-
-
-viewStyles : Config msg item -> List ( String, String )
-viewStyles config =
-    List.append Styles.visibleMenuStyles config.menuStyles

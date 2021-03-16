@@ -1,7 +1,7 @@
 module Select.Select.Input exposing (onKeyPressAttribute, onKeyUpAttribute, view)
 
 import Array
-import Html as Html exposing (Attribute, Html)
+import Html as Html exposing (Attribute, Html, div)
 import Html.Attributes
     exposing
         ( attribute
@@ -85,77 +85,28 @@ onKeyUpAttribute maybeItem =
         )
 
 
-view : Config msg item -> State -> List item -> List item -> Maybe (List item) -> Html (Msg item)
+view : Config msg item -> State -> List item -> List item -> Maybe (List item) -> Html msg
 view config model availableItems selectedItems maybeMatchedItems =
     let
-        inputControlClass : String
-        inputControlClass =
-            Styles.inputControlClass ++ config.inputControlClass
-
-        inputControlStyles : List ( String, String )
-        inputControlStyles =
-            List.append
-                Styles.inputControlStyles
-                config.inputControlStyles
-
-        inputControlStylesAttrs =
-            Utils.stylesToAttrs inputControlStyles
-
-        inputWrapperClass : String
-        inputWrapperClass =
-            Styles.inputWrapperClass ++ config.inputWrapperClass
-
-        inputWrapperStyles : List ( String, String )
-        inputWrapperStyles =
-            List.append
-                Styles.inputWrapperStyles
-                config.inputWrapperStyles
-
-        inputWrapperStylesAttrs =
-            Utils.stylesToAttrs inputWrapperStyles
-
-        clearClasses : String
-        clearClasses =
-            Styles.clearClass ++ config.clearClass
-
-        clearStyles : List ( String, String )
-        clearStyles =
-            List.append
-                Styles.clearStyles
-                config.clearStyles
-
-        clear : Html (Msg item)
+        clear : Html msg
         clear =
             if List.isEmpty selectedItems || config.hasClear == False then
                 Html.text ""
 
             else
                 Html.div
-                    ([ class clearClasses
-                     , onClickWithoutPropagation Msg.OnClear
+                    ([ onClickWithoutPropagation Msg.OnClear
+                        |> Html.Attributes.map config.toMsg
                      ]
-                        ++ (clearStyles
-                                |> List.map (\( f, s ) -> style f s)
-                           )
+                        ++ Styles.clearAttrs
+                        ++ config.clearAttrs
                     )
                     [ Clear.view config ]
 
-        underlineClasses : String
-        underlineClasses =
-            Styles.underlineClass ++ config.underlineClass
-
-        underlineStyles : List ( String, String )
-        underlineStyles =
-            List.append
-                Styles.underlineStyles
-                config.underlineStyles
-
-        underline : Html (Msg item)
+        underline : Html msg
         underline =
             Html.div
-                (class underlineClasses
-                    :: (underlineStyles |> List.map (\( f, s ) -> style f s))
-                )
+                (Styles.underlineAttrs ++ config.underlineAttrs)
                 []
 
         input =
@@ -175,65 +126,46 @@ view config model availableItems selectedItems maybeMatchedItems =
                     selectedItems
                     maybeMatchedItems
     in
-    Html.div
-        ([ class inputControlClass ] ++ inputControlStylesAttrs)
-        [ Html.div
-            ([ class inputWrapperClass ] ++ inputWrapperStylesAttrs)
+    div
+        (Styles.inputControlAttrs
+            ++ config.inputControlAttrs
+        )
+        [ div
+            (Styles.inputWrapperAttrs
+                ++ config.inputWrapperAttrs
+            )
             input
         , underline
         , clear
         ]
 
 
-multiInput : Config msg item -> State -> List item -> List item -> Maybe (List item) -> List (Html (Msg item))
+multiInput : Config msg item -> State -> List item -> List item -> Maybe (List item) -> List (Html msg)
 multiInput config model availableItems selected maybeMatchedItems =
     let
-        multiInputItemContainerClasses : String
-        multiInputItemContainerClasses =
-            Styles.multiInputItemContainerClass
-                ++ config.multiInputItemContainerClass
-
-        multiInputItemContainerStyles : List ( String, String )
-        multiInputItemContainerStyles =
-            List.append
-                Styles.multiInputItemContainerStyles
-                config.multiInputItemContainerStyles
-
-        multiInputItemContainerStylesAttrs =
-            Utils.stylesToAttrs multiInputItemContainerStyles
-
-        multiInputItemClasses : String
-        multiInputItemClasses =
-            Styles.multiInputItemClass ++ config.multiInputItemClass
-
-        multiInputItemStyles : List ( String, String )
-        multiInputItemStyles =
-            List.append
-                Styles.multiInputItemStyles
-                config.multiInputItemStyles
-
-        multiInputItemStylesAttrs =
-            Utils.stylesToAttrs multiInputItemStyles
-
-        viewMultiItems : List item -> Html (Msg item)
+        viewMultiItems : List item -> Html msg
         viewMultiItems subItems =
-            Html.div
-                (class multiInputItemContainerClasses
-                    :: multiInputItemContainerStylesAttrs
+            div
+                (Styles.multiInputItemContainerAttrs
+                    ++ config.multiInputItemContainerAttrs
                 )
                 (List.map
                     (\item ->
                         Html.div
-                            (class multiInputItemClasses :: multiInputItemStylesAttrs)
-                            [ Html.div (Styles.multiInputItemText |> List.map (\( f, s ) -> style f s)) [ Html.text (config.toLabel item) ]
+                            (Styles.multiInputItemAttrs
+                                ++ config.multiInputItemAttrs
+                            )
+                            [ Html.div
+                                Styles.multiInputItemTextAttrs
+                                [ Html.text (config.toLabel item) ]
                             , Maybe.withDefault (Html.span [] []) <|
                                 Maybe.map
                                     (\_ ->
                                         Html.div
-                                            (onClickWithoutPropagation (Msg.OnRemoveItem item)
-                                                :: (Styles.multiInputRemoveItem
-                                                        |> List.map (\( f, s ) -> style f s)
-                                                   )
+                                            ([ onClickWithoutPropagation (Msg.OnRemoveItem item)
+                                                |> Html.Attributes.map config.toMsg
+                                             ]
+                                                ++ Styles.multiInputRemoveItemAttrs
                                             )
                                             [ RemoveItem.view config ]
                                     )
@@ -261,7 +193,7 @@ multiInput config model availableItems selected maybeMatchedItems =
     ]
 
 
-singleInput : Config msg item -> State -> List item -> List item -> Maybe (List item) -> List (Html (Msg item))
+singleInput : Config msg item -> State -> List item -> List item -> Maybe (List item) -> List (Html msg)
 singleInput config model availableItems selectedItems maybeMatchedItems =
     let
         val =
@@ -282,34 +214,15 @@ singleInput config model availableItems selectedItems maybeMatchedItems =
     ]
 
 
-inputAttributes : Config msg item -> State -> List item -> List item -> Maybe (List item) -> List (Html.Attribute (Msg item))
+inputAttributes : Config msg item -> State -> List item -> List item -> Maybe (List item) -> List (Html.Attribute msg)
 inputAttributes config model availableItems selectedItems maybeMatchedItems =
     let
-        inputClasses : String
-        inputClasses =
-            String.join " "
-                [ Styles.inputClass
-                , config.inputClass
-                , promptClass
-                ]
-
-        inputStyles : List ( String, String )
-        inputStyles =
-            List.concat
-                [ Styles.inputStyles
-                , config.inputStyles
-                , promptStyles
-                ]
-
-        ( promptClass, promptStyles ) =
+        promptAttrs =
             if List.isEmpty selectedItems then
-                ( config.promptClass, config.promptStyles )
+                config.promptAttrs
 
             else
-                ( "", [] )
-
-        inputStylesAttrs =
-            Utils.stylesToAttrs inputStyles
+                []
 
         -- item that will be selected if enter if pressed
         preselectedItem : Maybe item
@@ -330,15 +243,16 @@ inputAttributes config model availableItems selectedItems maybeMatchedItems =
     [ autocomplete False
     , attribute "autocorrect" "off" -- for mobile Safari
     , id config.inputId
-    , onBlurAttribute config model
-    , onKeyUpAttribute preselectedItem
-    , onKeyPressAttribute preselectedItem
-    , onInput Msg.OnQueryChange
-    , onFocus Msg.OnFocus
+    , onBlurAttribute config model |> Html.Attributes.map config.toMsg
+    , onKeyUpAttribute preselectedItem |> Html.Attributes.map config.toMsg
+    , onKeyPressAttribute preselectedItem |> Html.Attributes.map config.toMsg
+    , onInput Msg.OnQueryChange |> Html.Attributes.map config.toMsg
+    , onFocus Msg.OnFocus |> Html.Attributes.map config.toMsg
     , Utils.referenceAttr config model
-    , class inputClasses
     ]
-        ++ inputStylesAttrs
+        ++ Styles.inputAttrs
+        ++ config.inputAttrs
+        ++ promptAttrs
 
 
 onClickWithoutPropagation : Msg item -> Attribute (Msg item)

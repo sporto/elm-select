@@ -1,4 +1,26 @@
-module Select.Styles exposing (clearClass, clearStyles, hiddenMenuStyles, inputClass, inputControlClass, inputControlStyles, inputId, inputStyles, inputWrapperClass, inputWrapperStyles, menuClass, menuItemClass, menuItemStyles, multiInputClass, multiInputItemClass, multiInputItemContainerClass, multiInputItemContainerStyles, multiInputItemStyles, multiInputItemText, multiInputRemoveItem, multiInputStyles, removeItemSvgClass, removeItemSvgStyles, underlineClass, underlineStyles, visibleMenuStyles)
+module Select.Styles exposing
+    ( clearAttrs
+    , hiddenMenuStyles
+    , inputAttrs
+    , inputControlAttrs
+    , inputId
+    , inputWrapperAttrs
+    , menuClass
+    , menuItemAttrs
+    , multiInputAttrs
+    , multiInputItemAttrs
+    , multiInputItemContainerAttrs
+    , multiInputItemTextAttrs
+    , multiInputRemoveItemAttrs
+    , removeItemSvgAttrs
+    , underlineAttrs
+    , visibleMenuStyles
+    )
+
+import Html exposing (Attribute)
+import Html.Attributes exposing (class, style)
+
+
 
 -- INPUT CONSTANTS
 
@@ -8,105 +30,77 @@ inputId =
     "elm-select-input"
 
 
-inputControlClass : String
-inputControlClass =
-    "elm-select-input-control "
-
-
-inputControlStyles : List ( String, String )
-inputControlStyles =
-    [ ( "position", "relative" )
-    , ( "background", "white" )
+inputControlAttrs : List (Attribute msg)
+inputControlAttrs =
+    [ class "elm-select-input-control"
+    , style "position" "relative"
     ]
 
 
-inputWrapperClass : String
-inputWrapperClass =
-    "elm-select-input-wrapper "
-
-
-inputWrapperStyles : List ( String, String )
-inputWrapperStyles =
-    [ ( "display", "flex" )
-    , ( "flex", "1" )
-    , ( "flex-direction", "row" )
-    , ( "flex-wrap", "wrap" )
-    , ( "overflow", "hidden" )
+inputWrapperAttrs : List (Attribute msg)
+inputWrapperAttrs =
+    [ class "elm-select-input-wrapper"
+    , style "display" "flex"
+    , style "flex" "1"
+    , style "flex-direction" "row"
+    , style "flex-wrap" "wrap"
+    , style "overflow" "hidden"
     ]
 
 
-inputClass : String
-inputClass =
-    "elm-select-input"
-
-
-inputStyles : List ( String, String )
-inputStyles =
-    [ ( "flex", "1" )
-    , ( "border", "none" )
-    , ( "outline", "none" )
-    , ( "min-height", "1.3rem" )
-    , ( "font-size", ".75rem" )
+inputAttrs : List (Attribute msg)
+inputAttrs =
+    [ class "elm-select-input"
+    , style "flex" "1"
+    , style "outline" "none"
     ]
 
 
-multiInputClass : String
-multiInputClass =
-    "elm-select-multi-input "
-
-
-multiInputStyles : List ( String, String )
-multiInputStyles =
-    []
-
-
-multiInputItemContainerClass : String
-multiInputItemContainerClass =
-    "elm-select-multi-input-item-container "
-
-
-multiInputItemContainerStyles : List ( String, String )
-multiInputItemContainerStyles =
-    [ ( "display", "flex" )
-    , ( "flex-direction", "row" )
-    , ( "align-items", "center" )
-    , ( "justify-content", "center" )
+multiInputAttrs : List (Attribute msg)
+multiInputAttrs =
+    [ class "elm-select-multi-input"
     ]
 
 
-multiInputItemClass : String
-multiInputItemClass =
-    "elm-select-multi-input-item "
-
-
-multiInputItemStyles : List ( String, String )
-multiInputItemStyles =
-    [ ( "display", "flex" )
-    , ( "border-width", "0.1rem" )
-    , ( "border-radius", "0.2em" )
-    , ( "border-color", "#E3E5E8" )
-    , ( "background-color", "#E3E5E8" )
-    , ( "font-size", ".75rem" )
-    , ( "margin-right", ".2rem" )
+multiInputItemContainerAttrs : List (Attribute msg)
+multiInputItemContainerAttrs =
+    [ class "elm-select-multi-input-item-container"
+    , style "display" "flex"
+    , style "flex-direction" "row"
+    , style "align-items" "center"
+    , style "justify-content" "center"
     ]
 
 
-multiInputItemText : List ( String, String )
-multiInputItemText =
-    [ ( "text-overflow", "ellipsis" )
-    , ( "padding-left", ".5rem" )
-    , ( "padding-right", ".3rem" )
-    , ( "padding-top", ".05rem" )
-    , ( "padding-bottom", ".05rem" )
+multiInputItemAttrs : List (Attribute msg)
+multiInputItemAttrs =
+    [ class "elm-select-multi-input-item"
+    , style "display" "flex"
+    , style "border-width" "0.1rem"
+    , style "border-radius" "0.2em"
+    , style "border-color" "#E3E5E8"
+    , style "background-color" "#E3E5E8"
+    , style "font-size" ".75rem"
+    , style "margin-right" ".2rem"
     ]
 
 
-multiInputRemoveItem : List ( String, String )
-multiInputRemoveItem =
-    [ ( "display", "flex" )
-    , ( "alignItems", "center" )
-    , ( "justifyContent", "center" )
-    , ( "padding-right", ".1rem" )
+multiInputItemTextAttrs : List (Attribute msg)
+multiInputItemTextAttrs =
+    [ style "text-overflow" "ellipsis"
+    , style "padding-left" ".5rem"
+    , style "padding-right" ".3rem"
+    , style "padding-top" ".05rem"
+    , style "padding-bottom" ".05rem"
+    ]
+
+
+multiInputRemoveItemAttrs : List (Attribute msg)
+multiInputRemoveItemAttrs =
+    [ style "display" "flex"
+    , style "alignItems" "center"
+    , style "justifyContent" "center"
+    , style "padding-right" ".1rem"
     ]
 
 
@@ -114,49 +108,33 @@ multiInputRemoveItem =
 -- UNDERLINE
 
 
-underlineClass : String
-underlineClass =
-    "elm-select-underline "
-
-
-underlineStyles : List ( String, String )
-underlineStyles =
-    []
+underlineAttrs : List (Attribute msg)
+underlineAttrs =
+    [ class "elm-select-underline"
+    ]
 
 
 
 -- ITEM CONSTANTS
 
 
-menuItemClass : String
-menuItemClass =
-    "elm-select-item "
-
-
-menuItemStyles : List ( String, String )
-menuItemStyles =
-    [ ( "cursor", "pointer" )
+menuItemAttrs : List (Attribute msg)
+menuItemAttrs =
+    [ class "elm-select-item"
+    , style "cursor" "pointer"
     ]
 
 
-
--- CLEAR CONSTANTS
-
-
-clearClass : String
-clearClass =
-    "elm-select-clear "
-
-
-clearStyles : List ( String, String )
-clearStyles =
-    [ ( "cursor", "pointer" )
-    , ( "height", "1rem" )
-    , ( "line-height", "0rem" )
-    , ( "margin-top", "-0.5rem" )
-    , ( "position", "absolute" )
-    , ( "right", "0.25rem" )
-    , ( "top", "50%" )
+clearAttrs : List (Attribute msg)
+clearAttrs =
+    [ class "elm-select-clear"
+    , style "cursor" "pointer"
+    , style "height" "1rem"
+    , style "line-height" "0rem"
+    , style "margin-top" "-0.5rem"
+    , style "position" "absolute"
+    , style "right" "0.25rem"
+    , style "top" "50%"
     ]
 
 
@@ -166,7 +144,7 @@ clearStyles =
 
 menuClass : String
 menuClass =
-    "elm-select-menu "
+    "elm-select-menu"
 
 
 visibleMenuStyles : List ( String, String )
@@ -179,16 +157,8 @@ hiddenMenuStyles =
     [ ( "display", "none" ) ]
 
 
-
--- REMOVE ITEM CONSTANTS
-
-
-removeItemSvgClass : String
-removeItemSvgClass =
-    "elm-select-remove-item "
-
-
-removeItemSvgStyles : List ( String, String )
-removeItemSvgStyles =
-    [ ( "cursor", "pointer" )
+removeItemSvgAttrs : List (Attribute msg)
+removeItemSvgAttrs =
+    [ class "elm-select-remove-item"
+    , style "cursor" "pointer"
     ]
