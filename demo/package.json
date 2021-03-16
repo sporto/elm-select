@@ -3,7 +3,7 @@
     "elm": "0.19.0-no-deps",
     "elm-hot": "^1.1.0",
     "node-elm-compiler": "^5.0.3",
-    "parcel-bundler": "^1.12.3"
+    "parcel-bundler": "^1.12.5"
   },
   "scripts": {
     "start": "parcel -p 4000 src/app.html",
