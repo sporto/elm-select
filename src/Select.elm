@@ -121,10 +121,10 @@ import Select.Update
 
 -}
 type alias RequiredConfig msg item =
-    { onSelect : Maybe item -> msg
+    { filter : String -> List item -> Maybe (List item)
     , toLabel : item -> String
-    , filter : String -> List item -> Maybe (List item)
-    , toMsg : Messages.Msg item -> msg
+    , onSelect : Maybe item -> msg
+    , toMsg : Msg item -> msg
     }
 
 
@@ -154,7 +154,7 @@ newConfig requiredConfig =
         { onSelect = requiredConfig.onSelect
         , toLabel = requiredConfig.toLabel
         , filter = requiredConfig.filter
-        , toMsg = requiredConfig.toMsg
+        , toMsg = PrivateMsg >> requiredConfig.toMsg
         }
         |> PrivateConfig
 

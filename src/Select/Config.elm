@@ -14,9 +14,9 @@ type alias Style =
 
 
 type alias RequiredConfig msg item =
-    { onSelect : Maybe item -> msg
+    { filter : String -> List item -> Maybe (List item)
     , toLabel : item -> String
-    , filter : String -> List item -> Maybe (List item)
+    , onSelect : Maybe item -> msg
     , toMsg : Msg item -> msg
     }
 

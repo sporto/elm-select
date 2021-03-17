@@ -182,18 +182,26 @@ selectConfig4a =
         { onSelect = Example4Custom.OnSelect
         , toLabel = .label
         , filter = Shared.filter 4 .label
+        , toMsg = Example4Custom.SelectMsg
         }
         |> Select.withCutoff 12
         |> Select.withEmptySearch True
-        |> Select.withInputClass "border border-gray-800 p-2"
-        |> Select.withItemClass " p-2 border-b border-gray-500 text-gray-800"
-        |> Select.withMenuClass "border border-gray-800 bg-white"
+        |> Select.withInputAttrs
+            [ class  "border border-gray-800 p-2" ]
+        |> Select.withItemAttrs
+            [ class  " p-2 border-b border-gray-500 text-gray-800" ]
+        |> Select.withMenuAttrs
+            [ class  "border border-gray-800 bg-white" ]
         |> Select.withNotFound "No matches"
-        |> Select.withNotFoundClass "text-red"
-        |> Select.withHighlightedItemClass "bg-gray-300"
+        |> Select.withNotFoundAttrs
+            [ class  "text-red" ]
+        |> Select.withHighlightedItemAttrs
+            [ class  "bg-gray-300" ]
         |> Select.withPrompt "Select a movie"
-        |> Select.withPromptClass "text-gray-800"
-        |> Select.withUnderlineClass "underline"
+        |> Select.withPromptAttrs
+            [ class  "text-gray-800" ]
+        |> Select.withUnderlineAttrs
+            [ class "underline" ]
 
 
 selectConfig4b =
@@ -212,4 +220,5 @@ selectConfig4c =
         { onSelect = Example4Custom.OnSelect
         , toLabel = .label
         , filter = Shared.filter 4 .label
+        , toMsg = Example4Custom.SelectMsg
         }
