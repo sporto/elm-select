@@ -10,7 +10,7 @@ module Example1Basic exposing
     )
 
 import Html exposing (..)
-import Html.Attributes exposing (class)
+import Html.Attributes exposing (class, style)
 import Movies
 import Select
 import Shared
@@ -85,24 +85,35 @@ selectConfig =
         { onSelect = OnSelect
         , toLabel = .label
         , filter = Shared.filter 4 .label
+        , toMsg = SelectMsg
         }
         |> Select.withCutoff 12
-        |> Select.withInputWrapperClass "border border-gray-600"
-        |> Select.withInputWrapperStyles
-            [ ( "padding", "0.4rem" ) ]
+        |> Select.withInputWrapperAttrs
+            [ class "border border-gray-600"
+            , style "padding" "0.4rem"
+            ]
         |> Select.withInputId "input-id"
-        |> Select.withItemClass " p-2 border-b border-gray-500 text-gray-800"
-        |> Select.withItemStyles [ ( "font-size", "1rem" ) ]
-        |> Select.withMenuClass "border border-gray-800"
-        |> Select.withMenuStyles [ ( "background", "white" ) ]
+        |> Select.withItemAttrs
+            [ class "p-2 border-b border-gray-500 text-gray-800"
+            , style "font-size" "1rem" ]
+        |> Select.withMenuAttrs
+            [ class "border border-gray-800"
+            , style "background" "white"
+            ]
         |> Select.withNotFound "No matches"
-        |> Select.withNotFoundClass "text-red"
-        |> Select.withNotFoundStyles [ ( "padding", "0 2rem" ) ]
-        |> Select.withHighlightedItemClass "bg-gray-300"
-        |> Select.withHighlightedItemStyles [ ( "color", "black" ) ]
+        |> Select.withNotFoundAttrs
+            [ class "text-red"
+            , style "padding" "0 2rem"
+            ]
+        |> Select.withHighlightedItemAttrs
+            [ class "bg-gray-300"
+            , style "color" "black"
+            ]
         |> Select.withPrompt "Select a movie"
-        |> Select.withPromptClass "text-gray-800"
-        |> Select.withUnderlineClass "underline"
+        |> Select.withPromptAttrs
+            [ class "text-gray-800" ]
+        |> Select.withUnderlineAttrs
+            [ class "underline" ]
 
 
 {-| Your update function should route messages back to the Select component, see `SelectMsg`.
@@ -183,6 +194,6 @@ view model =
             [ label [] [ text "Pick a movie" ]
             ]
         , p []
-            [ Html.map SelectMsg select
+            [ select
             ]
         ]

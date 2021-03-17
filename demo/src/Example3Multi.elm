@@ -9,7 +9,7 @@ module Example3Multi exposing
     )
 
 import Html exposing (..)
-import Html.Attributes exposing (class)
+import Html.Attributes exposing (class, style)
 import Select
 import Shared
 
@@ -126,25 +126,26 @@ selectConfig =
         { onSelect = OnSelect
         , toLabel = colorToString
         , filter = Shared.filter 2 colorToString
+        , toMsg = SelectMsg
         }
         |> Select.withMultiSelection True
         |> Select.withOnRemoveItem OnRemoveItem
         |> Select.withCutoff 12
         |> Select.withInputId "input-id"
-        |> Select.withInputWrapperStyles
-            [ ( "padding", "0.4rem" ) ]
-        |> Select.withItemClass "p-1 border-b border-gray-500 text-gray-800"
-        |> Select.withItemStyles [ ( "font-size", "1rem" ) ]
-        |> Select.withMenuClass "border border-gray-800"
-        |> Select.withMenuStyles [ ( "background", "white" ) ]
+        |> Select.withInputWrapperAttrs
+            [ style "padding" "0.4rem" ]
+        |> Select.withItemAttrs
+            [ class "p-1 border-b border-gray-500 text-gray-800", style "font-size" "1rem" ]
+        |> Select.withMenuAttrs
+            [ class "border border-gray-800", style  "background" "white" ]
         |> Select.withNotFound "No matches"
-        |> Select.withNotFoundClass "red"
-        |> Select.withNotFoundStyles [ ( "padding", "0 2rem" ) ]
-        |> Select.withHighlightedItemClass "bg-gray"
-        |> Select.withHighlightedItemStyles []
+        |> Select.withNotFoundAttrs
+            [ class "red", style "padding" "0 2rem" ]
+        |> Select.withHighlightedItemAttrs
+            [ class "bg-gray" ]
         |> Select.withPrompt "Select a color"
-        |> Select.withPromptClass "text-gray-800"
-        |> Select.withUnderlineClass "underline"
+        |> Select.withPromptAttrs [ class "text-gray-800" ]
+        |> Select.withUnderlineAttrs [ class"underline" ]
 
 
 {-| Your update function should route messages back to the Select component, see `SelectMsg`.
@@ -205,6 +206,6 @@ view model =
             [ label [] [ text "Pick colors" ]
             ]
         , p []
-            [ Html.map SelectMsg select
+            [ select
             ]
         ]

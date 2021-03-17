@@ -135,6 +135,6 @@ view selectConfig model title =
             [ label [] [ text "Pick a movie" ]
             ]
         , p []
-            [ Html.map SelectMsg select
+            [ select
             ]
         ]
