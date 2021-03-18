@@ -133,17 +133,9 @@ selectConfig =
         |> Select.withCutoff 12
         |> Select.withInputWrapperAttrs
             [ style "padding" "0.4rem" ]
-        |> Select.withItemAttrs
-            [ class "p-1 border-b border-gray-500 text-gray-800", style "font-size" "1rem" ]
-        |> Select.withMenuAttrs
-            [ class "border border-gray-800", style  "background" "white" ]
         |> Select.withNotFound "No matches"
-        |> Select.withNotFoundAttrs
-            [ class "red", style "padding" "0 2rem" ]
-        |> Select.withHighlightedItemAttrs
-            [ class "bg-gray" ]
         |> Select.withPrompt "Select a color"
-        |> Select.withPromptAttrs [ class "text-gray-800" ]
+
 
 
 {-| Your update function should route messages back to the Select component, see `SelectMsg`.
@@ -188,7 +180,7 @@ view : Model -> Html Msg
 view model =
     let
         currentSelection =
-            p 
+            p
                 []
                 [ text (String.join ", " <| List.map colorToString model.selectedColors) ]
 

@@ -75,15 +75,11 @@ selectConfig =
         }
         |> Select.withInputWrapperAttrs
             [ style "padding" "0.4rem" ]
-        |> Select.withMenuAttrs
-            [ class "border border-gray-800 bg-white" ]
         |> Select.withItemAttrs
-            [ class "p-1 border-b border-gray-800"
-            , style "font-size" "1rem"
-            ]
+            [ style "font-size" "1rem" ]
         |> Select.withNotFoundShown False
         |> Select.withHighlightedItemAttrs
-            [ class "bg-gray", style "color" "black" ]
+            [ style "color" "black" ]
         |> Select.withPrompt "Select a character"
         |> Select.withCutoff 12
         |> Select.withOnQuery OnQuery

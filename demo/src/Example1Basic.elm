@@ -89,28 +89,17 @@ selectConfig =
         }
         |> Select.withCutoff 12
         |> Select.withInputWrapperAttrs
-            [ class "border border-gray-600"
-            , style "padding" "0.4rem"
-            ]
+            [ style "padding" "0.4rem" ]
         |> Select.withItemAttrs
-            [ class "border-b border-gray-500 text-gray-800"
-            , style "font-size" "1rem" ]
+            [ style "font-size" "1rem" ]
         |> Select.withMenuAttrs
-            [ class "border border-gray-800"
-            , style "background" "white"
-            ]
+            [ style "background" "white" ]
         |> Select.withNotFound "No matches"
         |> Select.withNotFoundAttrs
-            [ class "text-red"
-            , style "padding" "0 2rem"
-            ]
+            [ style "padding" "0 2rem" ]
         |> Select.withHighlightedItemAttrs
-            [ class "demo-box"
-            , style "color" "black"
-            ]
+            [ style "color" "black" ]
         |> Select.withPrompt "Select a movie"
-        |> Select.withPromptAttrs
-            [ class "text-gray-800" ]
 
 
 {-| Your update function should route messages back to the Select component, see `SelectMsg`.
