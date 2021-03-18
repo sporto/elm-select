@@ -1,3 +1,65 @@
 .elm-select-input-control {
   background: white;
+  position: relative;
+}
+
+.elm-select-input-wrapper {
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+  flex-wrap: wrap;
+  overflow: hidden;
+}
+
+.elm-select-input {
+  flex: 1;
+  outline: none;
+}
+
+.elm-select-clear{
+  cursor: pointer;
+  height: 1rem;
+  line-height: 1rem;
+  margin-top: -0.5rem;
+  position: absolute;
+  right: 0.25rem;
+  top: 50%;
+}
+
+.elm-select-multi-input-item-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.elm-select-multi-input-item {
+  display: flex;
+  border-width: 1px;
+  background-color: #E3E5E8;
+}
+
+.elm-select-multi-input-item-text {
+  text-overflow: ellipsis;
+}
+
+.elm-select-multi-input-item-remove {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Menu */
+
+.elm-select-menu {
+  position: absolute;
+  z-index: 1;
+}
+
+.elm-select-menu-item {
+  cursor: pointer;
+}
+
+.elm-select-menu-item-remove {
+  cursor: pointer;
 }

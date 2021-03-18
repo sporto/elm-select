@@ -18,11 +18,10 @@ import Select.Config exposing (Config)
 import Select.Events exposing (onBlurAttribute)
 import Select.Messages as Msg exposing (Msg)
 import Select.Models exposing (State)
-import Select.Search as Search
 import Select.Select.Clear as Clear
 import Select.Select.RemoveItem as RemoveItem
+import Select.Shared as Utils exposing (classNames)
 import Select.Styles as Styles
-import Select.Utils as Utils
 
 
 onKeyPressAttribute : Maybe item -> Attribute (Msg item)
@@ -95,19 +94,13 @@ view config model availableItems selectedItems maybeMatchedItems =
 
             else
                 Html.div
-                    ([ onClickWithoutPropagation Msg.OnClear
+                    ([ class classNames.clear
+                     , onClickWithoutPropagation Msg.OnClear
                         |> Html.Attributes.map config.toMsg
                      ]
-                        ++ Styles.clearAttrs
                         ++ config.clearAttrs
                     )
                     [ Clear.view config ]
-
-        underline : Html msg
-        underline =
-            Html.div
-                (Styles.underlineAttrs ++ config.underlineAttrs)
-                []
 
         input =
             if config.isMultiSelect then
@@ -127,15 +120,14 @@ view config model availableItems selectedItems maybeMatchedItems =
                     maybeMatchedItems
     in
     div
-        (Styles.inputControlAttrs
+        ([ class classNames.inputControl ]
             ++ config.inputControlAttrs
         )
         [ div
-            (Styles.inputWrapperAttrs
+            ([ class classNames.inputWrapper ]
                 ++ config.inputWrapperAttrs
             )
             input
-        , underline
         , clear
         ]
 
@@ -146,27 +138,26 @@ multiInput config model availableItems selected maybeMatchedItems =
         viewMultiItems : List item -> Html msg
         viewMultiItems subItems =
             div
-                (Styles.multiInputItemContainerAttrs
+                ([ class classNames.multiInputItemContainer ]
                     ++ config.multiInputItemContainerAttrs
                 )
                 (List.map
                     (\item ->
                         Html.div
-                            (Styles.multiInputItemAttrs
+                            ([ class classNames.multiInputItem ]
                                 ++ config.multiInputItemAttrs
                             )
                             [ Html.div
-                                Styles.multiInputItemTextAttrs
+                                [ class classNames.multiInputItemText ]
                                 [ Html.text (config.toLabel item) ]
                             , Maybe.withDefault (Html.span [] []) <|
                                 Maybe.map
                                     (\_ ->
                                         Html.div
-                                            ([ onClickWithoutPropagation (Msg.OnRemoveItem item)
+                                            [ class classNames.multiInputItemRemove
+                                            , onClickWithoutPropagation (Msg.OnRemoveItem item)
                                                 |> Html.Attributes.map config.toMsg
-                                             ]
-                                                ++ Styles.multiInputRemoveItemAttrs
-                                            )
+                                            ]
                                             [ RemoveItem.view config ]
                                     )
                                     config.onRemoveItem
@@ -250,7 +241,7 @@ inputAttributes config model availableItems selectedItems maybeMatchedItems =
     , onFocus Msg.OnFocus |> Html.Attributes.map config.toMsg
     , Utils.referenceAttr config model
     ]
-        ++ Styles.inputAttrs
+        ++ [ class classNames.input ]
         ++ config.inputAttrs
         ++ promptAttrs
 

@@ -5,10 +5,8 @@ import Html.Attributes exposing (class, style)
 import Select.Config exposing (Config)
 import Select.Messages exposing (..)
 import Select.Models as Models exposing (State)
-import Select.Search as Search
 import Select.Select.Item as Item
-import Select.Styles as Styles
-import Select.Utils as Utils
+import Select.Shared exposing (classNames)
 
 
 view : Config msg item -> State -> Maybe (List item) -> Html msg
@@ -29,8 +27,7 @@ menu config state matchedItems =
 
         menuStyles =
             if hideWhenNotFound then
-                Styles.hiddenMenuStyles
-                    |> List.map (\( f, s ) -> style f s)
+                [ style "display" "none" ]
 
             else
                 []
@@ -50,7 +47,7 @@ menu config state matchedItems =
                 |> List.indexedMap (Item.view config state itemCount)
     in
     div
-        ([ class Styles.menuClass ]
+        ([ class classNames.menu ]
             ++ menuStyles
             ++ config.menuAttrs
         )

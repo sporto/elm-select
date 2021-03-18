@@ -186,8 +186,6 @@ selectConfig4a =
         |> Select.withPrompt "Select a movie"
         |> Select.withPromptAttrs
             [ class  "text-gray-800" ]
-        |> Select.withUnderlineAttrs
-            [ class "underline" ]
 
 
 selectConfig4b =

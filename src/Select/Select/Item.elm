@@ -9,8 +9,8 @@ import Html.Events exposing (onMouseDown)
 import Select.Config exposing (Config)
 import Select.Messages exposing (..)
 import Select.Models exposing (State)
+import Select.Shared exposing (referenceAttr)
 import Select.Styles as Styles
-import Select.Utils exposing (referenceAttr)
 
 
 view : Config msg item -> State -> Int -> Int -> item -> Html msg

@@ -6,7 +6,7 @@ import Json.Decode as Decode
 import Select.Config exposing (Config)
 import Select.Messages exposing (..)
 import Select.Models exposing (State)
-import Select.Utils exposing (referenceDataName)
+import Select.Shared exposing (referenceDataName)
 
 
 onBlurAttribute : Config msg item -> State -> Attribute (Msg item)

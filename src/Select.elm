@@ -6,7 +6,6 @@ module Select exposing
     , withInputWrapperAttrs
     , withInputId, withInputAttrs, withOnFocus
     , withClear, withClearAttrs, withClearSvgAttrs
-    , withUnderlineAttrs
     , withItemAttrs, withItemHtml, withHighlightedItemAttrs
     , withMenuAttrs
     , withNotFound, withNotFoundAttrs, withNotFoundShown
@@ -62,11 +61,6 @@ This is the element that wraps the selected item(s) and the input
 # Configure the clear button
 
 @docs withClear, withClearAttrs, withClearStyles, withClearSvgAttrs
-
-
-# Configure an underline element under the input
-
-@docs withUnderlineAttrs, withUnderlineStyles
 
 
 # Configure the items
@@ -185,23 +179,6 @@ withInputControlAttrs attrs config =
     let
         fn c =
             { c | inputControlAttrs = attrs }
-    in
-    mapConfig fn config
-
-
-{-| Add attributes to the underline div
-
-    Select.withUnderlineAttrs [ class "underline" ] config
-
--}
-withUnderlineAttrs :
-    List (Attribute msg)
-    -> Config msg item
-    -> Config msg item
-withUnderlineAttrs attrs config =
-    let
-        fn c =
-            { c | underlineAttrs = attrs }
     in
     mapConfig fn config
 

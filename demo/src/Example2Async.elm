@@ -88,7 +88,6 @@ selectConfig =
         |> Select.withCutoff 12
         |> Select.withOnQuery OnQuery
         |> Select.withItemHtml itemHtml
-        |> Select.withUnderlineAttrs [ class "underline" ]
         |> Select.withTransformQuery
             (\query ->
                 if String.length query < 3 then

@@ -145,7 +145,6 @@ selectConfig =
             [ class "bg-gray" ]
         |> Select.withPrompt "Select a color"
         |> Select.withPromptAttrs [ class "text-gray-800" ]
-        |> Select.withUnderlineAttrs [ class"underline" ]
 
 
 {-| Your update function should route messages back to the Select component, see `SelectMsg`.

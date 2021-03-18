@@ -53,7 +53,6 @@ type alias Config msg item =
     , scoreThreshold : Int
     , toLabel : item -> String
     , transformQuery : String -> String
-    , underlineAttrs : List (Attribute msg)
     , toMsg : Msg item -> msg
     }
 
@@ -91,6 +90,5 @@ newConfig requiredConfig =
     , scoreThreshold = 2000
     , toLabel = requiredConfig.toLabel
     , transformQuery = identity
-    , underlineAttrs = []
     , toMsg = requiredConfig.toMsg
     }
