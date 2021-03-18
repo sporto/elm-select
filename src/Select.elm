@@ -4,7 +4,7 @@ module Select exposing
     , withMultiSelection, withOnRemoveItem, withMultiInputItemContainerAttrs, withMultiInputItemAttrs
     , withInputControlAttrs
     , withInputWrapperAttrs
-    , withInputId, withInputAttrs, withOnFocus
+    , withInputAttrs, withOnFocus
     , withClear, withClearAttrs, withClearSvgAttrs
     , withItemAttrs, withItemHtml, withHighlightedItemAttrs
     , withMenuAttrs
@@ -255,20 +255,6 @@ withCutoff n config =
     let
         fn c =
             { c | cutoff = Just n }
-    in
-    mapConfig fn config
-
-
-{-| Set the ID of the input
-
-    Select.withInputId "input-id" config
-
--}
-withInputId : String -> Config msg item -> Config msg item
-withInputId id config =
-    let
-        fn c =
-            { c | inputId = id }
     in
     mapConfig fn config
 

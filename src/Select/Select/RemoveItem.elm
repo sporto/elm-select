@@ -1,9 +1,7 @@
 module Select.Select.RemoveItem exposing (svgPath, view)
 
-import Html.Attributes as HtmlAttrs
 import Select.Config exposing (Config)
 import Select.Shared exposing (classNames)
-import Select.Styles as Styles
 import Svg exposing (..)
 import Svg.Attributes as Attrs
 

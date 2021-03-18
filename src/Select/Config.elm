@@ -6,7 +6,6 @@ module Select.Config exposing
 
 import Html exposing (Attribute, Html)
 import Select.Messages exposing (Msg)
-import Select.Styles as Styles
 
 
 type alias Style =
@@ -30,7 +29,6 @@ type alias Config msg item =
     , filter : String -> List item -> Maybe (List item)
     , hasClear : Bool
     , highlightedItemAttrs : List (Attribute msg)
-    , inputId : String
     , inputAttrs : List (Attribute msg)
     , inputControlAttrs : List (Attribute msg)
     , inputWrapperAttrs : List (Attribute msg)
@@ -67,7 +65,6 @@ newConfig requiredConfig =
     , cutoff = Nothing
     , hasClear = True
     , highlightedItemAttrs = []
-    , inputId = Styles.inputId
     , inputAttrs = []
     , inputControlAttrs = []
     , inputWrapperAttrs = []

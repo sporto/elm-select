@@ -21,7 +21,6 @@ import Select.Models exposing (State)
 import Select.Select.Clear as Clear
 import Select.Select.RemoveItem as RemoveItem
 import Select.Shared as Utils exposing (classNames)
-import Select.Styles as Styles
 
 
 onKeyPressAttribute : Maybe item -> Attribute (Msg item)
@@ -233,7 +232,6 @@ inputAttributes config model availableItems selectedItems maybeMatchedItems =
     in
     [ autocomplete False
     , attribute "autocorrect" "off" -- for mobile Safari
-    , id config.inputId
     , onBlurAttribute config model |> Html.Attributes.map config.toMsg
     , onKeyUpAttribute preselectedItem |> Html.Attributes.map config.toMsg
     , onKeyPressAttribute preselectedItem |> Html.Attributes.map config.toMsg

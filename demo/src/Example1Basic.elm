@@ -92,7 +92,6 @@ selectConfig =
             [ class "border border-gray-600"
             , style "padding" "0.4rem"
             ]
-        |> Select.withInputId "input-id"
         |> Select.withItemAttrs
             [ class "border-b border-gray-500 text-gray-800"
             , style "font-size" "1rem" ]
