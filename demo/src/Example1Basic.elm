@@ -94,7 +94,7 @@ selectConfig =
             ]
         |> Select.withInputId "input-id"
         |> Select.withItemAttrs
-            [ class "p-2 border-b border-gray-500 text-gray-800"
+            [ class "border-b border-gray-500 text-gray-800"
             , style "font-size" "1rem" ]
         |> Select.withMenuAttrs
             [ class "border border-gray-800"
@@ -106,7 +106,7 @@ selectConfig =
             , style "padding" "0 2rem"
             ]
         |> Select.withHighlightedItemAttrs
-            [ class "bg-gray-300"
+            [ class "demo-box"
             , style "color" "black"
             ]
         |> Select.withPrompt "Select a movie"
@@ -148,7 +148,8 @@ view : Model -> Html Msg
 view model =
     let
         currentSelection =
-            p [ class "mt-2" ]
+            p
+                []
                 ([ text "Current selection: "
                  ]
                     ++ selectedMovieList
@@ -187,10 +188,11 @@ view model =
                 model.movies
                 selectedMovies
     in
-    div [ class "bg-gray-300 p-2" ]
+    div [ class "demo-box" ]
         [ h3 [] [ text "Basic example" ]
         , currentSelection
-        , p [ class "mt-2" ]
+        , p
+            []
             [ label [] [ text "Pick a movie" ]
             ]
         , p []

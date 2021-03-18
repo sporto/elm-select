@@ -190,7 +190,8 @@ view : Model -> Html Msg
 view model =
     let
         currentSelection =
-            p [ class "mt-2" ]
+            p 
+                []
                 [ text (String.join ", " <| List.map colorToString model.selectedColors) ]
 
         select =
@@ -199,13 +200,15 @@ view model =
                 model.colors
                 model.selectedColors
     in
-    div [ class "bg-gray-300 p-2" ]
+    div [ class "demo-box" ]
         [ h3 [] [ text "MultiSelect example" ]
         , currentSelection
-        , p [ class "mt-2" ]
+        , p
+            []
             [ label [] [ text "Pick colors" ]
             ]
-        , p []
+        , p
+            []
             [ select
             ]
         ]

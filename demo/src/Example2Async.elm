@@ -172,10 +172,11 @@ view model =
                 model.characters
                 selectedCharacters
     in
-    div [ class "bg-gray-300 p-2" ]
+    div [ class "demo-box" ]
         [ h3 [] [ text "Async example" ]
         , text (model.selectedCharacterId |> Maybe.withDefault "")
-        , p [ class "mt-2" ]
+        , p 
+            []
             [ label [] [ text "Pick an star wars character" ]
             ]
         , p []

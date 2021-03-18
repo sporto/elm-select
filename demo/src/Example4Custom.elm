@@ -94,7 +94,8 @@ view : Select.Config Msg Movie -> Model -> String -> Html Msg
 view selectConfig model title =
     let
         currentSelection =
-            p [ class "mt-2" ]
+            p
+                []
                 ([ text "Current selection: "
                  ]
                     ++ selectedMovieList
@@ -128,10 +129,11 @@ view selectConfig model title =
                 model.movies
                 selectedMovies
     in
-    div [ class "bg-gray-300 p-2" ]
+    div [ class "demo-box" ]
         [ h3 [] [ text title ]
         , currentSelection
-        , p [ class "mt-2" ]
+        , p
+            []
             [ label [] [ text "Pick a movie" ]
             ]
         , p []

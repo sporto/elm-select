@@ -130,39 +130,25 @@ view model =
     div [ class "p-5 pb-20" ]
         [ h1 [] [ text "Elm Select" ]
         , a [ href projectUrl ] [ text projectUrl ]
-        , div [ class "my-8" ]
-            [ Html.map Example1BasicAMsg (Example1Basic.view model.example1a)
-            ]
-        , div [ class "my-8" ]
-            [ Html.map Example1BasicBMsg (Example1Basic.view model.example1b)
-            ]
-        , div [ class "my-8" ]
-            [ Html.map Example2AsyncMsg (Example2Async.view model.example2)
-            ]
-        , div [ class "my-8" ]
-            [ Html.map Example3MultiMsg (Example3Multi.view model.example3)
-            ]
-        , div [ class "my-8" ]
-            [ Example4Custom.view
+        , Html.map Example1BasicAMsg (Example1Basic.view model.example1a)
+        , Html.map Example1BasicBMsg (Example1Basic.view model.example1b)
+        , Html.map Example2AsyncMsg (Example2Async.view model.example2)
+        , Html.map Example3MultiMsg (Example3Multi.view model.example3)
+        , Example4Custom.view
                 selectConfig4a
                 model.example4a
                 "With empty search"
                 |> Html.map Example4CustomAMsg
-            ]
-        , div [ class "my-8" ]
-            [ Example4Custom.view
+        , Example4Custom.view
                 selectConfig4b
                 model.example4b
                 "With custom input"
                 |> Html.map Example4CustomBMsg
-            ]
-        , div [ class "my-8" ]
-            [ Example4Custom.view
+        , Example4Custom.view
                 selectConfig4c
                 model.example4c
                 "Just the defaults"
                 |> Html.map Example4CustomCMsg
-            ]
         ]
 
 
@@ -196,7 +182,7 @@ selectConfig4a =
         |> Select.withNotFoundAttrs
             [ class  "text-red" ]
         |> Select.withHighlightedItemAttrs
-            [ class  "bg-gray-300" ]
+            [ class  "demo-box" ]
         |> Select.withPrompt "Select a movie"
         |> Select.withPromptAttrs
             [ class  "text-gray-800" ]
