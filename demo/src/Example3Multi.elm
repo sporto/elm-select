@@ -131,8 +131,6 @@ selectConfig =
         |> Select.withMultiSelection True
         |> Select.withOnRemoveItem OnRemoveItem
         |> Select.withCutoff 12
-        |> Select.withInputWrapperAttrs
-            [ style "padding" "0.4rem" ]
         |> Select.withNotFound "No matches"
         |> Select.withPrompt "Select a color"
 

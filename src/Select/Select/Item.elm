@@ -38,6 +38,7 @@ view config state itemCount index item =
     in
     div
         ([ class classNames.menuItem
+         , class classNames.menuItemSelectable
          , onMouseDown (config.toMsg (OnSelect item))
          , referenceAttr config state
          ]
@@ -54,5 +55,5 @@ viewNotFound config =
 
     else
         div
-            config.notFoundAttrs
+            ([ class classNames.menuItem ] ++ config.notFoundAttrs)
             [ text config.notFound ]

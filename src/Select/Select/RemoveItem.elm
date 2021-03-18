@@ -12,7 +12,6 @@ view config =
         ([ Attrs.width "14"
          , Attrs.height "14"
          , Attrs.viewBox "0 0 20 20"
-         , Attrs.class classNames.menuItemRemove
          ]
             ++ config.removeItemSvgAttrs
         )

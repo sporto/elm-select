@@ -22,7 +22,6 @@ import Select.Models exposing (State)
 
 classNames =
     { root = "elm-select"
-    , inputControl = "elm-select-input-control"
     , inputWrapper = "elm-select-input-wrapper"
     , input = "elm-select-input"
     , clear = "elm-select-clear"
@@ -32,12 +31,13 @@ classNames =
     , multiInputItemContainer = "elm-select-multi-input-item-container"
     , multiInputItem = "elm-select-multi-input-item"
     , multiInputItemText = "elm-select-multi-input-item-text"
-    , multiInputItemRemove = "elm-select-multi-input-item-remove"
+    , multiInputItemRemove = "elm-select-multi-item-remove"
 
+    --
     -- Menu
     , menu = "elm-select-menu"
     , menuItem = "elm-select-menu-item"
-    , menuItemRemove = "elm-select-menu-item-remove"
+    , menuItemSelectable = "elm-select-menu-item-selectable"
     }
 
 

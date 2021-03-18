@@ -44,16 +44,10 @@ view config model availableItems selectedItems maybeMatchedItems =
                     maybeMatchedItems
     in
     div
-        ([ class classNames.inputControl ]
-            ++ config.inputControlAttrs
+        ([ class classNames.inputWrapper ]
+            ++ config.inputWrapperAttrs
         )
-        [ div
-            ([ class classNames.inputWrapper ]
-                ++ config.inputWrapperAttrs
-            )
-            input
-        , maybeClear
-        ]
+        (input ++ [ maybeClear ])
 
 
 clear config =
@@ -67,7 +61,13 @@ clear config =
         [ Clear.view config ]
 
 
-singleInput : Config msg item -> State -> List item -> List item -> Maybe (List item) -> List (Html msg)
+singleInput :
+    Config msg item
+    -> State
+    -> List item
+    -> List item
+    -> Maybe (List item)
+    -> List (Html msg)
 singleInput config model availableItems selectedItems maybeMatchedItems =
     let
         val =
@@ -81,8 +81,7 @@ singleInput config model availableItems selectedItems maybeMatchedItems =
                 Just query ->
                     query
     in
-    [ div [] []
-    , input
+    [ input
         (Shared.inputAttributes config model availableItems selectedItems maybeMatchedItems ++ [ value val, placeholder config.prompt ])
         []
     ]

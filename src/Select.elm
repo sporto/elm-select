@@ -153,9 +153,13 @@ newConfig requiredConfig =
         |> PrivateConfig
 
 
-{-| Show results if the input is focused, but the query is empty
+{-| Show results if the input is focused, but the query is empty.
+Similar to a dropdown, focusing on the input will show the menu.
+
 Default is False.
-Select.withEmptySearch True config
+
+    Select.withEmptySearch True config
+
 -}
 withEmptySearch : Bool -> Config msg item -> Config msg item
 withEmptySearch emptySearch config =

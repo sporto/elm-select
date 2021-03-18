@@ -49,7 +49,6 @@ type Msg
     | Example3MultiMsg Example3Multi.Msg
     | Example4CustomAMsg Example4Custom.Msg
     | Example4CustomBMsg Example4Custom.Msg
-    | Example4CustomCMsg Example4Custom.Msg
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -96,16 +95,6 @@ update msg model =
             in
             ( { model | example4b = subModel }, Cmd.map Example4CustomBMsg subCmd )
 
-        Example4CustomCMsg sub ->
-            let
-                ( subModel, subCmd ) =
-                    Example4Custom.update
-                        selectConfig4c
-                        sub
-                        model.example4c
-            in
-            ( { model | example4c = subModel }, Cmd.map Example4CustomCMsg subCmd )
-
         NoOp ->
             ( model, Cmd.none )
 
@@ -133,11 +122,6 @@ view model =
                 model.example4b
                 "With custom input"
                 |> Html.map Example4CustomBMsg
-        , Example4Custom.view
-                selectConfig4c
-                model.example4c
-                "Just the defaults"
-                |> Html.map Example4CustomCMsg
         ]
 
 
@@ -161,21 +145,8 @@ selectConfig4a =
         }
         |> Select.withCutoff 12
         |> Select.withEmptySearch True
-        |> Select.withInputAttrs
-            [ class  "border border-gray-800 p-2" ]
-        |> Select.withItemAttrs
-            [ class  " p-2 border-b border-gray-500 text-gray-800" ]
-        |> Select.withMenuAttrs
-            [ class  "border border-gray-800 bg-white" ]
         |> Select.withNotFound "No matches"
-        |> Select.withNotFoundAttrs
-            [ class  "text-red" ]
-        |> Select.withHighlightedItemAttrs
-            [ class  "demo-box" ]
         |> Select.withPrompt "Select a movie"
-        |> Select.withPromptAttrs
-            [ class  "text-gray-800" ]
-
 
 selectConfig4b =
     selectConfig4a
@@ -185,13 +156,3 @@ selectConfig4b =
                 , label = input
                 }
             )
-
-
-selectConfig4c : Select.Config Example4Custom.Msg Example4Custom.Movie
-selectConfig4c =
-    Select.newConfig
-        { onSelect = Example4Custom.OnSelect
-        , toLabel = .label
-        , filter = Shared.filter 4 .label
-        , toMsg = Example4Custom.SelectMsg
-        }

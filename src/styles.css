@@ -1,14 +1,9 @@
-.elm-select-input-control {
-  background: white;
-  position: relative;
-}
-
 .elm-select-input-wrapper {
   display: flex;
-  flex: 1;
-  flex-direction: row;
-  flex-wrap: wrap;
+  position: relative;
   overflow: hidden;
+  background-color:white;
+  padding: 6px 8px;
 }
 
 .elm-select-input {
@@ -53,6 +48,12 @@
   justify-content: center;
 }
 
+.elm-select-multi-item-remove {
+  cursor: pointer;
+  padding-top: 1px;
+  line-height: 0px;
+}
+
 /* Menu */
 
 .elm-select-menu {
@@ -64,14 +65,13 @@
 }
 
 .elm-select-menu-item {
-  cursor: pointer;
   padding: 8px 4px;
 }
 
-.elm-select-menu-item:hover {
-  background-color: #e9e9e9;
+.elm-select-menu-item-selectable {
+  cursor: pointer;
 }
 
-.elm-select-menu-item-remove {
-  cursor: pointer;
+.elm-select-menu-item-selectable:hover {
+  background-color: #e9e9e9;
 }
