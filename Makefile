@@ -1,4 +1,4 @@
-build:
+compile:
 	elm make src/Select.elm > /dev/null
 
 test:

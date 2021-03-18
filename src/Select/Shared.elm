@@ -21,7 +21,8 @@ import Select.Models exposing (State)
 
 
 classNames =
-    { inputControl = "elm-select-input-control"
+    { root = "elm-select"
+    , inputControl = "elm-select-input-control"
     , inputWrapper = "elm-select-input-wrapper"
     , input = "elm-select-input"
     , clear = "elm-select-clear"

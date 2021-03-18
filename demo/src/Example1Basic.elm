@@ -88,17 +88,7 @@ selectConfig =
         , toMsg = SelectMsg
         }
         |> Select.withCutoff 12
-        |> Select.withInputWrapperAttrs
-            [ style "padding" "0.4rem" ]
-        |> Select.withItemAttrs
-            [ style "font-size" "1rem" ]
-        |> Select.withMenuAttrs
-            [ style "background" "white" ]
         |> Select.withNotFound "No matches"
-        |> Select.withNotFoundAttrs
-            [ style "padding" "0 2rem" ]
-        |> Select.withHighlightedItemAttrs
-            [ style "color" "black" ]
         |> Select.withPrompt "Select a movie"
 
 

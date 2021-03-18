@@ -92,7 +92,7 @@ initialModel : String -> Model
 initialModel id =
     { id = id
     , colors = colors
-    , selectedColors = []
+    , selectedColors = [ Green, Black ]
     , selectState = Select.newState id
     }
 

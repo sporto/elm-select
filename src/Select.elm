@@ -231,7 +231,8 @@ withClearSvgAttrs attrs config =
     mapConfig fn config
 
 
-{-| Enable user to add custom values
+{-| Allow users to write a custom values (free text entry)
+You must provide a function that converst a String into an item
 
     Select.withCustomInput (\string -> item) config
 

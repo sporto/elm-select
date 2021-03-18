@@ -73,13 +73,7 @@ selectConfig =
         , filter = Shared.filter 4 identity
         , toMsg = SelectMsg
         }
-        |> Select.withInputWrapperAttrs
-            [ style "padding" "0.4rem" ]
-        |> Select.withItemAttrs
-            [ style "font-size" "1rem" ]
         |> Select.withNotFoundShown False
-        |> Select.withHighlightedItemAttrs
-            [ style "color" "black" ]
         |> Select.withPrompt "Select a character"
         |> Select.withCutoff 12
         |> Select.withOnQuery OnQuery
@@ -170,7 +164,7 @@ view model =
     div [ class "demo-box" ]
         [ h3 [] [ text "Async example" ]
         , text (model.selectedCharacterId |> Maybe.withDefault "")
-        , p 
+        , p
             []
             [ label [] [ text "Pick an star wars character" ]
             ]

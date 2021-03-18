@@ -14,9 +14,10 @@
 .elm-select-input {
   flex: 1;
   outline: none;
+  border: none;
 }
 
-.elm-select-clear{
+.elm-select-clear {
   cursor: pointer;
   height: 1rem;
   line-height: 1rem;
@@ -37,6 +38,9 @@
   display: flex;
   border-width: 1px;
   background-color: #E3E5E8;
+  border-radius: 4px;
+  margin-right: 4px;
+  padding: 2px 8px;
 }
 
 .elm-select-multi-input-item-text {
@@ -54,10 +58,18 @@
 .elm-select-menu {
   position: absolute;
   z-index: 1;
+  background-color: white;
+  min-width: 8rem;
+  border: 1px solid #e9e9e9;
 }
 
 .elm-select-menu-item {
   cursor: pointer;
+  padding: 8px 4px;
+}
+
+.elm-select-menu-item:hover {
+  background-color: #e9e9e9;
 }
 
 .elm-select-menu-item-remove {

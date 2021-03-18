@@ -4,12 +4,12 @@ module Select.Select.Item exposing
     )
 
 import Html exposing (..)
-import Html.Attributes exposing (attribute, class, style)
+import Html.Attributes exposing (class)
 import Html.Events exposing (onMouseDown)
 import Select.Config exposing (Config)
 import Select.Messages exposing (..)
 import Select.Models exposing (State)
-import Select.Shared exposing (referenceAttr)
+import Select.Shared exposing (classNames, referenceAttr)
 
 
 view : Config msg item -> State -> Int -> Int -> item -> Html msg
@@ -37,7 +37,8 @@ view config state itemCount index item =
                     fn item
     in
     div
-        ([ onMouseDown (config.toMsg (OnSelect item))
+        ([ class classNames.menuItem
+         , onMouseDown (config.toMsg (OnSelect item))
          , referenceAttr config state
          ]
             ++ highlightedItemAttrs

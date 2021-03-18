@@ -12,8 +12,7 @@ import Shared
 
 
 type alias Model =
-    { example1a : Example1Basic.Model
-    , example1b : Example1Basic.Model
+    { example1 : Example1Basic.Model
     , example2 : Example2Async.Model
     , example3 : Example3Multi.Model
     , example4a : Example4Custom.Model
@@ -24,8 +23,7 @@ type alias Model =
 
 initialModel : Model
 initialModel =
-    { example1a = Example1Basic.initialModel "1a"
-    , example1b = Example1Basic.initialModel "1b"
+    { example1 = Example1Basic.initialModel "1a"
     , example2 = Example2Async.initialModel "2"
     , example3 = Example3Multi.initialModel "3"
     , example4a = Example4Custom.initialModel "4a"
@@ -46,8 +44,7 @@ init _ =
 
 type Msg
     = NoOp
-    | Example1BasicAMsg Example1Basic.Msg
-    | Example1BasicBMsg Example1Basic.Msg
+    | Example1BasicMsg Example1Basic.Msg
     | Example2AsyncMsg Example2Async.Msg
     | Example3MultiMsg Example3Multi.Msg
     | Example4CustomAMsg Example4Custom.Msg
@@ -58,19 +55,12 @@ type Msg
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        Example1BasicAMsg sub ->
+        Example1BasicMsg sub ->
             let
                 ( subModel, subCmd ) =
-                    Example1Basic.update sub model.example1a
+                    Example1Basic.update sub model.example1
             in
-            ( { model | example1a = subModel }, Cmd.map Example1BasicAMsg subCmd )
-
-        Example1BasicBMsg sub ->
-            let
-                ( subModel, subCmd ) =
-                    Example1Basic.update sub model.example1b
-            in
-            ( { model | example1b = subModel }, Cmd.map Example1BasicBMsg subCmd )
+            ( { model | example1 = subModel }, Cmd.map Example1BasicMsg subCmd )
 
         Example2AsyncMsg sub ->
             let
@@ -130,8 +120,7 @@ view model =
     div [ class "p-5 pb-20" ]
         [ h1 [] [ text "Elm Select" ]
         , a [ href projectUrl ] [ text projectUrl ]
-        , Html.map Example1BasicAMsg (Example1Basic.view model.example1a)
-        , Html.map Example1BasicBMsg (Example1Basic.view model.example1b)
+        , Html.map Example1BasicMsg (Example1Basic.view model.example1)
         , Html.map Example2AsyncMsg (Example2Async.view model.example2)
         , Html.map Example3MultiMsg (Example3Multi.view model.example3)
         , Example4Custom.view
