@@ -9,6 +9,7 @@
     "elm-test": "elm-test"
   },
   "devDependencies": {
+    "cssnano": "^4.1.10",
     "elm-format": "^0.8.0",
     "elm-test": "^0.19.0-rev6"
   }
