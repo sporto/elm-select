@@ -1,8 +1,24 @@
-module Movies exposing (movies)
+module Movie exposing (Movie, movies, toLabel)
 
 
-movies : List ( String, String )
+type alias Movie =
+    { id : String
+    , label : String
+    }
+
+
+toLabel : Movie -> String
+toLabel =
+    .label
+
+
+movies : List Movie
 movies =
+    List.map (\( id, name ) -> Movie id name) moviesDB
+
+
+moviesDB : List (String, String)
+moviesDB =
     [ ( "1", "Avatar (2009)" )
     , ( "2", "Titanic (1997)" )
     , ( "3", "Star Wars: Episode VII - The Force Awakens (2015)" )

@@ -3,21 +3,21 @@ module Main exposing (main)
 import Browser
 import Example1Basic
 import Example2Async
-import Example3Multi
-import Example4Custom
+import Example
 import Html exposing (..)
 import Html.Attributes exposing (class, href)
 import Select
 import Shared
+import Color
+import Movie
 
 
 type alias Model =
     { example1 : Example1Basic.Model
     , example2 : Example2Async.Model
-    , example3 : Example3Multi.Model
-    , example4a : Example4Custom.Model
-    , example4b : Example4Custom.Model
-    , example4c : Example4Custom.Model
+    , exampleEmptySearch : Example.Model Movie.Movie
+    , exampleMulti : Example.Model Color.Color
+    , exampleCustom : Example.Model Movie.Movie
     }
 
 
@@ -25,10 +25,27 @@ initialModel : Model
 initialModel =
     { example1 = Example1Basic.initialModel "1a"
     , example2 = Example2Async.initialModel "2"
-    , example3 = Example3Multi.initialModel "3"
-    , example4a = Example4Custom.initialModel "4a"
-    , example4b = Example4Custom.initialModel "4b"
-    , example4c = Example4Custom.initialModel "4c"
+    , exampleEmptySearch = Example.initialModel
+        { id = "exampleEmptySearch"
+        , available = Movie.movies
+        , itemToLabel = Movie.toLabel
+        , selected = [ ]
+        , selectConfig = selectConfigEmptySearch
+        }
+    , exampleMulti = Example.initialModel
+        { id = "exampleMulti"
+        , available = Color.colors
+        , itemToLabel = Color.toLabel
+        , selected = [ Color.Red, Color.Black ]
+        , selectConfig = selectConfigMulti
+        }
+    , exampleCustom = Example.initialModel
+        { id = "exampleCustom"
+        , available = Movie.movies
+        , itemToLabel = Movie.toLabel
+        , selected = [ ]
+        , selectConfig = selectConfigCustom
+        }
     }
 
 
@@ -46,9 +63,9 @@ type Msg
     = NoOp
     | Example1BasicMsg Example1Basic.Msg
     | Example2AsyncMsg Example2Async.Msg
-    | Example3MultiMsg Example3Multi.Msg
-    | Example4CustomAMsg Example4Custom.Msg
-    | Example4CustomBMsg Example4Custom.Msg
+    | ExampleEmptySearchMsg (Example.Msg Movie.Movie)
+    | ExampleMultiMsg (Example.Msg Color.Color)
+    | ExampleCustomMsg (Example.Msg Movie.Movie)
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -68,32 +85,38 @@ update msg model =
             in
             ( { model | example2 = subModel }, Cmd.map Example2AsyncMsg subCmd )
 
-        Example3MultiMsg sub ->
+        ExampleEmptySearchMsg sub ->
             let
                 ( subModel, subCmd ) =
-                    Example3Multi.update sub model.example3
-            in
-            ( { model | example3 = subModel }, Cmd.map Example3MultiMsg subCmd )
-
-        Example4CustomAMsg sub ->
-            let
-                ( subModel, subCmd ) =
-                    Example4Custom.update
-                        selectConfig4a
+                    Example.update
                         sub
-                        model.example4a
+                        model.exampleEmptySearch
             in
-            ( { model | example4a = subModel }, Cmd.map Example4CustomAMsg subCmd )
+            ( { model | exampleEmptySearch = subModel }
+            , Cmd.map ExampleEmptySearchMsg subCmd
+            )
 
-        Example4CustomBMsg sub ->
+        ExampleMultiMsg sub ->
             let
                 ( subModel, subCmd ) =
-                    Example4Custom.update
-                        selectConfig4b
+                    Example.update
                         sub
-                        model.example4b
+                        model.exampleMulti
             in
-            ( { model | example4b = subModel }, Cmd.map Example4CustomBMsg subCmd )
+            ( { model | exampleMulti = subModel }
+            , Cmd.map ExampleMultiMsg subCmd
+            )
+
+        ExampleCustomMsg sub ->
+            let
+                ( subModel, subCmd ) =
+                    Example.update
+                        sub
+                        model.exampleCustom
+            in
+            ( { model | exampleCustom = subModel }
+            , Cmd.map ExampleCustomMsg subCmd
+            )
 
         NoOp ->
             ( model, Cmd.none )
@@ -111,17 +134,18 @@ view model =
         , a [ href projectUrl ] [ text projectUrl ]
         , Html.map Example1BasicMsg (Example1Basic.view model.example1)
         , Html.map Example2AsyncMsg (Example2Async.view model.example2)
-        , Html.map Example3MultiMsg (Example3Multi.view model.example3)
-        , Example4Custom.view
-                selectConfig4a
-                model.example4a
+        , Example.view
+                model.exampleEmptySearch
                 "With empty search"
-                |> Html.map Example4CustomAMsg
-        , Example4Custom.view
-                selectConfig4b
-                model.example4b
+                |> Html.map ExampleEmptySearchMsg
+        , Example.view
+                model.exampleMulti
+                "With empty search"
+                |> Html.map ExampleMultiMsg
+        , Example.view
+                model.exampleCustom
                 "With custom input"
-                |> Html.map Example4CustomBMsg
+                |> Html.map ExampleCustomMsg
         ]
 
 
@@ -135,21 +159,50 @@ main =
         }
 
 
-selectConfig4a : Select.Config Example4Custom.Msg Example4Custom.Movie
-selectConfig4a =
+selectConfigMovie : Select.Config (Example.Msg Movie.Movie) Movie.Movie
+selectConfigMovie =
     Select.newConfig
-        { onSelect = Example4Custom.OnSelect
+        { onSelect = Example.OnSelect
+        , toLabel = Movie.toLabel
+        , filter = Shared.filter 2 Movie.toLabel
+        , toMsg = Example.SelectMsg
+        }
+
+
+selectConfigColor : Select.Config (Example.Msg Color.Color) Color.Color
+selectConfigColor =
+    Select.newConfig
+        { onSelect = Example.OnSelect
+        , toLabel = Color.toLabel
+        , filter = Shared.filter 2 Color.toLabel
+        , toMsg = Example.SelectMsg
+        }
+
+
+selectConfigMulti =
+    selectConfigColor
+        |> Select.withMultiSelection True
+        |> Select.withOnRemoveItem Example.OnRemoveItem
+        |> Select.withCutoff 12
+        |> Select.withNotFound "No matches"
+        |> Select.withPrompt "Select a color"
+
+
+selectConfigEmptySearch =
+    Select.newConfig
+        { onSelect = Example.OnSelect
         , toLabel = .label
         , filter = Shared.filter 4 .label
-        , toMsg = Example4Custom.SelectMsg
+        , toMsg = Example.SelectMsg
         }
         |> Select.withCutoff 12
         |> Select.withEmptySearch True
         |> Select.withNotFound "No matches"
         |> Select.withPrompt "Select a movie"
 
-selectConfig4b =
-    selectConfig4a
+
+selectConfigCustom =
+    selectConfigMovie
         |> Select.withCustomInput
             (\input ->
                 { id = input

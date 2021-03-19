@@ -1,9 +1,7 @@
 module Example1Basic exposing
     ( Model
-    , Movie
     , Msg(..)
     , initialModel
-    , movies
     , selectConfig
     , update
     , view
@@ -11,18 +9,9 @@ module Example1Basic exposing
 
 import Html exposing (..)
 import Html.Attributes exposing (class, style)
-import Movies
+import Movie exposing (Movie)
 import Select
 import Shared
-
-
-{-| Model to be passed to the select component. You model can be anything.
-E.g. Records, tuples or just strings.
--}
-type alias Movie =
-    { id : String
-    , label : String
-    }
 
 
 {-| In your main application model you should store:
@@ -39,19 +28,12 @@ type alias Model =
     }
 
 
-{-| A helper function that transforms a list of tuples into records
--}
-movies : List Movie
-movies =
-    List.map (\( id, name ) -> Movie id name) Movies.movies
-
-
 {-| Your model should store the selected item and the state of the Select component(s)
 -}
 initialModel : String -> Model
 initialModel id =
     { id = id
-    , movies = movies
+    , movies = Movie.movies
     , selectedMovieId = Nothing
     , selectState = Select.newState id
     }
@@ -150,7 +132,7 @@ view model =
                     []
 
                 Just id ->
-                    List.filter (\movie -> movie.id == id) movies
+                    List.filter (\movie -> movie.id == id) Movie.movies
 
         -- Render the Select view. You must pass:
         -- - The configuration

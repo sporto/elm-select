@@ -15,7 +15,10 @@ toMsg = SelectMsg
 
 ### Styles and classes
 
-All configuration for styles and classes has been removed in favour of passing attributes directly.
+All configuration for styles and classes has been removed in favour plain CSS.
+Please copy the default CSS from `src/styles.css`.
+
+You can also pass classes and styles via attributes:
 
 Before:
 
