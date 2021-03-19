@@ -1,5 +1,10 @@
 # Changelog
 
+## 4.0.0
+
+- All configuration for styles and classes has been changed to Attrs e.g. Replaced `withInputClass` and `withInputStyles` for `withInputAttrs`
+- All default styles has been removed
+
 ## 3.2.0
 
 - Added `withCustomInput`

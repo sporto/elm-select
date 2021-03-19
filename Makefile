@@ -1,4 +1,4 @@
-build:
+compile:
 	elm make src/Select.elm > /dev/null
 
 test:
@@ -9,6 +9,9 @@ docs:
 
 run-demo:
 	cd demo && npm i && npm start
+
+compile-demo:
+	cd demo && elm make src/Main.elm > /dev/null
 
 # Make the github page (demo)
 build-demo:

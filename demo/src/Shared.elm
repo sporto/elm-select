@@ -1,4 +1,6 @@
-module Shared exposing (filter)
+module Shared exposing
+    ( filter
+    )
 
 import Simple.Fuzzy
 

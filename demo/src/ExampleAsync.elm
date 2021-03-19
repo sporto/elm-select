@@ -1,4 +1,4 @@
-module Example2Async exposing
+module ExampleAsync exposing
     ( Character
     , Model
     , Msg(..)
@@ -16,7 +16,7 @@ module Example2Async exposing
     )
 
 import Html exposing (..)
-import Html.Attributes exposing (class)
+import Html.Attributes exposing (class, style)
 import Http
 import Json.Decode as Decode
 import Select
@@ -57,7 +57,7 @@ type Msg
     | OnQuery String
 
 
-itemHtml : Character -> Html Never
+itemHtml : Character -> Html msg
 itemHtml c =
     Html.div []
         [ Html.i [ class "fa fa-rebel" ] []
@@ -71,20 +71,13 @@ selectConfig =
         { onSelect = OnSelect
         , toLabel = identity
         , filter = Shared.filter 4 identity
+        , toMsg = SelectMsg
         }
-        |> Select.withInputWrapperStyles
-            [ ( "padding", "0.4rem" ) ]
-        |> Select.withMenuClass "border border-gray-800 bg-white"
-        |> Select.withItemClass "p-1 border-b border-gray-800"
-        |> Select.withItemStyles [ ( "font-size", "1rem" ) ]
         |> Select.withNotFoundShown False
-        |> Select.withHighlightedItemClass "bg-gray"
-        |> Select.withHighlightedItemStyles [ ( "color", "black" ) ]
-        |> Select.withPrompt "Select a character"
+        |> Select.withPrompt "Select a Star Wars character"
         |> Select.withCutoff 12
         |> Select.withOnQuery OnQuery
         |> Select.withItemHtml itemHtml
-        |> Select.withUnderlineClass "underline"
         |> Select.withTransformQuery
             (\query ->
                 if String.length query < 3 then
@@ -97,7 +90,7 @@ selectConfig =
 
 fetchUrl : String -> String
 fetchUrl query =
-    "https://swapi.co/api/people/?search=" ++ query
+    "https://swapi.dev/api/people/?search=" ++ query
 
 
 fetch : String -> Cmd Msg
@@ -168,13 +161,14 @@ view model =
                 model.characters
                 selectedCharacters
     in
-    div [ class "bg-gray-300 p-2" ]
+    div [ class "demo-box" ]
         [ h3 [] [ text "Async example" ]
-        , text (model.selectedCharacterId |> Maybe.withDefault "")
-        , p [ class "mt-2" ]
+        , p
+            []
             [ label [] [ text "Pick an star wars character" ]
             ]
         , p []
-            [ Html.map SelectMsg select
+            [ select
             ]
+        , text (model.selectedCharacterId |> Maybe.withDefault "")
         ]

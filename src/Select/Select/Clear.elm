@@ -5,9 +5,15 @@ import Svg exposing (..)
 import Svg.Attributes as Attrs
 
 
-view : Config userMsg item -> Svg msg
+view : Config msg item -> Svg msg
 view config =
-    svg [ Attrs.class config.clearSvgClass, Attrs.width "16", Attrs.height "16", Attrs.viewBox "0 0 16 16" ]
+    svg
+        ([ Attrs.width "16"
+         , Attrs.height "16"
+         , Attrs.viewBox "0 0 16 16"
+         ]
+            ++ config.clearSvgAttrs
+        )
         [ g [ Attrs.transform "translate(3, 3)" ]
             [ path [ Attrs.d svgPath ] []
             ]

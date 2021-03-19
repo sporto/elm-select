@@ -8,14 +8,12 @@ import Select.Models exposing (State)
 import Select.Search as Search
 import Select.Select.Input
 import Select.Select.Menu
+import Select.Shared exposing (classNames)
 
 
-view : Config msg item -> State -> List item -> List item -> Html (Msg item)
+view : Config msg item -> State -> List item -> List item -> Html msg
 view config state availableItems selectedItems =
     let
-        classes =
-            "elm-select"
-
         availableItemsWithCustom =
             case config.customInput of
                 Nothing ->
@@ -50,8 +48,7 @@ view config state availableItems selectedItems =
     in
     div
         [ id state.id
-        , class classes
-        , style "position" "relative"
+        , class classNames.root
         ]
         [ Select.Select.Input.view
             config
@@ -59,6 +56,9 @@ view config state availableItems selectedItems =
             availableItems
             selectedItems
             maybeMatchedItems
+        , div [ class classNames.underlineWrapper ] [
+            div [ class classNames.underline ] []
+        ]
         , Select.Select.Menu.view
             config
             state

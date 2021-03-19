@@ -1,0 +1,111 @@
+.elm-select-input-wrapper {
+  display: flex;
+  position: relative;
+  overflow: hidden;
+  background-color:white;
+  padding: 6px 8px;
+}
+
+.elm-select-input {
+  flex: 1;
+  outline: none;
+  border: none;
+}
+
+.elm-select-clear {
+  cursor: pointer;
+  height: 1rem;
+  line-height: 1rem;
+  margin-top: -0.5rem;
+  position: absolute;
+  right: 0.25rem;
+  top: 50%;
+}
+
+.elm-select-multi-input-item-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.elm-select-multi-input-item {
+  display: flex;
+  border-width: 1px;
+  background-color: #E3E5E8;
+  border-radius: 4px;
+  margin-right: 4px;
+  padding: 2px 8px;
+}
+
+.elm-select-multi-input-item-text {
+  text-overflow: ellipsis;
+}
+
+.elm-select-multi-input-item-remove {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.elm-select-multi-item-remove {
+  cursor: pointer;
+  padding-top: 1px;
+  line-height: 0px;
+}
+
+/* Menu */
+
+.elm-select-menu {
+  position: absolute;
+  z-index: 1;
+  background-color: white;
+  min-width: 8rem;
+  border: 1px solid #e9e9e9;
+  max-height:  20rem;
+  overflow-y: scroll;
+}
+
+.elm-select-menu-item {
+  padding: 8px 4px;
+}
+
+.elm-select-menu-item-selectable {
+  cursor: pointer;
+}
+
+.elm-select-menu-item-selectable:hover {
+  background-color: #e9e9e9;
+}
+
+/* Underline */
+
+.elm-select-input-underline-wrapper {
+  position:  relative;
+}
+
+.elm-select-input-underline:before,
+.elm-select-input-underline:after {
+  content: '';
+  height: 2px;
+  width: 0;
+  position: absolute;
+  background: #03a9f4;
+  -webkit-transition: 0.2s ease all;
+  -moz-transition: 0.2s ease all;
+  -o-transition: 0.2s ease all;
+  transition: 0.2s ease all;
+}
+
+.elm-select-input-underline:before {
+  left: 50%;
+}
+
+.elm-select-input-underline:after {
+  right: 50%;
+}
+
+.elm-select:focus-within .elm-select-input-underline:before,
+.elm-select:focus-within .elm-select-input-underline:after {
+  width: 50%;
+}

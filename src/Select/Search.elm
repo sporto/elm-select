@@ -1,7 +1,7 @@
 module Select.Search exposing (matchedItemsWithCutoff)
 
 import Select.Config exposing (Config)
-import Select.Utils as Utils
+import Select.Shared as Utils
 
 
 {-| If config.filter returns Nothing,
