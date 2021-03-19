@@ -75,3 +75,35 @@
 .elm-select-menu-item-selectable:hover {
   background-color: #e9e9e9;
 }
+
+/* Underline */
+
+.elm-select-input-underline-wrapper {
+  position:  relative;
+}
+
+.elm-select-input-underline:before,
+.elm-select-input-underline:after {
+  content: '';
+  height: 2px;
+  width: 0;
+  position: absolute;
+  background: #03a9f4;
+  -webkit-transition: 0.2s ease all;
+  -moz-transition: 0.2s ease all;
+  -o-transition: 0.2s ease all;
+  transition: 0.2s ease all;
+}
+
+.elm-select-input-underline:before {
+  left: 50%;
+}
+
+.elm-select-input-underline:after {
+  right: 50%;
+}
+
+.elm-select:focus-within .elm-select-input-underline:before,
+.elm-select:focus-within .elm-select-input-underline:after {
+  width: 50%;
+}
