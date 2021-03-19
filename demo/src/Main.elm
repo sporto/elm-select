@@ -4,7 +4,7 @@ import Browser
 import ExampleAsync
 import Example
 import Html exposing (..)
-import Html.Attributes exposing (class, href)
+import Html.Attributes exposing (class, href, style)
 import Select
 import Shared
 import Color
@@ -189,6 +189,7 @@ selectConfigMovie =
         , filter = Shared.filter 2 Movie.toLabel
         , toMsg = Example.SelectMsg
         }
+        |> Select.withMenuAttrs [ style "max-height" "10rem" ]
 
 
 selectConfigColor : Select.Config (Example.Msg Color.Color) Color.Color
