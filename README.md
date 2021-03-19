@@ -10,7 +10,7 @@ See https://sporto.github.io/elm-select/
 
 ## Example and Getting started
 
-See commented example at [`demo/src/Example1Basic.elm`](demo/src/Example1Basic.elm)
+See commented example at [`demo/src/Example.elm`](demo/src/Example.elm)
 
 ## API
 
@@ -20,11 +20,14 @@ See commented example at [`demo/src/Example1Basic.elm`](demo/src/Example1Basic.e
 
 ## Styling
 
-You can style elements using:
+Copy the CSS from [here](https://github.com/sporto/elm-select/blob/master/src/styles.css).
 
-- Using global classes e.g. `.elm-select-input`
-- Pass classes via configuration e.g. `withInputClass`
-- Passing styles via configuration e.g. `withInputStyles`
+You can also style elements by passing attributes in the configuration:
+
+```
+config
+|> withInputWrapperAttrs`[ style "background" "salmon" ]
+```
 
 To add borders and padding to the input use `InputWrapper` instead of `Input`.
 

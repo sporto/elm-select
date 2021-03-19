@@ -14,6 +14,5 @@ Open `localhost:4000`
 npm run build
 ```
 
-### Styles
 
 
