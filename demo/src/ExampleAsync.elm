@@ -74,7 +74,7 @@ selectConfig =
         , toMsg = SelectMsg
         }
         |> Select.withNotFoundShown False
-        |> Select.withPrompt "Select a character"
+        |> Select.withPrompt "Select a Star Wars character"
         |> Select.withCutoff 12
         |> Select.withOnQuery OnQuery
         |> Select.withItemHtml itemHtml
