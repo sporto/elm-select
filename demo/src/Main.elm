@@ -1,7 +1,6 @@
 module Main exposing (main)
 
 import Browser
-import Example1Basic
 import Example2Async
 import Example
 import Html exposing (..)
@@ -13,8 +12,8 @@ import Movie
 
 
 type alias Model =
-    { example1 : Example1Basic.Model
-    , example2 : Example2Async.Model
+    { exampleBasic : Example.Model Movie.Movie
+    , exampleAsync : Example2Async.Model
     , exampleEmptySearch : Example.Model Movie.Movie
     , exampleMulti : Example.Model Color.Color
     , exampleCustom : Example.Model Movie.Movie
@@ -23,8 +22,14 @@ type alias Model =
 
 initialModel : Model
 initialModel =
-    { example1 = Example1Basic.initialModel "1a"
-    , example2 = Example2Async.initialModel "2"
+    { exampleBasic = Example.initialModel
+        { id = "exampleBasic"
+        , available = Movie.movies
+        , itemToLabel = Movie.toLabel
+        , selected = [ ]
+        , selectConfig = selectConfigMovie
+        }
+    , exampleAsync = Example2Async.initialModel "2"
     , exampleEmptySearch = Example.initialModel
         { id = "exampleEmptySearch"
         , available = Movie.movies
@@ -61,7 +66,7 @@ init _ =
 
 type Msg
     = NoOp
-    | Example1BasicMsg Example1Basic.Msg
+    | ExampleBasicMsg (Example.Msg Movie.Movie)
     | Example2AsyncMsg Example2Async.Msg
     | ExampleEmptySearchMsg (Example.Msg Movie.Movie)
     | ExampleMultiMsg (Example.Msg Color.Color)
@@ -71,19 +76,27 @@ type Msg
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        Example1BasicMsg sub ->
+        ExampleBasicMsg sub ->
             let
                 ( subModel, subCmd ) =
-                    Example1Basic.update sub model.example1
+                    Example.update
+                        sub
+                        model.exampleBasic
             in
-            ( { model | example1 = subModel }, Cmd.map Example1BasicMsg subCmd )
+            ( { model | exampleBasic = subModel }
+            , Cmd.map ExampleBasicMsg subCmd
+            )
 
         Example2AsyncMsg sub ->
             let
                 ( subModel, subCmd ) =
-                    Example2Async.update sub model.example2
+                    Example2Async.update
+                        sub
+                        model.exampleAsync
             in
-            ( { model | example2 = subModel }, Cmd.map Example2AsyncMsg subCmd )
+            ( { model | exampleAsync = subModel }
+            , Cmd.map Example2AsyncMsg subCmd
+            )
 
         ExampleEmptySearchMsg sub ->
             let
@@ -132,20 +145,25 @@ view model =
     div [ class "p-5 pb-20" ]
         [ h1 [] [ text "Elm Select" ]
         , a [ href projectUrl ] [ text projectUrl ]
-        , Html.map Example1BasicMsg (Example1Basic.view model.example1)
-        , Html.map Example2AsyncMsg (Example2Async.view model.example2)
         , Example.view
-                model.exampleEmptySearch
-                "With empty search"
-                |> Html.map ExampleEmptySearchMsg
+            model.exampleBasic
+            "Default"
+            |> Html.map ExampleBasicMsg
+        , Example2Async.view
+            model.exampleAsync
+            |> Html.map Example2AsyncMsg
         , Example.view
-                model.exampleMulti
-                "With empty search"
-                |> Html.map ExampleMultiMsg
+            model.exampleEmptySearch
+            "With empty search"
+            |> Html.map ExampleEmptySearchMsg
         , Example.view
-                model.exampleCustom
-                "With custom input"
-                |> Html.map ExampleCustomMsg
+            model.exampleMulti
+            "With empty search"
+            |> Html.map ExampleMultiMsg
+        , Example.view
+            model.exampleCustom
+            "With custom input"
+            |> Html.map ExampleCustomMsg
         ]
 
 
