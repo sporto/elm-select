@@ -1,7 +1,7 @@
 module Main exposing (main)
 
 import Browser
-import Example2Async
+import ExampleAsync
 import Example
 import Html exposing (..)
 import Html.Attributes exposing (class, href)
@@ -13,7 +13,7 @@ import Movie
 
 type alias Model =
     { exampleBasic : Example.Model Movie.Movie
-    , exampleAsync : Example2Async.Model
+    , exampleAsync : ExampleAsync.Model
     , exampleEmptySearch : Example.Model Movie.Movie
     , exampleMulti : Example.Model Color.Color
     , exampleCustom : Example.Model Movie.Movie
@@ -29,7 +29,7 @@ initialModel =
         , selected = [ ]
         , selectConfig = selectConfigMovie
         }
-    , exampleAsync = Example2Async.initialModel "2"
+    , exampleAsync = ExampleAsync.initialModel "2"
     , exampleEmptySearch = Example.initialModel
         { id = "exampleEmptySearch"
         , available = Movie.movies
@@ -56,7 +56,7 @@ initialModel =
 
 initialCmds : Cmd Msg
 initialCmds =
-    Cmd.batch [ Cmd.map Example2AsyncMsg Example2Async.initialCmds ]
+    Cmd.batch [ Cmd.map ExampleAsyncMsg ExampleAsync.initialCmds ]
 
 
 init : flags -> ( Model, Cmd Msg )
@@ -67,7 +67,7 @@ init _ =
 type Msg
     = NoOp
     | ExampleBasicMsg (Example.Msg Movie.Movie)
-    | Example2AsyncMsg Example2Async.Msg
+    | ExampleAsyncMsg ExampleAsync.Msg
     | ExampleEmptySearchMsg (Example.Msg Movie.Movie)
     | ExampleMultiMsg (Example.Msg Color.Color)
     | ExampleCustomMsg (Example.Msg Movie.Movie)
@@ -87,15 +87,15 @@ update msg model =
             , Cmd.map ExampleBasicMsg subCmd
             )
 
-        Example2AsyncMsg sub ->
+        ExampleAsyncMsg sub ->
             let
                 ( subModel, subCmd ) =
-                    Example2Async.update
+                    ExampleAsync.update
                         sub
                         model.exampleAsync
             in
             ( { model | exampleAsync = subModel }
-            , Cmd.map Example2AsyncMsg subCmd
+            , Cmd.map ExampleAsyncMsg subCmd
             )
 
         ExampleEmptySearchMsg sub ->
@@ -149,9 +149,9 @@ view model =
             model.exampleBasic
             "Default"
             |> Html.map ExampleBasicMsg
-        , Example2Async.view
+        , ExampleAsync.view
             model.exampleAsync
-            |> Html.map Example2AsyncMsg
+            |> Html.map ExampleAsyncMsg
         , Example.view
             model.exampleEmptySearch
             "With empty search"

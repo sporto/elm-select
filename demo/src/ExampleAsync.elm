@@ -1,4 +1,4 @@
-module Example2Async exposing
+module ExampleAsync exposing
     ( Character
     , Model
     , Msg(..)
