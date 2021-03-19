@@ -25,9 +25,10 @@ classNames =
     , inputWrapper = "elm-select-input-wrapper"
     , input = "elm-select-input"
     , clear = "elm-select-clear"
+    , underline = "elm-select-input-underline"
+    , underlineWrapper = "elm-select-input-underline-wrapper"
 
     -- Multi input
-    -- , multiInput = "elm-select-multi-input"
     , multiInputItemContainer = "elm-select-multi-input-item-container"
     , multiInputItem = "elm-select-multi-input-item"
     , multiInputItemText = "elm-select-multi-input-item-text"

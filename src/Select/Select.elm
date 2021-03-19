@@ -56,6 +56,9 @@ view config state availableItems selectedItems =
             availableItems
             selectedItems
             maybeMatchedItems
+        , div [ class classNames.underlineWrapper ] [
+            div [ class classNames.underline ] []
+        ]
         , Select.Select.Menu.view
             config
             state

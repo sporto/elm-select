@@ -83,8 +83,8 @@ update msg model =
             ( model, Cmd.none )
 
 
-view : Model item -> String -> Html (Msg item)
-view model title =
+view : Model item -> String -> String -> Html (Msg item)
+view model title prompt =
     let
         currentSelection =
             p
@@ -100,9 +100,13 @@ view model title =
     in
     div [ class "demo-box" ]
         [ h3 [] [ text title ]
-        , currentSelection
+        , p
+            []
+            [ label [] [ text prompt ]
+            ]
         , p
             []
             [ select
             ]
+        , currentSelection
         ]

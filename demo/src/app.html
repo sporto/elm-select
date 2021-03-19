@@ -9,7 +9,7 @@
   <style type="text/css">
     body {
       font-family: sans-serif;
-      padding: 0 1rem 1rem;
+      padding: 0 1rem 20rem 1rem;
     }
 
     .demo-box {
@@ -18,14 +18,12 @@
       margin-top: 1rem;
     }
 
-    .underline {
-      position: relative;
-      display: block;
-      width: 100%;
+    .elm-select-input-underline-wrapper {
+      position:  relative;
     }
 
-    .underline:before,
-    .underline:after {
+    .elm-select-input-underline:before,
+    .elm-select-input-underline:after {
       content: '';
       height: 2px;
       width: 0;
@@ -37,16 +35,16 @@
       transition: 0.2s ease all;
     }
 
-    .underline:before {
+    .elm-select-input-underline:before {
       left: 50%;
     }
 
-    .underline:after {
+    .elm-select-input-underline:after {
       right: 50%;
     }
 
-    .elm-select-input-wrapper:focus-within~.underline:before,
-    .elm-select-input-wrapper:focus-within~.underline:after {
+    .elm-select:focus-within .elm-select-input-underline:before,
+    .elm-select:focus-within .elm-select-input-underline:after {
       width: 50%;
     }
   </style>

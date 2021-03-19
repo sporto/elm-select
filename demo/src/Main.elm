@@ -142,27 +142,31 @@ projectUrl =
 
 view : Model -> Html Msg
 view model =
-    div [ class "p-5 pb-20" ]
+    div [ ]
         [ h1 [] [ text "Elm Select" ]
         , a [ href projectUrl ] [ text projectUrl ]
         , Example.view
             model.exampleBasic
             "Default"
+            "Select a movie"
             |> Html.map ExampleBasicMsg
         , ExampleAsync.view
             model.exampleAsync
             |> Html.map ExampleAsyncMsg
         , Example.view
             model.exampleEmptySearch
-            "With empty search"
+            "Show menu when search is empty"
+            "Select a movie"
             |> Html.map ExampleEmptySearchMsg
         , Example.view
             model.exampleMulti
-            "With empty search"
+            "Multi"
+            "Select colors"
             |> Html.map ExampleMultiMsg
         , Example.view
             model.exampleCustom
-            "With custom input"
+            "Free entry input"
+            "Select a movie"
             |> Html.map ExampleCustomMsg
         ]
 
