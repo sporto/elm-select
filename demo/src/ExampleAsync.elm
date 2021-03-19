@@ -90,7 +90,7 @@ selectConfig =
 
 fetchUrl : String -> String
 fetchUrl query =
-    "https://swapi.co/api/people/?search=" ++ query
+    "https://swapi.dev/api/people/?search=" ++ query
 
 
 fetch : String -> Cmd Msg
@@ -163,7 +163,6 @@ view model =
     in
     div [ class "demo-box" ]
         [ h3 [] [ text "Async example" ]
-        , text (model.selectedCharacterId |> Maybe.withDefault "")
         , p
             []
             [ label [] [ text "Pick an star wars character" ]
@@ -171,4 +170,5 @@ view model =
         , p []
             [ select
             ]
+        , text (model.selectedCharacterId |> Maybe.withDefault "")
         ]
