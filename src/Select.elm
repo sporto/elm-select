@@ -55,32 +55,32 @@ This is the element that wraps the selected item(s) and the input
 
 # Configure the input
 
-@docs withInputId, withInputAttrs, withInputStyles, withOnFocus
+@docs withInputAttrs, withOnFocus
 
 
 # Configure the clear button
 
-@docs withClear, withClearAttrs, withClearStyles, withClearSvgAttrs
+@docs withClear, withClearAttrs, withClearSvgAttrs
 
 
 # Configure the items
 
-@docs withItemAttrs, withItemStyles, withItemHtml, withHighlightedItemAttrs, withHighlightedItemStyles
+@docs withItemAttrs, withItemHtml, withHighlightedItemAttrs
 
 
 # Configure the menu
 
-@docs withMenuAttrs, withMenuStyles
+@docs withMenuAttrs
 
 
 # Configure the not found message
 
-@docs withNotFound, withNotFoundAttrs, withNotFoundShown, withNotFoundStyles
+@docs withNotFound, withNotFoundAttrs, withNotFoundShown
 
 
 # Configure the prompt
 
-@docs withPrompt, withPromptAttrs, withPromptStyles
+@docs withPrompt, withPromptAttrs
 
 
 # State
