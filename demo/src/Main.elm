@@ -222,6 +222,7 @@ selectConfigEmptySearch =
         |> Select.withEmptySearch True
         |> Select.withNotFound "No matches"
         |> Select.withPrompt "Select a movie"
+        |> Select.withClearHtml (Just (text "X"))
 
 
 selectConfigCustom =

@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.1.0
+
+- Add `withClearHtml`
+
 ## 4.0.0
 
 - All configuration for styles and classes has been changed to Attrs e.g. Replaced `withInputClass` and `withInputStyles` for `withInputAttrs`

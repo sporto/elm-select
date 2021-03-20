@@ -1,12 +1,23 @@
 module Select.Select.Clear exposing (svgPath, view)
 
+import Html exposing (Html)
 import Select.Config exposing (Config)
 import Svg exposing (..)
 import Svg.Attributes as Attrs
 
 
-view : Config msg item -> Svg msg
+view : Config msg item -> Html msg
 view config =
+    case config.clearHtml of
+        Nothing ->
+            viewDefault config
+
+        Just html ->
+            html
+
+
+viewDefault : Config msg item -> Svg msg
+viewDefault config =
     svg
         ([ Attrs.width "16"
          , Attrs.height "16"

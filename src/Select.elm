@@ -5,7 +5,7 @@ module Select exposing
     , withInputControlAttrs
     , withInputWrapperAttrs
     , withInputAttrs, withOnFocus
-    , withClear, withClearAttrs, withClearSvgAttrs
+    , withClear, withClearAttrs, withClearSvgAttrs, withClearHtml
     , withItemAttrs, withItemHtml, withHighlightedItemAttrs
     , withMenuAttrs
     , withNotFound, withNotFoundAttrs, withNotFoundShown
@@ -60,7 +60,7 @@ This is the element that wraps the selected item(s) and the input
 
 # Configure the clear button
 
-@docs withClear, withClearAttrs, withClearSvgAttrs
+@docs withClear, withClearAttrs, withClearSvgAttrs, withClearHtml
 
 
 # Configure the items
@@ -231,6 +231,23 @@ withClearSvgAttrs attrs config =
     let
         fn c =
             { c | clearSvgAttrs = attrs }
+    in
+    mapConfig fn config
+
+
+{-| Use your own html for the clear icon
+
+    Select.withClearHtml (Just (text "X")) config
+
+-}
+withClearHtml :
+    Maybe (Html msg)
+    -> Config msg item
+    -> Config msg item
+withClearHtml html config =
+    let
+        fn c =
+            { c | clearHtml = html }
     in
     mapConfig fn config
 
