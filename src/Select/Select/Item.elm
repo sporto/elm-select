@@ -12,8 +12,8 @@ import Select.Models exposing (State)
 import Select.Shared exposing (classNames, referenceAttr)
 
 
-view : Config msg item -> State -> Int -> Int -> item -> Html msg
-view config state itemCount index item =
+view : Config msg item -> State -> Int -> List item -> Int -> item -> Html msg
+view config state itemCount selectedItems index item =
     let
         highlightedItemAttrs =
             case state.highlightedItem of
@@ -27,6 +27,15 @@ view config state itemCount index item =
 
                     else
                         []
+
+        selectedAttrs =
+            if isSelected then
+                config.selectedItemAttrs
+            else
+                []
+
+        isSelected =
+            List.member item selectedItems
 
         itemHtml =
             case config.itemHtml of
@@ -43,6 +52,7 @@ view config state itemCount index item =
          , referenceAttr config state
          ]
             ++ highlightedItemAttrs
+            ++ selectedAttrs
         )
         [ itemHtml
         ]

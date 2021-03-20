@@ -33,26 +33,27 @@ type alias Config msg item =
     , inputAttrs : List (Attribute msg)
     , inputControlAttrs : List (Attribute msg)
     , inputWrapperAttrs : List (Attribute msg)
+    , isMultiSelect : Bool
     , itemAttrs : List (Attribute msg)
     , itemHtml : Maybe (item -> Html msg)
-    , isMultiSelect : Bool
     , menuAttrs : List (Attribute msg)
-    , multiInputItemContainerAttrs : List (Attribute msg)
     , multiInputItemAttrs : List (Attribute msg)
+    , multiInputItemContainerAttrs : List (Attribute msg)
     , notFound : String
     , notFoundAttrs : List (Attribute msg)
     , notFoundShown : Bool
-    , onQueryChange : Maybe (String -> msg)
-    , onSelect : Maybe item -> msg
     , onFocus : Maybe msg
+    , onQueryChange : Maybe (String -> msg)
     , onRemoveItem : Maybe (item -> msg)
+    , onSelect : Maybe item -> msg
     , prompt : String
     , promptAttrs : List (Attribute msg)
     , removeItemSvgAttrs : List (Attribute msg)
     , scoreThreshold : Int
+    , selectedItemAttrs : List (Attribute msg)
     , toLabel : item -> String
-    , transformQuery : String -> String
     , toMsg : Msg item -> msg
+    , transformQuery : String -> String
     }
 
 
@@ -70,24 +71,25 @@ newConfig requiredConfig =
     , inputAttrs = []
     , inputControlAttrs = []
     , inputWrapperAttrs = []
+    , isMultiSelect = False
     , itemAttrs = []
     , itemHtml = Nothing
-    , isMultiSelect = False
     , menuAttrs = []
-    , multiInputItemContainerAttrs = []
     , multiInputItemAttrs = []
+    , multiInputItemContainerAttrs = []
     , notFound = "No results found"
     , notFoundAttrs = []
     , notFoundShown = True
-    , onQueryChange = Nothing
-    , onSelect = requiredConfig.onSelect
     , onFocus = Nothing
+    , onQueryChange = Nothing
     , onRemoveItem = Nothing
+    , onSelect = requiredConfig.onSelect
     , prompt = ""
     , promptAttrs = []
     , removeItemSvgAttrs = []
     , scoreThreshold = 2000
+    , selectedItemAttrs = []
     , toLabel = requiredConfig.toLabel
-    , transformQuery = identity
     , toMsg = requiredConfig.toMsg
+    , transformQuery = identity
     }

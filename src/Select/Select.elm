@@ -63,4 +63,5 @@ view config state availableItems selectedItems =
             config
             state
             maybeMatchedItems
+            selectedItems
         ]

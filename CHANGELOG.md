@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.2.0
+
+- Add `withItemSelectedAttrs`
+
 ## 4.1.0
 
 - Add `withClearHtml`

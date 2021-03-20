@@ -6,7 +6,7 @@ module Select exposing
     , withInputWrapperAttrs
     , withInputAttrs, withOnFocus
     , withClear, withClearAttrs, withClearSvgAttrs, withClearHtml
-    , withItemAttrs, withItemHtml, withHighlightedItemAttrs
+    , withItemAttrs, withItemHtml, withHighlightedItemAttrs, withItemSelectedAttrs
     , withMenuAttrs
     , withNotFound, withNotFoundAttrs, withNotFoundShown
     , withPrompt, withPromptAttrs
@@ -65,7 +65,7 @@ This is the element that wraps the selected item(s) and the input
 
 # Configure the items
 
-@docs withItemAttrs, withItemHtml, withHighlightedItemAttrs
+@docs withItemAttrs, withItemHtml, withHighlightedItemAttrs, withItemSelectedAttrs
 
 
 # Configure the menu
@@ -471,7 +471,7 @@ withNotFoundShown shown config =
     mapConfig fn config
 
 
-{-| Attributes for the hightlighted tem
+{-| Attributes for the hightlighted item
 
     Select.withHighlightedItemAttrs [ class "red" ] config
 
@@ -484,6 +484,23 @@ withHighlightedItemAttrs attrs config =
     let
         fn c =
             { c | highlightedItemAttrs = attrs }
+    in
+    mapConfig fn config
+
+
+{-| Attributes for the selected item in the menu
+
+    Select.withItemSelectedAttrs [ class "selected" ] config
+
+-}
+withItemSelectedAttrs :
+    List (Attribute msg)
+    -> Config msg item
+    -> Config msg item
+withItemSelectedAttrs attrs config =
+    let
+        fn c =
+            { c | selectedItemAttrs = attrs }
     in
     mapConfig fn config
 
