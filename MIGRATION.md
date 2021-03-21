@@ -1,5 +1,9 @@
 # Migration
 
+## From 4 to 5
+
+Rename `Select.newState` to `Select.init`.
+
 ## From 3 to 4
 
 ### `toMsg`
