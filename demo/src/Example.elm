@@ -37,7 +37,7 @@ initialModel args =
     , available = args.available
     , itemToLabel = args.itemToLabel
     , selected = args.selected
-    , selectState = Select.newState args.id
+    , selectState = Select.init args.id
     , selectConfig = args.selectConfig
     }
 

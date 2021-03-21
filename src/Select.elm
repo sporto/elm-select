@@ -1,7 +1,7 @@
 module Select exposing
     ( RequiredConfig, Config, State, Msg
     , newConfig, withCustomInput, withCutoff, withOnQuery, withEmptySearch, withTransformQuery
-    , withMultiSelection, withOnRemoveItem, withMultiInputItemContainerAttrs, withMultiInputItemAttrs, withMultiInputItemMoreAttrs
+    , withMultiSelection, withOnRemoveItem, withMultiInputItemContainerAttrs, withMultiInputItemContainerMoreAttrs, withMultiInputItemAttrs, withMultiInputItemMoreAttrs
     , withInputWrapperAttrs, withInputWrapperMoreAttrs
     , withInputAttrs, withInputMoreAttrs, withOnFocus
     , withClear, withClearAttrs, withClearMoreAttrs, withClearSvgAttrs, withClearSvgMoreAttrs, withClearHtml
@@ -9,7 +9,7 @@ module Select exposing
     , withMenuAttrs, withMenuMoreAttrs
     , withNotFound, withNotFoundAttrs, withNotFoundMoreAttrs, withNotFoundShown
     , withPrompt, withPromptAttrs, withPromptMoreAttrs
-    , newState, queryFromState, withQuery
+    , init, queryFromState, withQuery
     , view
     , update
     )
@@ -77,7 +77,7 @@ This is the element that wraps the selected item(s) and the input
 
 # State
 
-@docs newState, queryFromState, withQuery
+@docs init, queryFromState, withQuery
 
 
 # View
@@ -828,12 +828,12 @@ mapConfig fn config =
 
     {
         ...
-        selectState = Select.newState "select1"
+        selectState = Select.init "select1"
     }
 
 -}
-newState : String -> State
-newState id =
+init : String -> State
+init id =
     PrivateState (Models.newState id)
 
 

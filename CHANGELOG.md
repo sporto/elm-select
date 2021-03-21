@@ -1,5 +1,11 @@
 # Changelog
 
+## 5.0.0
+
+- Remove unused `withInputControlAttrs`
+- Rename `newState` to `init`
+- Added functions for adding additional attributes e.g. `withInputMoreAttrs`
+
 ## 4.3.1
 
 - Fix stack overflow when `valueSeparators` is an empty list.

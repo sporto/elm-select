@@ -40,7 +40,7 @@ initialModel id =
     { id = id
     , characters = []
     , selectedCharacterId = Nothing
-    , selectState = Select.newState id
+    , selectState = Select.init id
     }
 
 
