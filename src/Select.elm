@@ -625,7 +625,7 @@ queryFromState model =
     Select.view
         selectConfig
         model.selectState
-        model.items
+        availableItems
         selectedItems
 
 -}
