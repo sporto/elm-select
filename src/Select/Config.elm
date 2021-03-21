@@ -31,7 +31,6 @@ type alias Config msg item =
     , hasClear : Bool
     , highlightedItemAttrs : List (Attribute msg)
     , inputAttrs : List (Attribute msg)
-    , inputControlAttrs : List (Attribute msg)
     , inputWrapperAttrs : List (Attribute msg)
     , isMultiSelect : Bool
     , itemAttrs : List (Attribute msg)
@@ -70,7 +69,6 @@ newConfig requiredConfig =
     , hasClear = True
     , highlightedItemAttrs = []
     , inputAttrs = []
-    , inputControlAttrs = []
     , inputWrapperAttrs = []
     , isMultiSelect = False
     , itemAttrs = []

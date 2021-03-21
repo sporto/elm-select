@@ -1,15 +1,14 @@
 module Select exposing
     ( RequiredConfig, Config, State, Msg
     , newConfig, withCustomInput, withCutoff, withOnQuery, withEmptySearch, withTransformQuery
-    , withMultiSelection, withOnRemoveItem, withMultiInputItemContainerAttrs, withMultiInputItemAttrs
-    , withInputControlAttrs
-    , withInputWrapperAttrs
-    , withInputAttrs, withOnFocus
-    , withClear, withClearAttrs, withClearSvgAttrs, withClearHtml
-    , withItemAttrs, withItemHtml, withHighlightedItemAttrs, withItemSelectedAttrs
-    , withMenuAttrs
-    , withNotFound, withNotFoundAttrs, withNotFoundShown
-    , withPrompt, withPromptAttrs
+    , withMultiSelection, withOnRemoveItem, withMultiInputItemContainerAttrs, withMultiInputItemAttrs, withMultiInputItemMoreAttrs
+    , withInputWrapperAttrs, withInputWrapperMoreAttrs
+    , withInputAttrs, withInputMoreAttrs, withOnFocus
+    , withClear, withClearAttrs, withClearMoreAttrs, withClearSvgAttrs, withClearSvgMoreAttrs, withClearHtml
+    , withItemAttrs, withItemMoreAttrs, withItemHtml, withHighlightedItemAttrs, withHighlightedItemMoreAttrs, withItemSelectedAttrs, withItemSelectedMoreAttrs
+    , withMenuAttrs, withMenuMoreAttrs
+    , withNotFound, withNotFoundAttrs, withNotFoundMoreAttrs, withNotFoundShown
+    , withPrompt, withPromptAttrs, withPromptMoreAttrs
     , newState, queryFromState, withQuery
     , view
     , update
@@ -36,51 +35,44 @@ See live demo [here](https://sporto.github.io/elm-select)
 
 # Configure Multi Select mode
 
-@docs withMultiSelection, withOnRemoveItem, withMultiInputItemContainerAttrs, withMultiInputItemAttrs
-
-
-# Configure the input control
-
-This is the container that wraps the entire select view
-
-@docs withInputControlAttrs
+@docs withMultiSelection, withOnRemoveItem, withMultiInputItemContainerAttrs, withMultiInputItemContainerMoreAttrs, withMultiInputItemAttrs, withMultiInputItemMoreAttrs
 
 
 # Configure the input wapper
 
 This is the element that wraps the selected item(s) and the input
 
-@docs withInputWrapperAttrs
+@docs withInputWrapperAttrs, withInputWrapperMoreAttrs
 
 
 # Configure the input
 
-@docs withInputAttrs, withOnFocus
+@docs withInputAttrs, withInputMoreAttrs, withOnFocus
 
 
 # Configure the clear button
 
-@docs withClear, withClearAttrs, withClearSvgAttrs, withClearHtml
+@docs withClear, withClearAttrs, withClearMoreAttrs, withClearSvgAttrs, withClearSvgMoreAttrs, withClearHtml
 
 
 # Configure the items
 
-@docs withItemAttrs, withItemHtml, withHighlightedItemAttrs, withItemSelectedAttrs
+@docs withItemAttrs, withItemMoreAttrs, withItemHtml, withHighlightedItemAttrs, withHighlightedItemMoreAttrs, withItemSelectedAttrs, withItemSelectedMoreAttrs
 
 
 # Configure the menu
 
-@docs withMenuAttrs
+@docs withMenuAttrs, withMenuMoreAttrs
 
 
 # Configure the not found message
 
-@docs withNotFound, withNotFoundAttrs, withNotFoundShown
+@docs withNotFound, withNotFoundAttrs, withNotFoundMoreAttrs, withNotFoundShown
 
 
 # Configure the prompt
 
-@docs withPrompt, withPromptAttrs
+@docs withPrompt, withPromptAttrs, withPromptMoreAttrs
 
 
 # State
@@ -170,26 +162,10 @@ withEmptySearch emptySearch config =
     mapConfig fn config
 
 
-{-| Add attrs to the input control
-
-    Select.withInputControlAttrs "control-class" config
-
--}
-withInputControlAttrs :
-    List (Attribute msg)
-    -> Config msg item
-    -> Config msg item
-withInputControlAttrs attrs config =
-    let
-        fn c =
-            { c | inputControlAttrs = attrs }
-    in
-    mapConfig fn config
-
-
 {-| Remove the clear button entirely
 
-    Select.withClear False
+    config
+        |> Select.withClear False
 
 -}
 withClear : Bool -> Config msg item -> Config msg item
@@ -201,9 +177,11 @@ withClear value config =
     mapConfig fn config
 
 
-{-| Add attributes to the clear button
+{-| Set attributes for the clear button.
+This overrides any attributes already set in a previous call.
 
-    Select.withClearAttrs [ class "clear" ] config
+    config
+        |> Select.withClearAttrs [ class "clear" ]
 
 -}
 withClearAttrs :
@@ -218,9 +196,30 @@ withClearAttrs attrs config =
     mapConfig fn config
 
 
-{-| Add attributes to the clear SVG icon
+{-| Add attributes to the clear button.
+This adds to existing attributes.
 
-    Select.withClearSvgAttrs [ class "clear" ] config
+    config
+        |> Select.withClearMoreAttrs [ class "clear" ]
+
+-}
+withClearMoreAttrs :
+    List (Attribute msg)
+    -> Config msg item
+    -> Config msg item
+withClearMoreAttrs attrs config =
+    let
+        fn c =
+            { c | clearAttrs = c.clearAttrs ++ attrs }
+    in
+    mapConfig fn config
+
+
+{-| Set attributes for the clear SVG icon
+This overrides any attributes already set in a previous call.
+
+    config
+        |> Select.withClearSvgAttrs [ class "clear" ]
 
 -}
 withClearSvgAttrs :
@@ -235,9 +234,29 @@ withClearSvgAttrs attrs config =
     mapConfig fn config
 
 
+{-| Add attributes to the clear SVG icon.
+This adds to existing attributes.
+
+    config
+        |> Select.withClearSvgMoreAttrs [ class "clear" ]
+
+-}
+withClearSvgMoreAttrs :
+    List (Attribute msg)
+    -> Config msg item
+    -> Config msg item
+withClearSvgMoreAttrs attrs config =
+    let
+        fn c =
+            { c | clearSvgAttrs = c.clearSvgAttrs ++ attrs }
+    in
+    mapConfig fn config
+
+
 {-| Use your own html for the clear icon
 
-    Select.withClearHtml (Just (text "X")) config
+    config
+        |> Select.withClearHtml (Just (text "X"))
 
 -}
 withClearHtml :
@@ -255,7 +274,8 @@ withClearHtml html config =
 {-| Allow users to write a custom values (free text entry)
 You must provide a function that converst a String into an item
 
-    Select.withCustomInput (\string -> item) config
+    config
+        |> Select.withCustomInput (\string -> item)
 
 -}
 withCustomInput : (String -> item) -> Config msg item -> Config msg item
@@ -269,7 +289,8 @@ withCustomInput toItem config =
 
 {-| Set the maxium number of items to show
 
-    Select.withCutoff 6 config
+    config
+        |> Select.withCutoff 6
 
 -}
 withCutoff : Int -> Config msg item -> Config msg item
@@ -281,9 +302,11 @@ withCutoff n config =
     mapConfig fn config
 
 
-{-| Add attributes to the input
+{-| Set attributes for the input.
+This overrides any attributes already set in a previous call.
 
-    Select.withInputAttrs [ class "col-12" ] config
+    config
+        |> Select.withInputAttrs [ class "col-12" ]
 
 -}
 withInputAttrs :
@@ -298,9 +321,30 @@ withInputAttrs attrs config =
     mapConfig fn config
 
 
-{-| Add attributes to the input wrapper (element that wraps the input and the clear button)
+{-| Add attributes to the input.
+This adds to existing attributes.
 
-    Select.withInputWrapperAttrs [ class "col-12" ] config
+    config
+        |> Select.withInputMoreAttrs [ class "col-12" ]
+
+-}
+withInputMoreAttrs :
+    List (Attribute msg)
+    -> Config msg item
+    -> Config msg item
+withInputMoreAttrs attrs config =
+    let
+        fn c =
+            { c | inputAttrs = c.inputAttrs ++ attrs }
+    in
+    mapConfig fn config
+
+
+{-| Set attributes for the input wrapper (element that wraps the input and the clear button).
+This overrides any attributes already set in a previous call.
+
+    config
+        |> Select.withInputWrapperAttrs [ class "col-12" ]
 
 -}
 withInputWrapperAttrs : List (Attribute msg) -> Config msg item -> Config msg item
@@ -312,9 +356,27 @@ withInputWrapperAttrs attrs config =
     mapConfig fn config
 
 
-{-| Add attributes to the items
+{-| Add attributes to the input wrapper (element that wraps the input and the clear button).
+This adds to existing attributes.
 
-    Select.withItemAttrs [ class "border-bottom" ] config
+    config
+        |> Select.withInputWrapperMoreAttrs [ class "col-12" ]
+
+-}
+withInputWrapperMoreAttrs : List (Attribute msg) -> Config msg item -> Config msg item
+withInputWrapperMoreAttrs attrs config =
+    let
+        fn c =
+            { c | inputWrapperAttrs = c.inputWrapperAttrs ++ attrs }
+    in
+    mapConfig fn config
+
+
+{-| Set attributes for the items.
+This overrides any attributes already set in a previous call.
+
+    config
+        |> Select.withItemAttrs [ class "border-bottom" ]
 
 -}
 withItemAttrs :
@@ -329,9 +391,29 @@ withItemAttrs attrs config =
     mapConfig fn config
 
 
+{-| Add attributes to the items.
+This adds to existing attributes.
+
+    config
+        |> Select.withItemMoreAttrs [ class "border-bottom" ]
+
+-}
+withItemMoreAttrs :
+    List (Attribute msg)
+    -> Config msg item
+    -> Config msg item
+withItemMoreAttrs attrs config =
+    let
+        fn c =
+            { c | itemAttrs = c.itemAttrs ++ attrs }
+    in
+    mapConfig fn config
+
+
 {-| Custom item element HTML
 
-    Select.withItemHtml (\i -> Html.li [] [ text i ]) config
+    config
+        |> Select.withItemHtml (\i -> Html.li [] [ text i ])
 
 When this is used the original `toLabel` function in the config is ignored.
 
@@ -348,9 +430,11 @@ withItemHtml html config =
     mapConfig fn config
 
 
-{-| Add attributes to the menu
+{-| Set attributes for the menu.
+This overrides any attributes already set in a previous call.
 
-    Select.withMenuAttrs [ class "bg-white" ] config
+    config
+        |> Select.withMenuAttrs [ class "bg-white" ]
 
 -}
 withMenuAttrs :
@@ -365,10 +449,30 @@ withMenuAttrs attrs config =
     mapConfig fn config
 
 
+{-| Add attributes to the menu.
+This adds to existing attributes.
+
+    config
+        |> Select.withMenuMoreAttrs [ class "bg-white" ]
+
+-}
+withMenuMoreAttrs :
+    List (Attribute msg)
+    -> Config msg item
+    -> Config msg item
+withMenuMoreAttrs attrs config =
+    let
+        fn c =
+            { c | menuAttrs = c.menuAttrs ++ attrs }
+    in
+    mapConfig fn config
+
+
 {-| Message to call when removing an individual item. Please note that without this option
 specified, you will not be able to remove an individual item from MultiSelect mode.
 
-    Select.withOnRemoveItem OnRemoveItem
+    config
+        |> Select.withOnRemoveItem OnRemoveItem
 
 -}
 withOnRemoveItem : (item -> msg) -> Config msg item -> Config msg item
@@ -380,9 +484,10 @@ withOnRemoveItem onRemoveItemMsg config =
     mapConfig fn config
 
 
-{-| Add attributes to the container of selected items
+{-| Set attributes for the container of selected items.
 
-    Select.withMultiInputItemContainerAttrs [ class "bg-white" ] config
+    config
+        |> Select.withMultiInputItemContainerAttrs [ class "bg-white" ]
 
 -}
 withMultiInputItemContainerAttrs :
@@ -397,7 +502,26 @@ withMultiInputItemContainerAttrs attrs config =
     mapConfig fn config
 
 
-{-| Add attributes to an individual selected item
+{-| Add attributes for the container of selected items.
+This adds to existing attributes.
+
+    config
+        |> Select.withMultiInputItemContainerAttrs [ class "bg-white" ]
+
+-}
+withMultiInputItemContainerMoreAttrs :
+    List (Attribute msg)
+    -> Config msg item
+    -> Config msg item
+withMultiInputItemContainerMoreAttrs attrs config =
+    let
+        fn c =
+            { c | multiInputItemContainerAttrs = c.multiInputItemContainerAttrs ++ attrs }
+    in
+    mapConfig fn config
+
+
+{-| Set attributes for an individual selected item.
 
     config
         |> Select.withMultiInputItemAttrs [ class "bg-white" ]
@@ -415,7 +539,26 @@ withMultiInputItemAttrs attrs config =
     mapConfig fn config
 
 
-{-| Use a multi select instead of a single select
+{-| Add attributes to an individual selected item.
+This adds to existing attributes.
+
+    config
+        |> Select.withMultiInputItemMoreAttrs [ class "bg-white" ]
+
+-}
+withMultiInputItemMoreAttrs :
+    List (Attribute msg)
+    -> Config msg item
+    -> Config msg item
+withMultiInputItemMoreAttrs attrs config =
+    let
+        fn c =
+            { c | multiInputItemAttrs = c.multiInputItemAttrs ++ attrs }
+    in
+    mapConfig fn config
+
+
+{-| Use a multi select instead of a single select.
 -}
 withMultiSelection : Bool -> Config msg item -> Config msg item
 withMultiSelection value config =
@@ -426,9 +569,10 @@ withMultiSelection value config =
             )
 
 
-{-| Text that will appear when no matches are found
+{-| Text that will appear when no matches are found.
 
-    Select.withNotFound "No matches" config
+    config
+        |> Select.withNotFound "No matches"
 
 -}
 withNotFound : String -> Config msg item -> Config msg item
@@ -440,9 +584,10 @@ withNotFound text config =
     mapConfig fn config
 
 
-{-| Attributes for the not found message
+{-| Set attributes for the not found message.
 
-    Select.withNotFoundAttrs [ class "red" ] config
+    config
+        |> Select.withNotFoundAttrs [ class "red" ]
 
 -}
 withNotFoundAttrs :
@@ -457,9 +602,29 @@ withNotFoundAttrs attrs config =
     mapConfig fn config
 
 
-{-| Hide menu when no matches found
+{-| Add attributes to the not found message.
+This adds to existing attributes.
 
-    Select.withNotFoundShown False config
+    config
+        |> Select.withNotFoundMoreAttrs [ class "red" ]
+
+-}
+withNotFoundMoreAttrs :
+    List (Attribute msg)
+    -> Config msg item
+    -> Config msg item
+withNotFoundMoreAttrs attrs config =
+    let
+        fn c =
+            { c | notFoundAttrs = c.notFoundAttrs ++ attrs }
+    in
+    mapConfig fn config
+
+
+{-| Hide menu when no matches found.
+
+    config
+        |> Select.withNotFoundShown False
 
 -}
 withNotFoundShown : Bool -> Config msg item -> Config msg item
@@ -471,9 +636,10 @@ withNotFoundShown shown config =
     mapConfig fn config
 
 
-{-| Attributes for the hightlighted item
+{-| Set attributes for the hightlighted item.
 
-    Select.withHighlightedItemAttrs [ class "red" ] config
+    config
+        |> Select.withHighlightedItemAttrs [ class "red" ]
 
 -}
 withHighlightedItemAttrs :
@@ -488,9 +654,28 @@ withHighlightedItemAttrs attrs config =
     mapConfig fn config
 
 
-{-| Attributes for the selected item in the menu
+{-| Add attributes to the hightlighted item.
 
-    Select.withItemSelectedAttrs [ class "selected" ] config
+    config
+        |> Select.withHighlightedItemMoreAttrs [ class "red" ]
+
+-}
+withHighlightedItemMoreAttrs :
+    List (Attribute msg)
+    -> Config msg item
+    -> Config msg item
+withHighlightedItemMoreAttrs attrs config =
+    let
+        fn c =
+            { c | highlightedItemAttrs = c.highlightedItemAttrs ++ attrs }
+    in
+    mapConfig fn config
+
+
+{-| Set attributes for the selected item in the menu.
+
+    config
+        |> Select.withItemSelectedAttrs [ class "selected" ]
 
 -}
 withItemSelectedAttrs :
@@ -505,9 +690,28 @@ withItemSelectedAttrs attrs config =
     mapConfig fn config
 
 
-{-| Add a callback for when the query changes
+{-| Add attributes to the selected item in the menu.
 
-    Select.withOnQuery OnQuery
+    config
+        |> Select.withItemSelectedMoreAttrs [ class "selected" ]
+
+-}
+withItemSelectedMoreAttrs :
+    List (Attribute msg)
+    -> Config msg item
+    -> Config msg item
+withItemSelectedMoreAttrs attrs config =
+    let
+        fn c =
+            { c | selectedItemAttrs = c.selectedItemAttrs ++ attrs }
+    in
+    mapConfig fn config
+
+
+{-| Add a callback for when the query changes.
+
+    config
+        |> Select.withOnQuery OnQuery
 
 -}
 withOnQuery : (String -> msg) -> Config msg item -> Config msg item
@@ -519,9 +723,10 @@ withOnQuery msg config =
     mapConfig fn config
 
 
-{-| Add a callback for when the input field receives focus
+{-| Add a callback for when the input field receives focus.
 
-    Select.withOnFocus OnFocus
+    config
+        |> Select.withOnFocus OnFocus
 
 -}
 withOnFocus : msg -> Config msg item -> Config msg item
@@ -533,8 +738,11 @@ withOnFocus msg config =
     mapConfig fn config
 
 
-{-| Add attributes to the prompt text (When no item is selected)
-Select.withPromptAttrs "prompt" config
+{-| Set attributes for the prompt text (When no item is selected)
+
+    config
+        |> Select.withPromptAttrs [ class "prompt" ]
+
 -}
 withPromptAttrs :
     List (Attribute msg)
@@ -548,9 +756,29 @@ withPromptAttrs attrs config =
     mapConfig fn config
 
 
-{-| Add a prompt text to be displayed when no element is selected
+{-| Add attributes to the prompt text (When no item is selected)
+This adds to existing attributes.
 
-    Select.withPrompt "Select a movie" config
+    config
+        |> Select.withPromptMoreAttrs [ class "prompt" ]
+
+-}
+withPromptMoreAttrs :
+    List (Attribute msg)
+    -> Config msg item
+    -> Config msg item
+withPromptMoreAttrs attrs config =
+    let
+        fn c =
+            { c | promptAttrs = c.promptAttrs ++ attrs }
+    in
+    mapConfig fn config
+
+
+{-| Add a prompt text to be displayed when no element is selected.
+
+    config
+        |> Select.withPrompt "Select a movie"
 
 -}
 withPrompt : String -> Config msg item -> Config msg item
@@ -572,7 +800,8 @@ Return Nothing to prevent searching
         else
             Just query
 
-    Select.withTransformQuery transform config
+    config
+    |> Select.withTransformQuery transform
 
 -}
 withTransformQuery : (String -> String) -> Config msg item -> Config msg item
