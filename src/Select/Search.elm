@@ -1,7 +1,7 @@
 module Select.Search exposing (matchedItemsWithCutoff)
 
 import Select.Config exposing (Config)
-import Select.Shared as Utils
+import Select.Shared as Shared
 
 
 {-| If config.filter returns Nothing,
@@ -16,7 +16,10 @@ matchedItemsWithCutoff config maybeQuery availableItems selectedItems =
         {- When emptySearch is On, onBlur will set query to Just "" -}
         Just "" ->
             if config.emptySearch then
-                filterItems config availableItems selectedItems
+                filterSelectedItemsWhenMulti
+                    config
+                    availableItems
+                    selectedItems
                     |> maybeCuttoff config
                     |> Just
 
@@ -24,9 +27,37 @@ matchedItemsWithCutoff config maybeQuery availableItems selectedItems =
                 Nothing
 
         Just query ->
-            filterItems config availableItems selectedItems
-                |> config.filter query
+            filterSelectedItemsWhenMulti
+                config
+                availableItems
+                selectedItems
+                |> filterItems config query
                 |> Maybe.map (maybeCuttoff config)
+
+
+{-| If the users types multiple values in the query
+e.g. Apple, Banana
+We want to search for each of those (not the combined string)
+-}
+filterItems : Config msg item -> String -> List item -> Maybe (List item)
+filterItems config query items =
+    let
+        queries =
+            Shared.splitWithSeparators config.valueSeparators query
+
+        results =
+            queries
+                |> List.map (\query_ -> config.filter query_ items)
+    in
+    if List.all ((==) Nothing) results then
+        Nothing
+
+    else
+        results
+            |> List.filterMap identity
+            |> List.concat
+            |> Shared.uniqueBy config.toLabel
+            |> Just
 
 
 {-| If this is a multi select, then we don't want to display the selected items
@@ -35,10 +66,10 @@ in the menu.
 So filter these out.
 
 -}
-filterItems : Config msg item -> List item -> List item -> List item
-filterItems config availableItems selectedItems =
+filterSelectedItemsWhenMulti : Config msg item -> List item -> List item -> List item
+filterSelectedItemsWhenMulti config availableItems selectedItems =
     if config.isMultiSelect then
-        Utils.difference
+        Shared.difference
             availableItems
             selectedItems
 

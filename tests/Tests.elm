@@ -2,13 +2,14 @@ module Tests exposing
     ( IceCream(..)
     , availableItems
     , config
-    , menuTests
+    , inputTests
     , model
     , suite
     , toLabel
     )
 
-import Html.Attributes exposing (placeholder, value)
+import Expect
+import Html.Attributes exposing (attribute, placeholder, value)
 import Select
 import Test exposing (..)
 import Test.Html.Query as Query
@@ -64,7 +65,7 @@ config =
     Select.newConfig
         { onSelect = always ()
         , toLabel = toLabel
-        , filter = \_ _ -> Nothing
+        , filter = \query items -> Just items
         , toMsg = always ()
         }
         |> Select.withPrompt "Select a flavour"
@@ -74,8 +75,8 @@ model =
     Select.newState "id"
 
 
-menuTests =
-    describe "menu"
+inputTests =
+    describe "input"
         [ test "It renders" <|
             \_ ->
                 Select.view
@@ -106,8 +107,51 @@ menuTests =
         ]
 
 
+menuTests =
+    describe "menu"
+        [ test "It shows the custom item" <|
+            \_ ->
+                Select.view
+                    (config
+                        |> Select.withCustomInput Custom
+                    )
+                    (model |> Select.withQuery (Just "Passion"))
+                    availableItems
+                    []
+                    |> Query.fromHtml
+                    |> Query.findAll
+                        [ Selector.class "elm-select-menu-item"
+                        , Selector.attribute (attribute "data-select-item" "Passion")
+                        ]
+                    |> Query.count (Expect.equal 1)
+        , test "It can show multiple custom items" <|
+            \_ ->
+                Select.view
+                    (config
+                        |> Select.withCustomInput Custom
+                    )
+                    (model |> Select.withQuery (Just "Passion, Mango"))
+                    availableItems
+                    []
+                    |> Query.fromHtml
+                    |> Expect.all
+                        [ Query.findAll
+                            [ Selector.class "elm-select-menu-item"
+                            , Selector.attribute (attribute "data-select-item" "Passion")
+                            ]
+                            >> Query.count (Expect.equal 1)
+                        , Query.findAll
+                            [ Selector.class "elm-select-menu-item"
+                            , Selector.attribute (attribute "data-select-item" "Mango")
+                            ]
+                            >> Query.count (Expect.equal 1)
+                        ]
+        ]
+
+
 suite : Test
 suite =
     describe "all"
-        [ menuTests
+        [ inputTests
+        , menuTests
         ]

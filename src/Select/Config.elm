@@ -54,6 +54,7 @@ type alias Config msg item =
     , toLabel : item -> String
     , toMsg : Msg item -> msg
     , transformQuery : String -> String
+    , valueSeparators : List String
     }
 
 
@@ -92,4 +93,5 @@ newConfig requiredConfig =
     , toLabel = requiredConfig.toLabel
     , toMsg = requiredConfig.toMsg
     , transformQuery = identity
+    , valueSeparators = [ "\n", "\t", "," ]
     }

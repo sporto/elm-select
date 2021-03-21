@@ -4,14 +4,15 @@
     "summary": "A selection input with auto-completion",
     "license": "MIT",
     "version": "4.2.0",
-    "elm-version": "0.19.0 <= v < 0.20.0",
     "exposed-modules": [
         "Select"
     ],
+    "elm-version": "0.19.0 <= v < 0.20.0",
     "dependencies": {
         "elm/core": "1.0.0 <= v < 2.0.0",
         "elm/html": "1.0.0 <= v < 2.0.0",
         "elm/json": "1.0.0 <= v < 2.0.0",
+        "elm/regex": "1.0.0 <= v < 2.0.0",
         "elm/svg": "1.0.0 <= v < 2.0.0"
     },
     "test-dependencies": {

@@ -8,7 +8,7 @@ import Select.Models exposing (State)
 import Select.Search as Search
 import Select.Select.Input
 import Select.Select.Menu
-import Select.Shared exposing (classNames)
+import Select.Shared as Shared exposing (classNames)
 
 
 view : Config msg item -> State -> List item -> List item -> Html msg
@@ -30,10 +30,13 @@ view config state availableItems selectedItems =
 
                             else
                                 let
-                                    item =
-                                        fn query
+                                    items : List item
+                                    items =
+                                        query
+                                            |> Shared.splitWithSeparators config.valueSeparators
+                                            |> List.map fn
                                 in
-                                item :: availableItems
+                                items ++ availableItems
 
         -- This is a maybe because
         -- When no search has been done we don't want to show the menu
@@ -56,9 +59,9 @@ view config state availableItems selectedItems =
             availableItems
             selectedItems
             maybeMatchedItems
-        , div [ class classNames.underlineWrapper ] [
-            div [ class classNames.underline ] []
-        ]
+        , div [ class classNames.underlineWrapper ]
+            [ div [ class classNames.underline ] []
+            ]
         , Select.Select.Menu.view
             config
             state

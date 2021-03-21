@@ -4,7 +4,7 @@ module Select.Select.Item exposing
     )
 
 import Html exposing (..)
-import Html.Attributes exposing (class)
+import Html.Attributes exposing (attribute, class)
 import Html.Events exposing (onMouseDown)
 import Select.Config exposing (Config)
 import Select.Messages exposing (..)
@@ -31,16 +31,20 @@ view config state itemCount selectedItems index item =
         selectedAttrs =
             if isSelected then
                 config.selectedItemAttrs
+
             else
                 []
 
         isSelected =
             List.member item selectedItems
 
+        label =
+            config.toLabel item
+
         itemHtml =
             case config.itemHtml of
                 Nothing ->
-                    text (config.toLabel item)
+                    text label
 
                 Just fn ->
                     fn item
@@ -48,6 +52,7 @@ view config state itemCount selectedItems index item =
     div
         ([ class classNames.menuItem
          , class classNames.menuItemSelectable
+         , attribute "data-select-item" label
          , onMouseDown (config.toMsg (OnSelect item))
          , referenceAttr config state
          ]

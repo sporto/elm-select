@@ -8,6 +8,8 @@ module Select.Shared exposing
 
     , referenceAttr
     , referenceDataName
+    , splitWithSeparators
+    , uniqueBy
     )
 
 import Array
@@ -15,9 +17,11 @@ import Html exposing (Attribute)
 import Html.Attributes exposing (attribute, autocomplete, class)
 import Html.Events exposing (keyCode, on, onFocus, onInput, preventDefaultOn, stopPropagationOn)
 import Json.Decode as Decode
+import Regex
 import Select.Config exposing (Config)
 import Select.Messages as Msg exposing (Msg)
 import Select.Models exposing (State)
+import Set exposing (Set)
 
 
 classNames =
@@ -182,3 +186,39 @@ onBlurAttribute config state =
                 |> Decode.map (Maybe.withDefault Msg.OnBlur)
     in
     on "focusout" blur
+
+
+splitWithSeparators : List String -> String -> List String
+splitWithSeparators separators phrase =
+    let
+        separatorRegex =
+            separators
+                |> String.join "|"
+                |> Regex.fromString
+                |> Maybe.withDefault Regex.never
+    in
+    Regex.split separatorRegex phrase
+        |> List.map String.trim
+
+
+uniqueBy : (a -> comparable) -> List a -> List a
+uniqueBy f list =
+    uniqueHelper f Set.empty list []
+
+
+uniqueHelper : (a -> comparable) -> Set comparable -> List a -> List a -> List a
+uniqueHelper f existing remaining accumulator =
+    case remaining of
+        [] ->
+            List.reverse accumulator
+
+        first :: rest ->
+            let
+                computedFirst =
+                    f first
+            in
+            if Set.member computedFirst existing then
+                uniqueHelper f existing rest accumulator
+
+            else
+                uniqueHelper f (Set.insert computedFirst existing) rest (first :: accumulator)

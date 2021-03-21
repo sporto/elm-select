@@ -10,7 +10,7 @@ module Select exposing
     , withMenuAttrs
     , withNotFound, withNotFoundAttrs, withNotFoundShown
     , withPrompt, withPromptAttrs
-    , newState, queryFromState
+    , newState, queryFromState, withQuery
     , view
     , update
     )
@@ -85,7 +85,7 @@ This is the element that wraps the selected item(s) and the input
 
 # State
 
-@docs newState, queryFromState
+@docs newState, queryFromState, withQuery
 
 
 # View
@@ -618,6 +618,16 @@ queryFromState model =
     model
         |> unwrapModel
         |> .query
+
+
+{-| Change the current query
+
+    Select.withQuery (Just "hello") selectModel
+
+-}
+withQuery : Maybe String -> State -> State
+withQuery query (PrivateState model) =
+    PrivateState { model | query = query }
 
 
 {-| Render the view
