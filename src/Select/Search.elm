@@ -1,4 +1,7 @@
-module Select.Search exposing (matchedItemsWithCutoff)
+module Select.Search exposing
+    ( filterItems
+    , matchedItemsWithCutoff
+    )
 
 import Select.Config exposing (Config)
 import Select.Shared as Shared
@@ -31,23 +34,36 @@ matchedItemsWithCutoff config maybeQuery availableItems selectedItems =
                 config
                 availableItems
                 selectedItems
-                |> filterItems config query
+                |> filterItems
+                    { filter = config.filter
+                    , query = query
+                    , toLabel = config.toLabel
+                    , valueSeparators = config.valueSeparators
+                    }
                 |> Maybe.map (maybeCuttoff config)
+
+
+type alias FilterArgs item =
+    { filter : String -> List item -> Maybe (List item)
+    , query : String
+    , toLabel : item -> String
+    , valueSeparators : List String
+    }
 
 
 {-| If the users types multiple values in the query
 e.g. Apple, Banana
 We want to search for each of those (not the combined string)
 -}
-filterItems : Config msg item -> String -> List item -> Maybe (List item)
-filterItems config query items =
+filterItems : FilterArgs item -> List item -> Maybe (List item)
+filterItems args items =
     let
         queries =
-            Shared.splitWithSeparators config.valueSeparators query
+            Shared.splitWithSeparators args.valueSeparators args.query
 
         results =
             queries
-                |> List.map (\query_ -> config.filter query_ items)
+                |> List.map (\query_ -> args.filter query_ items)
     in
     if List.all ((==) Nothing) results then
         Nothing
@@ -56,7 +72,7 @@ filterItems config query items =
         results
             |> List.filterMap identity
             |> List.concat
-            |> Shared.uniqueBy config.toLabel
+            |> Shared.uniqueBy args.toLabel
             |> Just
 
 

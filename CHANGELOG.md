@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.3.1
+
+- Fix stack overflow when `valueSeparators` is an empty list.
+
 ## 4.3.0
 
 - Allow to type multiple queries by using a `,`. When using custom input, these values will appear as disctinct items in the menu.

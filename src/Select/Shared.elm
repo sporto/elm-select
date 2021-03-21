@@ -190,15 +190,19 @@ onBlurAttribute config state =
 
 splitWithSeparators : List String -> String -> List String
 splitWithSeparators separators phrase =
-    let
-        separatorRegex =
-            separators
-                |> String.join "|"
-                |> Regex.fromString
-                |> Maybe.withDefault Regex.never
-    in
-    Regex.split separatorRegex phrase
-        |> List.map String.trim
+    if List.isEmpty separators then
+        [ phrase ]
+
+    else
+        let
+            separatorRegex =
+                separators
+                    |> String.join "|"
+                    |> Regex.fromString
+                    |> Maybe.withDefault Regex.never
+        in
+        Regex.split separatorRegex phrase
+            |> List.map String.trim
 
 
 uniqueBy : (a -> comparable) -> List a -> List a

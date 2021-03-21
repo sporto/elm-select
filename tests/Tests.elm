@@ -11,6 +11,7 @@ module Tests exposing
 import Expect
 import Html.Attributes exposing (attribute, placeholder, value)
 import Select
+import Select.Search as Search
 import Test exposing (..)
 import Test.Html.Query as Query
 import Test.Html.Selector as Selector
@@ -107,6 +108,14 @@ inputTests =
         ]
 
 
+testEqual testCase a b =
+    test testCase <|
+        \_ ->
+            Expect.equal
+                a
+                b
+
+
 menuTests =
     describe "menu"
         [ test "It shows the custom item" <|
@@ -149,9 +158,50 @@ menuTests =
         ]
 
 
+filterItemsTests =
+    let
+        args =
+            { filter = \query items -> List.filter ((==) query) items |> Just
+            , query = ""
+            , toLabel = identity
+            , valueSeparators = []
+            }
+    in
+    describe "filterItems"
+        [ testEqual
+            "It returns the filtered items"
+            (Search.filterItems
+                { args | query = "One" }
+                [ "One", "Two", "Three" ]
+            )
+            (Just [ "One" ])
+        , testEqual
+            "It can return two when the query uses the separators"
+            (Search.filterItems
+                { args
+                    | query = "One, Two"
+                    , valueSeparators = [ "," ]
+                }
+                [ "One", "Two", "Three" ]
+            )
+            (Just [ "One", "Two" ])
+        , testEqual
+            "It doesn't match when there are no separators"
+            (Search.filterItems
+                { args
+                    | query = "One, Two"
+                    , valueSeparators = []
+                }
+                [ "One", "Two", "Three" ]
+            )
+            (Just [])
+        ]
+
+
 suite : Test
 suite =
     describe "all"
         [ inputTests
         , menuTests
+        , filterItemsTests
         ]
