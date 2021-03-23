@@ -1,0 +1,1 @@
+{"version":3,"sources":["app.js"],"names":["Elm","Main","init","node","document","getElementById"],"mappings":";;;AAEA,aAFA,IAAA,EAAA,QAAA,cAEAA,EAAIC,IAAAA,KAAKC,KAAK,CACZC,KAAMC,SAASC,eAAe","file":"app.c9630bd2.js","sourceRoot":"../demo/src","sourcesContent":["import { Elm } from \"./Main.elm\";\n\nElm.Main.init({\n  node: document.getElementById('main')\n});\n"]}
