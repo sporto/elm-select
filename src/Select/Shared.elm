@@ -41,6 +41,7 @@ classNames =
     --
     -- Menu
     , menu = "elm-select-menu"
+    , menuAnchor = "elm-select-menu-anchor"
     , menuItem = "elm-select-menu-item"
     , menuItemSelectable = "elm-select-menu-item-selectable"
     }

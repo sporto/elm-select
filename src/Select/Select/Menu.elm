@@ -11,6 +11,11 @@ import Select.Shared exposing (classNames)
 
 view : Config msg item -> State -> Maybe (List item) -> List item -> Html msg
 view config state maybeMatchedItems selectedItems =
+    div [ class classNames.menuAnchor ] [ maybeMenu config state maybeMatchedItems selectedItems ]
+
+
+maybeMenu : Config msg item -> State -> Maybe (List item) -> List item -> Html msg
+maybeMenu config state maybeMatchedItems selectedItems =
     case maybeMatchedItems of
         Nothing ->
             text ""

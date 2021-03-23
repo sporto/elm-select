@@ -1,5 +1,9 @@
 # Changelog
 
+## 6.0.1
+
+- Internal change: Add menuAnchor element
+
 ## 6.0.0
 
 - Remove `withClearSvgAttrs`. Passing a `class` attribute to and SVG generates a runtime error. So this is not allowed anymore.

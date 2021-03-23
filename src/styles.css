@@ -57,6 +57,10 @@
 /* Menu */
 
 .elm-select-menu {
+  position: relative;
+}
+
+.elm-select-menu {
   position: absolute;
   z-index: 1;
   background-color: white;
