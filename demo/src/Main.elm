@@ -190,6 +190,7 @@ selectConfigMovie =
         , toMsg = Example.SelectMsg
         }
         |> Select.withMenuAttrs [ style "max-height" "10rem" ]
+        |> Select.withClearSvgClass "foo" 
 
 
 selectConfigColor : Select.Config (Example.Msg Color.Color) Color.Color

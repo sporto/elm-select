@@ -22,7 +22,7 @@ type alias RequiredConfig msg item =
 
 type alias Config msg item =
     { clearAttrs : List (Attribute msg)
-    , clearSvgAttrs : List (Attribute msg)
+    , clearSvgClass : String
     , clearHtml : Maybe (Html msg)
     , customInput : Maybe (String -> item)
     , cutoff : Maybe Int
@@ -60,7 +60,7 @@ type alias Config msg item =
 newConfig : RequiredConfig msg item -> Config msg item
 newConfig requiredConfig =
     { clearAttrs = []
-    , clearSvgAttrs = []
+    , clearSvgClass = ""
     , clearHtml = Nothing
     , customInput = Nothing
     , emptySearch = False

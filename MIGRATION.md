@@ -1,5 +1,9 @@
 # Migration
 
+## From 5 to 6
+
+`withClearSvgAttrs` has been removed because this can lead to a runtime error.
+
 ## From 4 to 5
 
 Rename `Select.newState` to `Select.init`.

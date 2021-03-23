@@ -4,7 +4,7 @@ module Select exposing
     , withMultiSelection, withOnRemoveItem, withMultiInputItemContainerAttrs, withMultiInputItemContainerMoreAttrs, withMultiInputItemAttrs, withMultiInputItemMoreAttrs
     , withInputWrapperAttrs, withInputWrapperMoreAttrs
     , withInputAttrs, withInputMoreAttrs, withOnFocus
-    , withClear, withClearAttrs, withClearMoreAttrs, withClearSvgAttrs, withClearSvgMoreAttrs, withClearHtml
+    , withClear, withClearAttrs, withClearMoreAttrs, withClearSvgClass, withClearHtml
     , withItemAttrs, withItemMoreAttrs, withItemHtml, withHighlightedItemAttrs, withHighlightedItemMoreAttrs, withItemSelectedAttrs, withItemSelectedMoreAttrs
     , withMenuAttrs, withMenuMoreAttrs
     , withNotFound, withNotFoundAttrs, withNotFoundMoreAttrs, withNotFoundShown
@@ -52,7 +52,7 @@ This is the element that wraps the selected item(s) and the input
 
 # Configure the clear button
 
-@docs withClear, withClearAttrs, withClearMoreAttrs, withClearSvgAttrs, withClearSvgMoreAttrs, withClearHtml
+@docs withClear, withClearAttrs, withClearMoreAttrs, withClearSvgClass, withClearHtml
 
 
 # Configure the items
@@ -215,40 +215,20 @@ withClearMoreAttrs attrs config =
     mapConfig fn config
 
 
-{-| Set attributes for the clear SVG icon
-This overrides any attributes already set in a previous call.
+{-| Set classes for the clear SVG icon
 
     config
-        |> Select.withClearSvgAttrs [ class "clear" ]
+        |> Select.withClearSvgClass "clear"
 
 -}
-withClearSvgAttrs :
-    List (Attribute msg)
+withClearSvgClass :
+    String
     -> Config msg item
     -> Config msg item
-withClearSvgAttrs attrs config =
+withClearSvgClass class config =
     let
         fn c =
-            { c | clearSvgAttrs = attrs }
-    in
-    mapConfig fn config
-
-
-{-| Add attributes to the clear SVG icon.
-This adds to existing attributes.
-
-    config
-        |> Select.withClearSvgMoreAttrs [ class "clear" ]
-
--}
-withClearSvgMoreAttrs :
-    List (Attribute msg)
-    -> Config msg item
-    -> Config msg item
-withClearSvgMoreAttrs attrs config =
-    let
-        fn c =
-            { c | clearSvgAttrs = c.clearSvgAttrs ++ attrs }
+            { c | clearSvgClass = class }
     in
     mapConfig fn config
 

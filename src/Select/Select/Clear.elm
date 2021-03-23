@@ -19,12 +19,11 @@ view config =
 viewDefault : Config msg item -> Svg msg
 viewDefault config =
     svg
-        ([ Attrs.width "16"
-         , Attrs.height "16"
-         , Attrs.viewBox "0 0 16 16"
-         ]
-            ++ config.clearSvgAttrs
-        )
+        [ Attrs.width "16"
+        , Attrs.height "16"
+        , Attrs.viewBox "0 0 16 16"
+        , Attrs.class config.clearSvgClass
+        ]
         [ g [ Attrs.transform "translate(3, 3)" ]
             [ path [ Attrs.d svgPath ] []
             ]
