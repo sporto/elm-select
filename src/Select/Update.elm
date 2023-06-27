@@ -23,7 +23,15 @@ update config msg model =
             ( model, Cmd.none )
 
         OnEsc ->
-            ( { model | query = Nothing }, Cmd.none )
+            ( { model | query = Nothing }
+            , case config.onEsc of
+                Nothing ->
+                    Cmd.none
+
+                Just escMessage ->
+                    Task.succeed Nothing
+                        |> Task.perform (\x -> escMessage)
+            )
 
         OnDownArrow ->
             let
@@ -80,7 +88,15 @@ update config msg model =
                     ( model, cmd )
 
         OnBlur ->
-            ( { model | query = Nothing }, Cmd.none )
+            ( { model | query = Nothing }
+            , case config.onBlur of
+                Nothing ->
+                    Cmd.none
+
+                Just blurMessage ->
+                    Task.succeed Nothing
+                        |> Task.perform (\x -> blurMessage)
+            )
 
         OnClear ->
             let
