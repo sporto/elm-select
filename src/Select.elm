@@ -3,7 +3,7 @@ module Select exposing
     , newConfig, withCustomInput, withCutoff, withOnQuery, withEmptySearch, withTransformQuery
     , withMultiSelection, withOnRemoveItem, withMultiInputItemContainerAttrs, withMultiInputItemContainerMoreAttrs, withMultiInputItemAttrs, withMultiInputItemMoreAttrs
     , withInputWrapperAttrs, withInputWrapperMoreAttrs
-    , withInputAttrs, withInputMoreAttrs, withOnFocus
+    , withInputAttrs, withInputMoreAttrs, withOnFocus, withOnBlur, withOnEsc
     , withClear, withClearAttrs, withClearMoreAttrs, withClearSvgClass, withClearHtml
     , withItemAttrs, withItemMoreAttrs, withItemHtml, withHighlightedItemAttrs, withHighlightedItemMoreAttrs, withItemSelectedAttrs, withItemSelectedMoreAttrs
     , withMenuAttrs, withMenuMoreAttrs
@@ -47,7 +47,7 @@ This is the element that wraps the selected item(s) and the input
 
 # Configure the input
 
-@docs withInputAttrs, withInputMoreAttrs, withOnFocus
+@docs withInputAttrs, withInputMoreAttrs, withOnFocus, withOnBlur, withOnEsc
 
 
 # Configure the clear button
@@ -714,6 +714,36 @@ withOnFocus msg config =
     let
         fn c =
             { c | onFocus = Just msg }
+    in
+    mapConfig fn config
+
+
+{-| Add a callback for when the input field loses focus.
+
+    config
+        |> Select.withOnBlur OnBlur
+
+-}
+withOnBlur : msg -> Config msg item -> Config msg item
+withOnBlur msg config =
+    let
+        fn c =
+            { c | onBlur = Just msg }
+    in
+    mapConfig fn config
+
+
+{-| Add a callback for when the Escape key is pressed.
+
+    config
+        |> Select.withOnEsc OnEsc
+
+-}
+withOnEsc : msg -> Config msg item -> Config msg item
+withOnEsc msg config =
+    let
+        fn c =
+            { c | onEsc = Just msg }
     in
     mapConfig fn config
 

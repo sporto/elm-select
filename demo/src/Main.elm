@@ -1,14 +1,14 @@
 module Main exposing (main)
 
 import Browser
-import ExampleAsync
+import Color
 import Example
+import ExampleAsync
 import Html exposing (..)
 import Html.Attributes exposing (class, href, style)
+import Movie
 import Select
 import Shared
-import Color
-import Movie
 
 
 type alias Model =
@@ -17,40 +17,53 @@ type alias Model =
     , exampleEmptySearch : Example.Model Movie.Movie
     , exampleMulti : Example.Model Color.Color
     , exampleCustom : Example.Model Movie.Movie
+    , exampleFocusBlurEsc : Example.Model Movie.Movie
     }
 
 
 initialModel : Model
 initialModel =
-    { exampleBasic = Example.initialModel
-        { id = "exampleBasic"
-        , available = Movie.movies
-        , itemToLabel = Movie.toLabel
-        , selected = [ ]
-        , selectConfig = selectConfigMovie
-        }
+    { exampleBasic =
+        Example.initialModel
+            { id = "exampleBasic"
+            , available = Movie.movies
+            , itemToLabel = Movie.toLabel
+            , selected = []
+            , selectConfig = selectConfigMovie
+            }
     , exampleAsync = ExampleAsync.initialModel "2"
-    , exampleEmptySearch = Example.initialModel
-        { id = "exampleEmptySearch"
-        , available = Movie.movies
-        , itemToLabel = Movie.toLabel
-        , selected = [ ]
-        , selectConfig = selectConfigEmptySearch
-        }
-    , exampleMulti = Example.initialModel
-        { id = "exampleMulti"
-        , available = Color.colors
-        , itemToLabel = Color.toLabel
-        , selected = [ Color.Red, Color.Black ]
-        , selectConfig = selectConfigMulti
-        }
-    , exampleCustom = Example.initialModel
-        { id = "exampleCustom"
-        , available = Movie.movies
-        , itemToLabel = Movie.toLabel
-        , selected = [ ]
-        , selectConfig = selectConfigCustom
-        }
+    , exampleEmptySearch =
+        Example.initialModel
+            { id = "exampleEmptySearch"
+            , available = Movie.movies
+            , itemToLabel = Movie.toLabel
+            , selected = []
+            , selectConfig = selectConfigEmptySearch
+            }
+    , exampleMulti =
+        Example.initialModel
+            { id = "exampleMulti"
+            , available = Color.colors
+            , itemToLabel = Color.toLabel
+            , selected = [ Color.Red, Color.Black ]
+            , selectConfig = selectConfigMulti
+            }
+    , exampleCustom =
+        Example.initialModel
+            { id = "exampleCustom"
+            , available = Movie.movies
+            , itemToLabel = Movie.toLabel
+            , selected = []
+            , selectConfig = selectConfigCustom
+            }
+    , exampleFocusBlurEsc =
+        Example.initialModel
+            { id = "exampleFocusBlurEsc"
+            , available = Movie.movies
+            , itemToLabel = Movie.toLabel
+            , selected = []
+            , selectConfig = selectConfigFocusBlurEsc
+            }
     }
 
 
@@ -71,6 +84,7 @@ type Msg
     | ExampleEmptySearchMsg (Example.Msg Movie.Movie)
     | ExampleMultiMsg (Example.Msg Color.Color)
     | ExampleCustomMsg (Example.Msg Movie.Movie)
+    | ExampleFocusBlurEscMsg (Example.Msg Movie.Movie)
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -131,6 +145,17 @@ update msg model =
             , Cmd.map ExampleCustomMsg subCmd
             )
 
+        ExampleFocusBlurEscMsg sub ->
+            let
+                ( subModel, subCmd ) =
+                    Example.update
+                        sub
+                        model.exampleFocusBlurEsc
+            in
+            ( { model | exampleFocusBlurEsc = subModel }
+            , Cmd.map ExampleFocusBlurEscMsg subCmd
+            )
+
         NoOp ->
             ( model, Cmd.none )
 
@@ -142,7 +167,7 @@ projectUrl =
 
 view : Model -> Html Msg
 view model =
-    div [ ]
+    div []
         [ h1 [] [ text "Elm Select" ]
         , a [ href projectUrl ] [ text projectUrl ]
         , Example.view
@@ -168,6 +193,11 @@ view model =
             "Free entry input"
             "Select a movie"
             |> Html.map ExampleCustomMsg
+        , Example.view
+            model.exampleFocusBlurEsc
+            "OnFocus, OnBlur, OnEsc"
+            "See these messages fire in the debugger"
+            |> Html.map ExampleFocusBlurEscMsg
         ]
 
 
@@ -190,7 +220,7 @@ selectConfigMovie =
         , toMsg = Example.SelectMsg
         }
         |> Select.withMenuAttrs [ style "max-height" "10rem" ]
-        |> Select.withClearSvgClass "foo" 
+        |> Select.withClearSvgClass "foo"
 
 
 selectConfigColor : Select.Config (Example.Msg Color.Color) Color.Color
@@ -224,6 +254,13 @@ selectConfigEmptySearch =
         |> Select.withNotFound "No matches"
         |> Select.withPrompt "Select a movie"
         |> Select.withClearHtml (Just (text "X"))
+
+
+selectConfigFocusBlurEsc =
+    selectConfigMovie
+        |> Select.withOnFocus Example.OnFocus
+        |> Select.withOnBlur Example.OnBlur
+        |> Select.withOnEsc Example.OnEsc
 
 
 selectConfigCustom =
