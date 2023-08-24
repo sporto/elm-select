@@ -116,7 +116,7 @@ update config msg model =
                         _ ->
                             queryChangeCmd newQuery
             in
-            ( { model | highlightedItem = Nothing, query = Just value }, cmd )
+            ( { model | highlightedItem = Nothing, query = Just newQuery }, cmd )
 
         OnSelect item ->
             let
