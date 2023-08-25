@@ -78,14 +78,6 @@ selectConfig =
         |> Select.withCutoff 12
         |> Select.withOnQuery OnQuery
         |> Select.withItemHtml itemHtml
-        |> Select.withTransformQuery
-            (\query ->
-                if String.length query < 3 then
-                    ""
-
-                else
-                    query
-            )
 
 
 fetchUrl : String -> String
@@ -118,7 +110,12 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         OnQuery query ->
-            ( model, fetch query )
+            if String.length query < 3 then
+                ( model, Cmd.none )
+
+            else
+                ( model, fetch query )
+            
 
         OnFetch result ->
             case result of
