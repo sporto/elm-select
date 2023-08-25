@@ -770,15 +770,12 @@ withPrompt prompt config =
     mapConfig fn config
 
 
-{-| Transform the input query before performing the search
-Return Nothing to prevent searching
+{-| Transform the input query
+Return "" to effectively disable searching.
 
-    transform : String -> Maybe String
+    transform : String -> String
     transform query =
-        if String.length query < 4 then
-            Nothing
-        else
-            Just query
+        ""
 
     config
     |> Select.withTransformQuery transform
