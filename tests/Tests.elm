@@ -73,7 +73,7 @@ config =
 
 
 model =
-    Select.newState "id"
+    Select.init "id"
 
 
 inputTests =

@@ -42,6 +42,8 @@ type alias Config msg item =
     , notFoundAttrs : List (Attribute msg)
     , notFoundShown : Bool
     , onFocus : Maybe msg
+    , onBlur : Maybe msg
+    , onEsc : Maybe msg
     , onQueryChange : Maybe (String -> msg)
     , onRemoveItem : Maybe (item -> msg)
     , onSelect : Maybe item -> msg
@@ -80,6 +82,8 @@ newConfig requiredConfig =
     , notFoundAttrs = []
     , notFoundShown = True
     , onFocus = Nothing
+    , onBlur = Nothing
+    , onEsc = Nothing
     , onQueryChange = Nothing
     , onRemoveItem = Nothing
     , onSelect = requiredConfig.onSelect

@@ -1,9 +1,9 @@
 module Example exposing
     ( Model
     , Msg(..)
+    , initialModel
     , update
     , view
-    , initialModel
     )
 
 import Html exposing (..)
@@ -23,7 +23,7 @@ type alias Model item =
 
 
 type alias InitArgs item =
-    { id: String
+    { id : String
     , available : List item
     , selected : List item
     , selectConfig : Select.Config (Msg item) item
@@ -47,6 +47,9 @@ type Msg item
     | OnSelect (Maybe item)
     | OnRemoveItem item
     | SelectMsg (Select.Msg item)
+    | OnFocus
+    | OnBlur
+    | OnEsc
 
 
 update : Msg item -> Model item -> ( Model item, Cmd (Msg item) )
@@ -80,6 +83,15 @@ update msg model =
             ( { model | selectState = updated }, cmd )
 
         NoOp ->
+            ( model, Cmd.none )
+
+        OnFocus ->
+            ( model, Cmd.none )
+
+        OnBlur ->
+            ( model, Cmd.none )
+
+        OnEsc ->
             ( model, Cmd.none )
 
 
