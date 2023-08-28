@@ -1,5 +1,10 @@
 # Changelog
 
+## 6.10.0
+
+- Add `onBlur`
+- Add `onEsc`
+
 ## 6.0.1
 
 - Internal change: Add menuAnchor element
