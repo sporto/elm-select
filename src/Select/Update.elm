@@ -121,18 +121,23 @@ update config msg model =
 
         OnQueryChange value ->
             let
-                newQuery =
-                    value |> config.transformQuery
+                transformedValue =
+                    value
+                        |> config.transformInput
+
+                transformedQuery =
+                    transformedValue
+                        |> config.transformQuery
 
                 cmd =
-                    case newQuery of
+                    case transformedQuery of
                         "" ->
                             Cmd.none
 
                         _ ->
-                            queryChangeCmd newQuery
+                            queryChangeCmd transformedQuery
             in
-            ( { model | highlightedItem = Nothing, query = Just value }, cmd )
+            ( { model | highlightedItem = Nothing, query = Just transformedValue }, cmd )
 
         OnSelect item ->
             let
