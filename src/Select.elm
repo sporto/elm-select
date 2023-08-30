@@ -12,6 +12,7 @@ module Select exposing
     , init, queryFromState, withQuery
     , view
     , update
+    , withTransformInput
     )
 
 {-| Select input with auto-complete
@@ -796,6 +797,27 @@ withPrompt prompt config =
     let
         fn c =
             { c | prompt = prompt }
+    in
+    mapConfig fn config
+
+
+{-| Transform the input
+This can be used to restrict input to certain characters.
+Returning "" effectively disables input
+
+    transform : String -> String
+    transform input =
+        ""
+
+    config
+    |> Select.withTransformInput transform
+
+-}
+withTransformInput : (String -> String) -> Config msg item -> Config msg item
+withTransformInput transform config =
+    let
+        fn c =
+            { c | transformInput = transform }
     in
     mapConfig fn config
 
