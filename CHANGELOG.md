@@ -1,5 +1,9 @@
 # Changelog
 
+## 6.20.0
+
+- Add `withTransformInput`
+
 ## 6.10.0
 
 - Add `onBlur`

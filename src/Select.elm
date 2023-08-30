@@ -1,6 +1,6 @@
 module Select exposing
     ( RequiredConfig, Config, State, Msg
-    , newConfig, withCustomInput, withCutoff, withOnQuery, withEmptySearch, withTransformQuery
+    , newConfig, withCustomInput, withCutoff, withOnQuery, withEmptySearch, withTransformQuery, withTransformInput
     , withMultiSelection, withOnRemoveItem, withMultiInputItemContainerAttrs, withMultiInputItemContainerMoreAttrs, withMultiInputItemAttrs, withMultiInputItemMoreAttrs
     , withInputWrapperAttrs, withInputWrapperMoreAttrs
     , withInputAttrs, withInputMoreAttrs, withOnFocus, withOnBlur, withOnEsc
@@ -12,7 +12,6 @@ module Select exposing
     , init, queryFromState, withQuery
     , view
     , update
-    , withTransformInput
     )
 
 {-| Select input with auto-complete
@@ -31,7 +30,7 @@ See live demo [here](https://sporto.github.io/elm-select)
 
 # Configuration
 
-@docs newConfig, withCustomInput, withCutoff, withOnQuery, withEmptySearch, withTransformQuery
+@docs newConfig, withCustomInput, withCutoff, withOnQuery, withEmptySearch, withTransformQuery, withTransformInput
 
 
 # Configure Multi Select mode
