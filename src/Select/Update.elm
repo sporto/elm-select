@@ -130,12 +130,11 @@ update config msg model =
                         |> config.transformQuery
 
                 cmd =
-                    case transformedQuery of
-                        "" ->
-                            Cmd.none
+                    if not (String.isEmpty transformedQuery) || config.emptySearch then
+                        queryChangeCmd transformedQuery
 
-                        _ ->
-                            queryChangeCmd transformedQuery
+                    else
+                        Cmd.none
             in
             ( { model | highlightedItem = Nothing, query = Just transformedValue }, cmd )
 
