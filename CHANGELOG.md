@@ -1,5 +1,9 @@
 # Changelog
 
+## 6.20.1
+
+- Make OnQueryChange obey emptySearch. https://github.com/sporto/elm-select/pull/58
+
 ## 6.20.0
 
 - Add `withTransformInput`
