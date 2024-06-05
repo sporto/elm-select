@@ -1,5 +1,9 @@
 # Changelog
 
+## 6.3.0
+
+- Add `withValueSeparators` https://github.com/sporto/elm-select/pull/59
+
 ## 6.20.1
 
 - Make OnQueryChange obey emptySearch. https://github.com/sporto/elm-select/pull/58
