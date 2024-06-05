@@ -12,6 +12,7 @@ module Select exposing
     , init, queryFromState, withQuery
     , view
     , update
+    , withValueSeparators
     )
 
 {-| Select input with auto-complete
@@ -840,6 +841,22 @@ withTransformQuery transform config =
     let
         fn c =
             { c | transformQuery = transform }
+    in
+    mapConfig fn config
+
+
+{-| Specify a custom list of separators for the query
+The default is `[ "\n", "\t", "," ]`
+
+    config
+        |> Select.withValueSeparators []
+
+-}
+withValueSeparators : List String -> Config msg item -> Config msg item
+withValueSeparators valueSeparators config =
+    let
+        fn c =
+            { c | valueSeparators = valueSeparators }
     in
     mapConfig fn config
 
