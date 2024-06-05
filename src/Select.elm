@@ -3,7 +3,7 @@ module Select exposing
     , newConfig, withCustomInput, withCutoff, withOnQuery, withEmptySearch, withTransformQuery, withTransformInput
     , withMultiSelection, withOnRemoveItem, withMultiInputItemContainerAttrs, withMultiInputItemContainerMoreAttrs, withMultiInputItemAttrs, withMultiInputItemMoreAttrs
     , withInputWrapperAttrs, withInputWrapperMoreAttrs
-    , withInputAttrs, withInputMoreAttrs, withOnFocus, withOnBlur, withOnEsc
+    , withInputAttrs, withInputMoreAttrs, withOnFocus, withOnBlur, withOnEsc, withValueSeparators
     , withClear, withClearAttrs, withClearMoreAttrs, withClearSvgClass, withClearHtml
     , withItemAttrs, withItemMoreAttrs, withItemHtml, withHighlightedItemAttrs, withHighlightedItemMoreAttrs, withItemSelectedAttrs, withItemSelectedMoreAttrs
     , withMenuAttrs, withMenuMoreAttrs
@@ -12,7 +12,6 @@ module Select exposing
     , init, queryFromState, withQuery
     , view
     , update
-    , withValueSeparators
     )
 
 {-| Select input with auto-complete
@@ -48,7 +47,7 @@ This is the element that wraps the selected item(s) and the input
 
 # Configure the input
 
-@docs withInputAttrs, withInputMoreAttrs, withOnFocus, withOnBlur, withOnEsc
+@docs withInputAttrs, withInputMoreAttrs, withOnFocus, withOnBlur, withOnEsc, withValueSeparators
 
 
 # Configure the clear button
