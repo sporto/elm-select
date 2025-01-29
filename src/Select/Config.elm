@@ -38,6 +38,7 @@ type alias Config msg item =
     , menuAttrs : List (Attribute msg)
     , multiInputItemAttrs : List (Attribute msg)
     , multiInputItemContainerAttrs : List (Attribute msg)
+    , multiInputItemRemoveable : Maybe (item -> Bool)
     , notFound : String
     , notFoundAttrs : List (Attribute msg)
     , notFoundShown : Bool
@@ -79,6 +80,7 @@ newConfig requiredConfig =
     , menuAttrs = []
     , multiInputItemAttrs = []
     , multiInputItemContainerAttrs = []
+    , multiInputItemRemoveable = Nothing
     , notFound = "No results found"
     , notFoundAttrs = []
     , notFoundShown = True
