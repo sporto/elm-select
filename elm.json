@@ -1,6 +1,6 @@
 {
   "type": "package",
-  "name": "Johnny2210/elm-select-fork",
+  "name": "sporto/elm-select",
   "summary": "A selection input with auto-completion",
   "license": "MIT",
   "version": "6.3.0",
