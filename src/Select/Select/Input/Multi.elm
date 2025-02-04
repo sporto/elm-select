@@ -85,7 +85,7 @@ currentSelection_item_maybeClear config item =
 
 currentSelection_item_clear config item =
     let
-        removeableHtml =
+        removableHtml =
             div
                 [ class classNames.multiInputItemRemove
                 , Shared.onClickWithoutPropagation (Msg.OnRemoveItem item)
@@ -93,13 +93,13 @@ currentSelection_item_clear config item =
                 ]
                 [ RemoveItem.view config ]
     in
-    case config.multiInputItemRemoveable of
+    case config.multiInputItemRemovable of
         Nothing ->
-            removeableHtml
+            removableHtml
 
         Just fn ->
             if fn item then
-                removeableHtml
+                removableHtml
 
             else
                 div [] []
