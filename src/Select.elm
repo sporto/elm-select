@@ -1,7 +1,7 @@
 module Select exposing
     ( RequiredConfig, Config, State, Msg
     , newConfig, withCustomInput, withCutoff, withOnQuery, withEmptySearch, withTransformQuery, withTransformInput
-    , withMultiSelection, withOnRemoveItem, withMultiInputItemContainerAttrs, withMultiInputItemContainerMoreAttrs, withMultiInputItemAttrs, withMultiInputItemMoreAttrs
+    , withMultiSelection, withOnRemoveItem, withMultiInputItemContainerAttrs, withMultiInputItemContainerMoreAttrs, withMultiInputItemAttrs, withMultiInputItemMoreAttrs, withMultiInputItemRemovable
     , withInputWrapperAttrs, withInputWrapperMoreAttrs
     , withInputAttrs, withInputMoreAttrs, withOnFocus, withOnBlur, withOnEsc, withValueSeparators
     , withClear, withClearAttrs, withClearMoreAttrs, withClearSvgClass, withClearHtml
@@ -12,7 +12,6 @@ module Select exposing
     , init, queryFromState, withQuery
     , view
     , update
-    , withMultiInputItemRemovable
     )
 
 {-| Select input with auto-complete
@@ -36,7 +35,7 @@ See live demo [here](https://sporto.github.io/elm-select)
 
 # Configure Multi Select mode
 
-@docs withMultiSelection, withOnRemoveItem, withMultiInputItemContainerAttrs, withMultiInputItemContainerMoreAttrs, withMultiInputItemAttrs, withMultiInputItemMoreAttrs
+@docs withMultiSelection, withOnRemoveItem, withMultiInputItemContainerAttrs, withMultiInputItemContainerMoreAttrs, withMultiInputItemAttrs, withMultiInputItemMoreAttrs, withMultiInputItemRemovable
 
 
 # Configure the input wapper
