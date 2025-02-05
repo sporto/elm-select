@@ -1,5 +1,9 @@
 # Changelog
 
+## 6.4.0
+
+- Add `withMultiInputItemRemovable`. https://github.com/sporto/elm-select/pull/60
+
 ## 6.3.0
 
 - Add `withValueSeparators` https://github.com/sporto/elm-select/pull/59
