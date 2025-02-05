@@ -12,6 +12,7 @@ module Select exposing
     , init, queryFromState, withQuery
     , view
     , update
+    , withMultiInputItemRemovable
     )
 
 {-| Select input with auto-complete
@@ -534,6 +535,24 @@ withMultiInputItemMoreAttrs attrs config =
     let
         fn c =
             { c | multiInputItemAttrs = c.multiInputItemAttrs ++ attrs }
+    in
+    mapConfig fn config
+
+
+{-| Which items are removeable from the list
+
+    config
+        |> Select.withMultiInputItemRemovable (\x -> x.removeable)
+
+-}
+withMultiInputItemRemovable :
+    (item -> Bool)
+    -> Config msg item
+    -> Config msg item
+withMultiInputItemRemovable value config =
+    let
+        fn c =
+            { c | multiInputItemRemovable = Just value }
     in
     mapConfig fn config
 

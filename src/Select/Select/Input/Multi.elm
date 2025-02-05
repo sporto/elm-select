@@ -84,9 +84,22 @@ currentSelection_item_maybeClear config item =
 
 
 currentSelection_item_clear config item =
-    div
-        [ class classNames.multiInputItemRemove
-        , Shared.onClickWithoutPropagation (Msg.OnRemoveItem item)
-            |> Html.Attributes.map config.toMsg
-        ]
-        [ RemoveItem.view config ]
+    let
+        removableHtml =
+            div
+                [ class classNames.multiInputItemRemove
+                , Shared.onClickWithoutPropagation (Msg.OnRemoveItem item)
+                    |> Html.Attributes.map config.toMsg
+                ]
+                [ RemoveItem.view config ]
+    in
+    case config.multiInputItemRemovable of
+        Nothing ->
+            removableHtml
+
+        Just fn ->
+            if fn item then
+                removableHtml
+
+            else
+                div [] []
