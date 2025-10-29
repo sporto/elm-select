@@ -56,6 +56,7 @@ view config state itemCount selectedItems index item =
          , onMouseDown (config.toMsg (OnSelect item))
          , referenceAttr config state
          ]
+            ++ config.itemAttrs
             ++ highlightedItemAttrs
             ++ selectedAttrs
         )
