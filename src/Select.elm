@@ -356,17 +356,17 @@ withInputWrapperMoreAttrs attrs config =
 This overrides any attributes already set in a previous call.
 
     config
-        |> Select.withItemAttrs [ class "border-bottom" ]
+        |> Select.withItemAttrs (\i -> [ class ("item-" ++ i.status) ])
 
 -}
 withItemAttrs :
-    List (Attribute msg)
+    (item -> List (Attribute msg))
     -> Config msg item
     -> Config msg item
 withItemAttrs attrs config =
     let
         fn c =
-            { c | itemAttrs = attrs }
+            { c | itemAttrs = Just attrs }
     in
     mapConfig fn config
 
@@ -375,17 +375,25 @@ withItemAttrs attrs config =
 This adds to existing attributes.
 
     config
-        |> Select.withItemMoreAttrs [ class "border-bottom" ]
+        |> Select.withItemMoreAttrs (\i -> [ class ("item-" ++ i.status) ])
 
 -}
 withItemMoreAttrs :
-    List (Attribute msg)
+    (item -> List (Attribute msg))
     -> Config msg item
     -> Config msg item
 withItemMoreAttrs attrs config =
     let
         fn c =
-            { c | itemAttrs = c.itemAttrs ++ attrs }
+            { c
+                | itemAttrs =
+                    case c.itemAttrs of
+                        Just existingAttrs ->
+                            Just (\i -> existingAttrs i ++ attrs i)
+
+                        Nothing ->
+                            Just attrs
+            }
     in
     mapConfig fn config
 
