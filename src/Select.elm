@@ -5,7 +5,7 @@ module Select exposing
     , withInputWrapperAttrs, withInputWrapperMoreAttrs
     , withInputAttrs, withInputMoreAttrs, withOnFocus, withOnBlur, withOnEsc, withValueSeparators
     , withClear, withClearAttrs, withClearMoreAttrs, withClearSvgClass, withClearHtml
-    , withItemAttrs, withItemMoreAttrs, withItemHtml, withHighlightedItemAttrs, withHighlightedItemMoreAttrs, withItemSelectedAttrs, withItemSelectedMoreAttrs
+    , withItemAttrs, withItemHtml, withHighlightedItemAttrs, withHighlightedItemMoreAttrs, withItemSelectedAttrs, withItemSelectedMoreAttrs
     , withMenuAttrs, withMenuMoreAttrs
     , withNotFound, withNotFoundAttrs, withNotFoundMoreAttrs, withNotFoundShown
     , withPrompt, withPromptAttrs, withPromptMoreAttrs
@@ -57,7 +57,7 @@ This is the element that wraps the selected item(s) and the input
 
 # Configure the items
 
-@docs withItemAttrs, withItemMoreAttrs, withItemHtml, withHighlightedItemAttrs, withHighlightedItemMoreAttrs, withItemSelectedAttrs, withItemSelectedMoreAttrs
+@docs withItemAttrs, withItemHtml, withHighlightedItemAttrs, withHighlightedItemMoreAttrs, withItemSelectedAttrs, withItemSelectedMoreAttrs
 
 
 # Configure the menu
@@ -367,33 +367,6 @@ withItemAttrs attrs config =
     let
         fn c =
             { c | itemAttrs = Just attrs }
-    in
-    mapConfig fn config
-
-
-{-| Add attributes to the items.
-This adds to existing attributes.
-
-    config
-        |> Select.withItemMoreAttrs (\i -> [ class ("item-" ++ i.status) ])
-
--}
-withItemMoreAttrs :
-    (item -> List (Attribute msg))
-    -> Config msg item
-    -> Config msg item
-withItemMoreAttrs attrs config =
-    let
-        fn c =
-            { c
-                | itemAttrs =
-                    case c.itemAttrs of
-                        Just existingAttrs ->
-                            Just (\i -> existingAttrs i ++ attrs i)
-
-                        Nothing ->
-                            Just attrs
-            }
     in
     mapConfig fn config
 
