@@ -33,12 +33,12 @@ type alias Config msg item =
     , inputAttrs : List (Attribute msg)
     , inputWrapperAttrs : List (Attribute msg)
     , isMultiSelect : Bool
-    , itemAttrs : List (Attribute msg)
+    , itemAttrs : Maybe (item -> List (Attribute msg))
     , itemHtml : Maybe (item -> Html msg)
     , menuAttrs : List (Attribute msg)
     , multiInputItemAttrs : List (Attribute msg)
     , multiInputItemContainerAttrs : List (Attribute msg)
-    , multiInputItemRemovable: Maybe (item -> Bool)
+    , multiInputItemRemovable : Maybe (item -> Bool)
     , notFound : String
     , notFoundAttrs : List (Attribute msg)
     , notFoundShown : Bool
@@ -75,7 +75,7 @@ newConfig requiredConfig =
     , inputAttrs = []
     , inputWrapperAttrs = []
     , isMultiSelect = False
-    , itemAttrs = []
+    , itemAttrs = Nothing
     , itemHtml = Nothing
     , menuAttrs = []
     , multiInputItemAttrs = []

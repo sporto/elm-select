@@ -5,7 +5,7 @@ module Select exposing
     , withInputWrapperAttrs, withInputWrapperMoreAttrs
     , withInputAttrs, withInputMoreAttrs, withOnFocus, withOnBlur, withOnEsc, withValueSeparators
     , withClear, withClearAttrs, withClearMoreAttrs, withClearSvgClass, withClearHtml
-    , withItemAttrs, withItemMoreAttrs, withItemHtml, withHighlightedItemAttrs, withHighlightedItemMoreAttrs, withItemSelectedAttrs, withItemSelectedMoreAttrs
+    , withItemAttrs, withItemHtml, withHighlightedItemAttrs, withHighlightedItemMoreAttrs, withItemSelectedAttrs, withItemSelectedMoreAttrs
     , withMenuAttrs, withMenuMoreAttrs
     , withNotFound, withNotFoundAttrs, withNotFoundMoreAttrs, withNotFoundShown
     , withPrompt, withPromptAttrs, withPromptMoreAttrs
@@ -57,7 +57,7 @@ This is the element that wraps the selected item(s) and the input
 
 # Configure the items
 
-@docs withItemAttrs, withItemMoreAttrs, withItemHtml, withHighlightedItemAttrs, withHighlightedItemMoreAttrs, withItemSelectedAttrs, withItemSelectedMoreAttrs
+@docs withItemAttrs, withItemHtml, withHighlightedItemAttrs, withHighlightedItemMoreAttrs, withItemSelectedAttrs, withItemSelectedMoreAttrs
 
 
 # Configure the menu
@@ -356,36 +356,17 @@ withInputWrapperMoreAttrs attrs config =
 This overrides any attributes already set in a previous call.
 
     config
-        |> Select.withItemAttrs [ class "border-bottom" ]
+        |> Select.withItemAttrs (\i -> [ class ("item-" ++ i.status) ])
 
 -}
 withItemAttrs :
-    List (Attribute msg)
+    (item -> List (Attribute msg))
     -> Config msg item
     -> Config msg item
 withItemAttrs attrs config =
     let
         fn c =
-            { c | itemAttrs = attrs }
-    in
-    mapConfig fn config
-
-
-{-| Add attributes to the items.
-This adds to existing attributes.
-
-    config
-        |> Select.withItemMoreAttrs [ class "border-bottom" ]
-
--}
-withItemMoreAttrs :
-    List (Attribute msg)
-    -> Config msg item
-    -> Config msg item
-withItemMoreAttrs attrs config =
-    let
-        fn c =
-            { c | itemAttrs = c.itemAttrs ++ attrs }
+            { c | itemAttrs = Just attrs }
     in
     mapConfig fn config
 

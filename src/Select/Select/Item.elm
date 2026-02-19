@@ -41,6 +41,14 @@ view config state itemCount selectedItems index item =
         label =
             config.toLabel item
 
+        itemAttrs =
+            case config.itemAttrs of
+                Nothing ->
+                    []
+
+                Just fn ->
+                    fn item
+
         itemHtml =
             case config.itemHtml of
                 Nothing ->
@@ -56,6 +64,7 @@ view config state itemCount selectedItems index item =
          , onMouseDown (config.toMsg (OnSelect item))
          , referenceAttr config state
          ]
+            ++ itemAttrs
             ++ highlightedItemAttrs
             ++ selectedAttrs
         )
