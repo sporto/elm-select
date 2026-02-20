@@ -1,5 +1,10 @@
 # Changelog
 
+## 7.0.0
+
+- Updated `withItemAttrs`. https://github.com/sporto/elm-select/pull/63
+- Removed `withItemMoreAttrs`
+
 ## 6.4.0
 
 - Add `withMultiInputItemRemovable`. https://github.com/sporto/elm-select/pull/60

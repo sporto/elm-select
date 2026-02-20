@@ -1,0 +1,2 @@
+test:
+  npx elm-test
